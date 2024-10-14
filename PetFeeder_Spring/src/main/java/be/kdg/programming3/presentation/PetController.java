@@ -11,7 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping
-public class PetController {
+    public class PetController {
+    /*
     private FeederService feederService;
     private PetService petService;
     private UserService userService;
@@ -38,5 +39,5 @@ public class PetController {
         return "";
     }
 
-
+*/
 }

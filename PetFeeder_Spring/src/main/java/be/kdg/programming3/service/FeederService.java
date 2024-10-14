@@ -7,7 +7,9 @@ import java.time.LocalTime;
 import java.util.List;
 
 public interface FeederService {
-    List<Feeder> getAllFeeders();
+    List<Feeder> findAll();
+     Feeder save(Feeder feeder);
+     void deleteById(Long id);
 
-    Feeder addFeeder(double reservoirLevel, LocalTime nextFeedingTime, LocalDate nextFeedingDate, LocalDate emptyIN);
+
 }
