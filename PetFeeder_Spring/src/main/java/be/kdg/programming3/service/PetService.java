@@ -8,5 +8,5 @@ import java.util.List;
 public interface PetService {
     List<Pet> getPets();
 
-    Pet addPet(String name, int age, Breed gender, String animalType, double weight);
+    Pet addPet(Long id,String name, int age, Breed gender, String animalType, double weight);
 }

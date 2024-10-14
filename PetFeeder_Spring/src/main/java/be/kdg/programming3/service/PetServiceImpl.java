@@ -26,9 +26,9 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Pet addPet(String name, int age, Breed gender, String animalType, double weight) {
+    public Pet addPet(Long id, String name, int age, Breed gender, String animalType, double weight) {
         logger.info("Adding pet {}", name);
-        return petRepositrory.createPets(new Pet(name, age, gender, animalType, weight));
+        return petRepositrory.createPets(new Pet(id,name, age, gender, animalType, weight));
     }
 
 
