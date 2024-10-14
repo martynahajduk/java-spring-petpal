@@ -2,7 +2,7 @@ package be.kdg.programming3.repository;
 
 import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.Pet;
-import be.kdg.programming3.domain.Users;
+import be.kdg.programming3.domain.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ import java.util.List;
 public class ListPetRepository implements PetRepositrory {
     private Logger logger = LoggerFactory.getLogger(ListPetRepository.class);
     private static List<Pet> pets = new ArrayList<>();
-    private static List<Users> users = new ArrayList<>();
+    private static List<User> users = new ArrayList<>();
     private static List <Feeder> feeders = new ArrayList<>();
 
     @Override
@@ -24,7 +24,7 @@ public class ListPetRepository implements PetRepositrory {
     }
 
     @Override
-    public List<Users> getUsers() {
+    public List<User> getUsers() {
         logger.info("getting users");
         return users;
     }
@@ -43,7 +43,7 @@ public class ListPetRepository implements PetRepositrory {
     }
 
     @Override
-    public Users createUsers(Users user){
+    public User createUsers(User user){
         logger.info("creating users {}", users);
         users.add(user);
         return user;

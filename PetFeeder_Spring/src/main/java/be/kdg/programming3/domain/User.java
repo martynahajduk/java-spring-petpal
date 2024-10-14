@@ -1,14 +1,27 @@
 package be.kdg.programming3.domain;
 
-public class Users {
+import jakarta.persistence.*;
+
+@Entity
+public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    Long id;
+
     String name;
+    @Column(unique = true)
     String email;
+
     String password;
 
-    public Users(String name, String email, String password) {
+    public User(Long id, String name, String email, String password) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    protected User() {
     }
 
     public String getName() {
@@ -35,9 +48,16 @@ public class Users {
         this.password = password;
     }
 
-
     @Override
     public String toString() {
-        return "User [name=" + name + ", email=" + email + ", password=" + password + "]";
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
     }
 }
+
+
+
