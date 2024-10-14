@@ -1,6 +1,6 @@
 package be.kdg.programming3.service;
 
-import be.kdg.programming3.domain.Users;
+import be.kdg.programming3.domain.User;
 import be.kdg.programming3.repository.PetRepositrory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,15 +20,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Users> getUser() {
+    public List<User> getUser() {
         logger.info("Getting users");
         return petRepositrory.getUsers();
     }
 
     @Override
-    public Users addUser(String name, String email, String password){
+    public User addUser(Long id,String name, String email, String password){
         logger.info("Adding user {}", name);
-        return petRepositrory.createUsers(new Users(name, email, password));
+        return petRepositrory.createUsers(new User(id,name, email, password));
     }
 
 
