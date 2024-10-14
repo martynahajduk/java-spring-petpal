@@ -1,28 +1,34 @@
 package be.kdg.programming3.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 @Entity
+@Table(name="pets")
 public class Pet {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id")
     private Long id;
+    @Column(name="name", nullable = false)
     private String name;
+    @Column(name="age", nullable = false)
     private int age;
+    @Column(name="gender", nullable = false)
     private String gender;
+    @Enumerated(EnumType.STRING)
+    @Column(name="animal_type", nullable = false)
     private Breed animalType;
+    @Column(name="weight", nullable = true)
     private double weight;
-
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "feeder_id", referencedColumnName = "id")
+    private Feeder feeder;
 
     protected Pet() {
     } //Encapsulation: You don’t want other parts of the application
     // (except for subclasses) to use the default constructor. By marking it as
     // protected, only the JPA framework
     // (and subclasses of Pet) can use it
-
 
 
     public Pet(Long id, String name, int age, Breed animalType, String gender, double weight) {
