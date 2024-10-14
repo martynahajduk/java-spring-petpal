@@ -1,26 +1,13 @@
 package be.kdg.programming3.domain;
 
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
-@Entity
 public class Pet {
+    String name;
+    int age;
+    String gender;
+    Breed animalType;
+    double weight;
 
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
-    private String name;
-    private int age;
-    private Genders gender;
-    private String animalType;
-    private double weight;
-
-
-
-    public Pet(String name, int age, Genders gender, String animalType, double weight) {
+    public Pet(String name, int age, Breed animalType, String gender, double weight) {
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -44,19 +31,19 @@ public class Pet {
         this.age = age;
     }
 
-    public Genders getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Genders gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
-    public String getAnimalType() {
+    public Breed getAnimalType() {
         return animalType;
     }
 
-    public void setAnimalType(String animalType) {
+    public void setAnimalType(Breed animalType) {
         this.animalType = animalType;
     }
 

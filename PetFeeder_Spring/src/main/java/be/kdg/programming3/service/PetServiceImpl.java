@@ -1,6 +1,6 @@
 package be.kdg.programming3.service;
 
-import be.kdg.programming3.domain.Genders;
+import be.kdg.programming3.domain.Breed;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.repository.PetRepositrory;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ public class PetServiceImpl implements PetService {
     }
 
     @Override
-    public Pet addPet(String name, int age, Genders gender, String animalType, double weight) {
+    public Pet addPet(String name, int age, Breed gender, String animalType, double weight) {
         logger.info("Adding pet {}", name);
         return petRepositrory.createPets(new Pet(name, age, gender, animalType, weight));
     }
