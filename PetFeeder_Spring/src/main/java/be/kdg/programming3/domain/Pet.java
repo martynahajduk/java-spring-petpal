@@ -1,11 +1,24 @@
 package be.kdg.programming3.domain;
 
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Pet {
-    String name;
-    int age;
-    Genders gender;
-    String animalType;
-    double weight;
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    private Long id;
+    private String name;
+    private int age;
+    private Genders gender;
+    private String animalType;
+    private double weight;
+
+
 
     public Pet(String name, int age, Genders gender, String animalType, double weight) {
         this.name = name;
