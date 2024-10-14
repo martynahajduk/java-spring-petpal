@@ -1,35 +1,63 @@
 package be.kdg.programming3.domain;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
+@Entity
+@Table(name="feeders")
 public class Feeder {
-    double reservoirLevel;
-    LocalDate nextFeedingDate;
-    LocalTime nextFeedingTime;
-    LocalDate emptyIN;
-    LocalTime[][] schedule;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name="id", nullable = false)
+    private Long id;
+    @Column(name="resevoir_level", nullable = false)
+    private double reservoirLevel;
+    @Column(name = "next_feeding_date")
+    private LocalDate nextFeedingDate;
+    @Column(name = "next_feeding_time")
+    private LocalTime nextFeedingTime;
+    @Column(name = "empty_in")
+    private LocalDate emptyIN;
+    @ElementCollection
+    @CollectionTable(name = "feeder_schedule",
+            joinColumns = @JoinColumn(name = "feeder_id"))
+    @Column(name = "feeding_time")
+    private List<List<LocalTime>> schedule = new ArrayList<>();
+    @OneToOne(mappedBy = "feeder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private Pet pet;
 
+    protected Feeder() {}
 
-    public Feeder(double reservoirLevel, LocalTime nextFeedingTime, LocalDate nextFeedingDate, LocalDate emptyIN) {
+    public Feeder(Long id, double reservoirLevel, LocalTime nextFeedingTime, LocalDate nextFeedingDate, LocalDate emptyIN) {
+        this.id = id;
         this.reservoirLevel = reservoirLevel;
         this.nextFeedingDate = nextFeedingDate;
         this.nextFeedingTime = nextFeedingTime;
         this.emptyIN = emptyIN;
-
-
-        this.schedule = new LocalTime[7][];
-        schedule[0] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Monday
-        schedule[1] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Tuesday
-        schedule[2] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Wednesday
-        schedule[3] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Thursday
-        schedule[4] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Friday
-        schedule[5] = new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 0)}; // Saturday
-        schedule[6] = new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 0)}; // Sunday
-
+        this.schedule = new ArrayList<>();
+        schedule.add(List.of(LocalTime.of(8, 0), LocalTime.of(18, 0))); //example schedule for Monday
+        schedule.add(List.of(LocalTime.of(8, 0), LocalTime.of(18, 0))); //Tuesday
+        schedule.add(List.of(LocalTime.of(8, 0), LocalTime.of(18, 0))); //Wednesday
+        schedule.add(List.of(LocalTime.of(8, 0), LocalTime.of(18, 0))); //Thursday
+        schedule.add(List.of(LocalTime.of(8, 0), LocalTime.of(18, 0))); //Friday
+        schedule.add(List.of(LocalTime.of(9, 0), LocalTime.of(17, 0))); //Saturday
+        schedule.add(List.of(LocalTime.of(9, 0), LocalTime.of(17, 0))); //Sunday
     }
 
 
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public double getReservoirLevel() {
         return reservoirLevel;
@@ -63,7 +91,31 @@ public class Feeder {
         this.emptyIN = emptyIN;
     }
 
-    public LocalTime[] getFeedingTimesForDay(int dayOfWeek) {
-        return schedule[dayOfWeek];
+    public List<LocalTime> getFeedingTimesForDay(int dayOfWeek) {
+        if (dayOfWeek >= 0 && dayOfWeek < 7) {
+            return schedule.get(dayOfWeek);
+        } else {
+            throw new IllegalArgumentException("Day of week must be between 0 (Monday) and 6 (Sunday)");
+        }
+    }
+
+    public void addFeedingTimeForDay(int dayOfWeek, List<LocalTime> times) {
+        if (dayOfWeek >= 0 && dayOfWeek < 7) {
+            schedule.set(dayOfWeek, times);
+        } else {
+            throw new IllegalArgumentException("Day of week must be between 0 (Monday) and 6 (Sunday)");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Feeder{" +
+                "id=" + id +
+                ", reservoirLevel=" + reservoirLevel +
+                ", nextFeedingDate=" + nextFeedingDate +
+                ", nextFeedingTime=" + nextFeedingTime +
+                ", emptyIN=" + emptyIN +
+                ", schedule=" + schedule +
+                '}';
     }
 }

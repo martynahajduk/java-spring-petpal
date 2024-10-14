@@ -27,9 +27,9 @@ public class FeederServiceImpl implements FeederService {
     }
 
     @Override
-    public Feeder addFeeder(double reservoirLevel, LocalTime nextFeedingTime, LocalDate nextFeedingDate, LocalDate emptyIN) {
+    public Feeder addFeeder(Long id, double reservoirLevel, LocalTime nextFeedingTime, LocalDate nextFeedingDate, LocalDate emptyIN) {
         logger.info("Adding feeder");
-        return petRepositrory.creatingFeeder(new Feeder(reservoirLevel, nextFeedingTime, nextFeedingDate, emptyIN));
+        return petRepositrory.creatingFeeder(new Feeder(id, reservoirLevel, nextFeedingTime, nextFeedingDate, emptyIN));
     }
 
 }
