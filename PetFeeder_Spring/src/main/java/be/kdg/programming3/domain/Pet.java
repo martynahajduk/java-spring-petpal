@@ -3,7 +3,7 @@ package be.kdg.programming3.domain;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name="pets")
+@Table(name="pet")
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

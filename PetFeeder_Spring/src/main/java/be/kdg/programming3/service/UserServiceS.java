@@ -17,6 +17,10 @@ public class UserServiceS implements UserService {
         this.userRepository = userRepository;
     }
 
+    public User findUserById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
     public List<User> findAll() {
         return userRepository.findAll();
     }

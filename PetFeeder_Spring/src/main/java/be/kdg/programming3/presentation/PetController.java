@@ -1,43 +1,53 @@
 package be.kdg.programming3.presentation;
 
 import be.kdg.programming3.domain.Feeder;
+import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.PetService;
 import be.kdg.programming3.service.UserService;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 
-@Controller
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
 @RequestMapping
     public class PetController {
-    /*
-    private FeederService feederService;
-    private PetService petService;
-    private UserService userService;
+    private final PetService petService;
 
-    public PetController(FeederService feederService, PetService petService, UserService userService) {
-        this.feederService = feederService;
+    @Autowired
+    public PetController(PetService petService) {
         this.petService = petService;
-        this.userService = userService;
     }
 
-    @GetMapping("/PetChoice")
-    public String displayPets(Model model) {
-        model.addAttribute("PetChoice", petService.getPets());
-        return "PetChoice";
+    @GetMapping
+    public List<Pet> getAllPets() {
+        return petService.findAll();
     }
 
-    public String displayUsers(Model model) {
-        model.addAttribute("", userService.getUser());
-        return "";
+    @GetMapping("/{id}")
+    public ResponseEntity<Pet> getPetById(@PathVariable Long id) {
+        Pet pet = petService.findById(id);
+        return pet != null ? ResponseEntity.ok(pet) : ResponseEntity.notFound().build();
     }
 
-    public String displayFeeders(Model model) {
-        model.addAttribute("", feederService.getAllFeeders());
-        return "";
+    @PostMapping
+    public Pet createPet(@RequestBody Pet pet) {
+        return petService.save(pet);
     }
 
-*/
+  // @PutMapping("/{id}")
+  // public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody Pet petDetails) {
+  //     Pet updatedPet = petService.updatePet(id, petDetails);
+  //     return updatedPet != null ? ResponseEntity.ok(updatedPet) : ResponseEntity.notFound().build();
+  // }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePet(@PathVariable Long id) {
+        petService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

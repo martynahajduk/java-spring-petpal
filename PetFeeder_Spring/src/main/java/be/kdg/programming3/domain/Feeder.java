@@ -9,25 +9,30 @@ import java.util.Arrays;
 import java.util.List;
 
 @Entity
-@Table(name="feeders")
+@Table(name="feeder")
 public class Feeder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false)
     private Long id;
+
     @Column(name="resevoir_level", nullable = false)
     private double reservoirLevel;
+
     @Column(name = "next_feeding_date")
     private LocalDate nextFeedingDate;
+
     @Column(name = "next_feeding_time")
     private LocalTime nextFeedingTime;
+
     @Column(name = "empty_in")
     private LocalDate emptyIN;
+
     @ElementCollection
-    @CollectionTable(name = "feeder_schedule",
-            joinColumns = @JoinColumn(name = "feeder_id"))
+    @CollectionTable(name = "feeder_schedule", joinColumns = @JoinColumn(name = "feeder_id"))
     @Column(name = "feeding_time")
-    private LocalTime[][] schedule;
+    private List<String> schedule = new ArrayList<>();
+
     @OneToOne(mappedBy = "feeder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Pet pet;
 
@@ -39,75 +44,37 @@ public class Feeder {
         this.nextFeedingDate = nextFeedingDate;
         this.nextFeedingTime = nextFeedingTime;
         this.emptyIN = emptyIN;
-        this.schedule = new LocalTime[7][];
-        schedule[0] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // example schedule for Monday
-        schedule[1] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Tuesday
-        schedule[2] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Wednesday
-        schedule[3] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Thursday
-        schedule[4] = new LocalTime[]{LocalTime.of(8, 0), LocalTime.of(18, 0)}; // Friday
-        schedule[5] = new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 0)}; // Saturday
-        schedule[6] = new LocalTime[]{LocalTime.of(9, 0), LocalTime.of(17, 0)}; // Sunday
+
+        // Initialize schedule with 7 days (one list for each day)
+      // schedule = new ArrayList<>(7);
+      // for (int i = 0; i < 7; i++) {
+      //     schedule.add();
+      // }
+
+      // // Example schedule for Monday and Tuesday
+      // schedule.get(0).add(LocalTime.of(8, 0)); // Monday
+      // schedule.get(0).add(LocalTime.of(18, 0));
+      // schedule.get(1).add(LocalTime.of(9, 0)); // Tuesday
+      // schedule.get(1).add(LocalTime.of(17, 0));
     }
 
+    // Other getters and setters
 
+  // public List<LocalTime> getFeedingTimesForDay(int dayOfWeek) {
+  //     if (dayOfWeek >= 0 && dayOfWeek < 7) {
+  //         return schedule.get(dayOfWeek);
+  //     } else {
+  //         throw new IllegalArgumentException("Day of week must be between 0 (Monday) and 6 (Sunday)");
+  //     }
+  // }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public double getReservoirLevel() {
-        return reservoirLevel;
-    }
-
-    public void setReservoirLevel(double reservoirLevel) {
-        this.reservoirLevel = reservoirLevel;
-    }
-
-    public LocalDate getNextFeedingDate() {
-        return nextFeedingDate;
-    }
-
-    public void setNextFeedingDate(LocalDate nextFeedingDate) {
-        this.nextFeedingDate = nextFeedingDate;
-    }
-
-    public LocalTime getNextFeedingTime() {
-        return nextFeedingTime;
-    }
-
-    public void setNextFeedingTime(LocalTime nextFeedingTime) {
-        this.nextFeedingTime = nextFeedingTime;
-    }
-
-    public LocalDate getEmptyIN() {
-        return emptyIN;
-    }
-
-    public void setEmptyIN(LocalDate emptyIN) {
-        this.emptyIN = emptyIN;
-    }
-
-    //get feeding times for a specific day
-    public LocalTime[] getFeedingTimesForDay(int dayOfWeek) {
-        if (dayOfWeek >= 0 && dayOfWeek < 7) {
-            return schedule[dayOfWeek];
-        } else {
-            throw new IllegalArgumentException("Day of week must be between 0 (Monday) and 6 (Sunday)");
-        }
-    }
-
-    //set feeding times for a specific day
-    public void setFeedingTimesForDay(int dayOfWeek, LocalTime[] times) {
-        if (dayOfWeek >= 0 && dayOfWeek < 7) {
-            schedule[dayOfWeek] = times;
-        } else {
-            throw new IllegalArgumentException("Day of week must be between 0 (Monday) and 6 (Sunday)");
-        }
-    }
+  // public void setFeedingTimesForDay(int dayOfWeek, List<LocalTime> times) {
+  //     if (dayOfWeek >= 0 && dayOfWeek < 7) {
+  //         schedule.set(dayOfWeek, times);
+  //     } else {
+  //         throw new IllegalArgumentException("Day of week must be between 0 (Monday) and 6 (Sunday)");
+  //     }
+  // }
 
     @Override
     public String toString() {
@@ -117,7 +84,6 @@ public class Feeder {
                 ", nextFeedingDate=" + nextFeedingDate +
                 ", nextFeedingTime=" + nextFeedingTime +
                 ", emptyIN=" + emptyIN +
-                ", schedule=" + schedule +
                 '}';
     }
 }

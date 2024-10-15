@@ -7,12 +7,15 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
-    @Column(name = "name", nullable = false)
+    @Column
     String name;
     @Column(unique = true)
     String email;
 
     String password;
+
+    protected User() {
+    }
 
     public User(Long id, String name, String email, String password) {
         this.id = id;
@@ -21,8 +24,7 @@ public class User {
         this.password = password;
     }
 
-    protected User() {
-    }
+
 
     public String getName() {
         return name;

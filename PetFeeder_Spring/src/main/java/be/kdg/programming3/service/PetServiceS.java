@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 public class PetServiceS implements PetService {
@@ -17,6 +18,11 @@ public class PetServiceS implements PetService {
     @Autowired
     public PetServiceS(PetRepository petRepository) {
         this.petRepository = petRepository;
+    }
+
+    public Pet findById(Long id) {
+        return petRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException("Pet not found with id: " + id));
     }
 
     public List<Pet> findAll() {
