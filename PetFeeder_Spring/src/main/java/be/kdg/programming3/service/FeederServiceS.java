@@ -26,6 +26,5 @@ public class FeederServiceS implements FeederService {
         feederRepository.deleteById(id);
     }
 
-
 }
 
