@@ -20,9 +20,9 @@ public class Pet {
     private Breed animalType;
     @Column(name="weight", nullable = true)
     private double weight;
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "feeder_id", referencedColumnName = "id")
-    private Feeder feeder;
+  // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  // @JoinColumn(name = "feeder_id", referencedColumnName = "id")
+  // private Feeder feeder;
 
     protected Pet() {
     } //Encapsulation: You don’t want other parts of the application

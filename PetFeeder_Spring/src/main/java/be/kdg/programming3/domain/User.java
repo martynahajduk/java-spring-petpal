@@ -2,29 +2,38 @@ package be.kdg.programming3.domain;
 
 import jakarta.persistence.*;
 
+
 @Entity
+@Table(name="pidaras")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long id;
     @Column
     String name;
-    @Column(unique = true)
+    @Column(unique = true, nullable = false)
     String email;
-
+    @Column(unique = true, nullable = false)
     String password;
 
     protected User() {
     }
 
-    public User(Long id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+   public User(Long id, String name, String email, String password) {
+       this.id = id;
+       this.name = name;
+       this.email = email;
+       this.password = password;
+   }
+
+
+    public Long getId() {
+        return id;
     }
 
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
