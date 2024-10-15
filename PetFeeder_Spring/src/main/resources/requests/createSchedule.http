@@ -1,0 +1,9 @@
+### GET request to example server
+### Create a Schedule
+POST http://localhost:8080/schedules/add
+Content-Type: application/json
+
+{
+  "timeToFeed": ["2024-10-16", "2024-10-17"]
+}
+
