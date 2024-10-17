@@ -31,9 +31,14 @@ public class UserController {
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    /*@PostMapping
     public User createUser(@RequestBody User user) {
         return userService.save(user);
+    }*/
+    @PostMapping("/add")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
+        User createdUser = userService.save(user);
+        return ResponseEntity.ok(createdUser);
     }
 
 //  @PutMapping("/{id}")

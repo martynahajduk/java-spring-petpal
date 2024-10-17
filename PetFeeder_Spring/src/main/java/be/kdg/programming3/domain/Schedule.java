@@ -23,9 +23,7 @@ public class Schedule {
     @ElementCollection
     private List<LocalDate> timeToFeed;
 
-    public Schedule() {
-
-    }
+    public Schedule() {}
 
     public void setId(Long id) {this.id = id;}
 

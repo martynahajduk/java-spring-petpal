@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping
+@RequestMapping("/pets")
     public class PetController {
     private final PetService petService;
 
@@ -34,9 +34,15 @@ import java.util.List;
         return pet != null ? ResponseEntity.ok(pet) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
+    /*@PostMapping
     public Pet createPet(@RequestBody Pet pet) {
         return petService.save(pet);
+    }*/
+
+    @PostMapping("/add")
+    public ResponseEntity<Pet> createPet(@RequestBody Pet pet) {
+        Pet createdPet = petService.save(pet);
+        return ResponseEntity.ok(createdPet);
     }
 
   // @PutMapping("/{id}")

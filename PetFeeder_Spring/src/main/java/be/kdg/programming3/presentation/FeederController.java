@@ -27,11 +27,15 @@ public class FeederController {
 
 
 
-    @PostMapping
+    /*@PostMapping
     public Feeder createFeeder(@RequestBody Feeder feeder) {
         return feederService.save(feeder);
+    }*/
+    @PostMapping("/add")
+    public ResponseEntity<Feeder> createFeeder(@RequestBody Feeder feeder) {
+        Feeder createdFeeder = feederService.save(feeder);
+        return ResponseEntity.ok(createdFeeder);
     }
-
 
 
     @DeleteMapping("/{id}")
