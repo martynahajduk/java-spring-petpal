@@ -28,7 +28,7 @@ public class ScheduleController {
     @PostMapping("/add")
     public ResponseEntity<Schedule> createSchedule(@RequestBody Schedule schedule) {
         Schedule createdSchedule = scheduleService.save(schedule);
-        return ResponseEntity.ok(createdSchedule); // Returns 200 OK by default
+        return ResponseEntity.ok(createdSchedule);
     }
 
     @DeleteMapping("/{id}")

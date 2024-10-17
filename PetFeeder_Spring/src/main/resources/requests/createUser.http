@@ -1,0 +1,11 @@
+### GET request to example server
+### Create a User
+### POST request to create multiple Users
+POST http://localhost:8080/users/add
+Content-Type: application/json
+
+[
+  {"name": "Alice Johnson", "email": "alice.johnson@kdg.com", "password": "noPassword123"},
+  {"name": "Bob Smith", "email": "bob.smith@kdg.com", "password": "Passw0rd2137"},
+  {"name": "Charlie Brown", "email": "charlie.brown@kdg.com", "password": "passwordpassword123"}
+]
