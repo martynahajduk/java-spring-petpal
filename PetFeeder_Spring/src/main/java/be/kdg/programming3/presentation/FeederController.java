@@ -25,22 +25,14 @@ public class FeederController {
         return feederService.findAll();
     }
 
-
-
-    /*@PostMapping
+    @PostMapping("/add")
     public Feeder createFeeder(@RequestBody Feeder feeder) {
         return feederService.save(feeder);
-    }*/
-    @PostMapping("/add")
-    public ResponseEntity<Feeder> createFeeder(@RequestBody Feeder feeder) {
-        Feeder createdFeeder = feederService.save(feeder);
-        return ResponseEntity.ok(createdFeeder);
     }
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteFeeder(@PathVariable Long id) {
+    public void deleteFeeder(@PathVariable Long id) {
         feederService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }

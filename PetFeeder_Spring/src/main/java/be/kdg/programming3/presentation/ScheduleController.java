@@ -21,25 +21,17 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Schedule>> getAllSchedules() {
-        return ResponseEntity.ok(scheduleService.findAll());
+    public List<Schedule> getAllSchedules() {
+        return scheduleService.findAll();
     }
 
-    /*@PostMapping("/add")
-    public ResponseEntity<Schedule> createSchedule(@RequestBody Schedule schedule) {
-        Schedule createdSchedule = scheduleService.save(schedule);
-        return ResponseEntity.ok(createdSchedule);
-    }
-     */
     @PostMapping("/add")
-    public ResponseEntity<List<Schedule>> createSchedules(@RequestBody List<Schedule> schedules) {
-        List<Schedule> savedSchedules = scheduleService.saveAll(schedules);
-        return ResponseEntity.ok(savedSchedules);
+    public List<Schedule> createSchedules(@RequestBody List<Schedule> schedules) {
+        return scheduleService.saveAll(schedules);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long id) {
+    public void deleteSchedule(@PathVariable Long id) {
         scheduleService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }

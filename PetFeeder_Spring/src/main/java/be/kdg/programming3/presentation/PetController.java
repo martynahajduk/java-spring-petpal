@@ -29,32 +29,18 @@ import java.util.List;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pet> getPetById(@PathVariable Long id) {
-        Pet pet = petService.findById(id);
-        return pet != null ? ResponseEntity.ok(pet) : ResponseEntity.notFound().build();
+    public Pet getPetById(@PathVariable Long id) {
+        return petService.findById(id);
     }
-
-    /*@PostMapping
-    public Pet createPet(@RequestBody Pet pet) {
-        return petService.save(pet);
-    }*/
 
     @PostMapping("/add")
-    public ResponseEntity<Pet> createPet(@RequestBody Pet pet) {
-        Pet createdPet = petService.save(pet);
-        return ResponseEntity.ok(createdPet);
+    public Pet createPet(@RequestBody Pet pet) {
+        return petService.save(pet);
     }
 
-  // @PutMapping("/{id}")
-  // public ResponseEntity<Pet> updatePet(@PathVariable Long id, @RequestBody Pet petDetails) {
-  //     Pet updatedPet = petService.updatePet(id, petDetails);
-  //     return updatedPet != null ? ResponseEntity.ok(updatedPet) : ResponseEntity.notFound().build();
-  // }
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePet(@PathVariable Long id) {
+    public void deletePet(@PathVariable Long id) {
         petService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 
 }

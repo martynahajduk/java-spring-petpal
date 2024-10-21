@@ -28,27 +28,17 @@ public class PetDataLogController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<PetDataLog> getPetDataLogById(@PathVariable Long id) {
-        PetDataLog petDataLog = petDataLogService.findPetDataLogById(id);
-        return petDataLog != null ? ResponseEntity.ok(petDataLog) : ResponseEntity.notFound().build();
+    public PetDataLog getPetDataLogById(@PathVariable Long id) {
+        return petDataLogService.findPetDataLogById(id);
     }
 
-    /*@PostMapping
+    @PostMapping("add")
     public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
-        //PetDataLog createdPetDataLog = petDataLogService.save(petDataLog);
-        //return ResponseEntity.status(201).body(createdPetDataLog);
         return petDataLogService.save(petDataLog);
-    }*/
-    @PostMapping("/add")
-    public ResponseEntity<PetDataLog> createPetDataLog(@RequestBody PetDataLog petDataLog) {
-        PetDataLog createdPetDataLog = petDataLogService.save(petDataLog);
-        return ResponseEntity.ok(createdPetDataLog);
     }
-
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePetDataLog(@PathVariable Long id) {
+    public void deletePetDataLog(@PathVariable Long id) {
         petDataLogService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }
