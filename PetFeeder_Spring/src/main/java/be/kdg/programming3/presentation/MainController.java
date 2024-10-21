@@ -4,11 +4,13 @@ import be.kdg.programming3.domain.*;
 import be.kdg.programming3.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Controller
+@RequestMapping
 public class MainController {
 
     private final FeederService feederService;
@@ -63,23 +65,23 @@ public class MainController {
 
 
 
-    @GetMapping("/pet-data-logs")
+    @GetMapping("/data-logs")
     public List<PetDataLog> getAllPetDataLog() {
         return petDataLogService.findAll();
     }
 
 
-    @GetMapping("/pet-data-logs/{id}")
+    @GetMapping("/data-logs/{id}")
     public PetDataLog getPetDataLogById(@PathVariable Long id) {
         return petDataLogService.getPetDataLogById(id);
     }
 
-    @PostMapping("/pet-data-logs/add")
+    @PostMapping("/data-logs/add")
     public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
         return petDataLogService.save(petDataLog);
     }
 
-    @DeleteMapping("/pet-data-logs/{id}")
+    @DeleteMapping("/data-logs/{id}")
     public void deletePetDataLog(@PathVariable Long id) {
         petDataLogService.deleteById(id);
     }
@@ -118,5 +120,13 @@ public class MainController {
     public String addUser(@RequestBody User user) {
         userService.save(user);
         return "User added successfully";
+    }
+    @GetMapping("/DataPage")
+    public String showPetDataLogs(Model model) {
+        List<PetDataLog> petDataLogs = petDataLogService.findAll();
+        // Force loading of the pet for each log
+        petDataLogs.forEach(log -> log.getPet().getName());
+        model.addAttribute("petDataLogs", petDataLogs);
+        return "LogDataTestPage";
     }
 }

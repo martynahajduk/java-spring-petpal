@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/feeders")
+//@Controller
+//@RequestMapping("/feeders")
 
 public class FeederController {
 
