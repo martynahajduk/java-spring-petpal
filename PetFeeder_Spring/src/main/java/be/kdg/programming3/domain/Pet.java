@@ -2,6 +2,7 @@ package be.kdg.programming3.domain;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -25,7 +26,7 @@ public class Pet {
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> owners;
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PetDataLog> petDataLogs;
+    private List<PetDataLog> petDataLogs = new ArrayList<>();
 
 
     public Pet(){}

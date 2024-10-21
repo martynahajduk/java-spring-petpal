@@ -5,5 +5,5 @@ POST http://localhost:8080/pets/add
 Content-Type: application/json
 
 
-  {"name": "Pedro", "age": 6, "gender":"M", "animalType": "HAMSTER", "weight": 350.0,""}
+  {"name": "Pedro", "age": 6, "gender":"M", "animalType": "HAMSTER", "weight": 350.0}
 

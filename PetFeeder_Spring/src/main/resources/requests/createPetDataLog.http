@@ -4,4 +4,11 @@
 POST http://localhost:8080/data-logs/add
 Content-Type: application/json
 
-{"animal_type":"HAMSTER","food_ate":15,"pet_weight_log":350}
+{
+  "petWeight": 350,
+  "foodAte": 15,
+  "animalType": "HAMSTER",
+  "pet": {
+    "id": 1
+  }
+}
