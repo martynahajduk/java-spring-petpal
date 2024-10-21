@@ -38,9 +38,11 @@ import java.util.List;
         return petService.save(pet);
     }
 
+    /*
     @DeleteMapping("/{id}")
     public void deletePet(@PathVariable Long id) {
         petService.deleteById(id);
     }
+     */
 
 }

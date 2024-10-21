@@ -1,5 +1,7 @@
 ### GET request to example server
 ### Create a Feeder
 ### POST request to create multiple Schedules
-POST http://localhost:8080/schedules/add
+POST http://localhost:8080/feeders/add
 Content-Type: application/json
+
+{"reservoir_level": 23.0}

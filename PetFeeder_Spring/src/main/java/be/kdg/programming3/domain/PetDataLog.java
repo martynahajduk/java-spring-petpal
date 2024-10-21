@@ -9,9 +9,9 @@ public class PetDataLog {
     @Column(name="id")
     private Long id;
     @Column(name="pet_weight_log", nullable = false)
-    private String petWeight;
+    private double petWeight;
     @Column(name="food_ate", nullable = false)
-    private String foodAte;
+    private double foodAte;
     @Enumerated(EnumType.STRING)
     @Column(name="animal_type", nullable = false)
     private Breed animalType;
@@ -19,10 +19,9 @@ public class PetDataLog {
     @JoinColumn(name ="pet_id", nullable = false)
     private Pet pet;
 
-    protected PetDataLog(){}
+    public PetDataLog(){}
 
-    public PetDataLog(Long id, String petWeight, String foodAte, Breed animalType, Pet pet) {
-        this.id = id;
+    public PetDataLog(double petWeight, double foodAte, Breed animalType, Pet pet) {
         this.petWeight = petWeight;
         this.foodAte = foodAte;
         this.animalType = animalType;
@@ -37,19 +36,19 @@ public class PetDataLog {
         this.id = id;
     }
 
-    public String getPetWeight() {
+    public double getPetWeight() {
         return petWeight;
     }
 
-    public void setPetWeight(String petWeight) {
+    public void setPetWeight(double petWeight) {
         this.petWeight = petWeight;
     }
 
-    public String getFoodAte() {
+    public double getFoodAte() {
         return foodAte;
     }
 
-    public void setFoodAte(String foodAte) {
+    public void setFoodAte(double foodAte) {
         this.foodAte = foodAte;
     }
 

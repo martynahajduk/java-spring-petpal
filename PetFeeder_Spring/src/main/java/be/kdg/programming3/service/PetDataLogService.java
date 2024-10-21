@@ -8,7 +8,7 @@ import java.util.List;
 public interface PetDataLogService {
 
     List<PetDataLog> findAll();
-    PetDataLog findPetDataLogById(Long id);
+    PetDataLog getPetDataLogById(Long id);
     PetDataLog save(PetDataLog petDataLog);
     void deleteById(Long id);
 }

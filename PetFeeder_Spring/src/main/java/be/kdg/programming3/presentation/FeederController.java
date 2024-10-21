@@ -1,6 +1,7 @@
 package be.kdg.programming3.presentation;
 
 import be.kdg.programming3.domain.Feeder;
+import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.service.FeederService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,14 +26,19 @@ public class FeederController {
         return feederService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Feeder getFeederById(@PathVariable Long id) {
+        return feederService.findById(id);
+    }
     @PostMapping("/add")
     public Feeder createFeeder(@RequestBody Feeder feeder) {
         return feederService.save(feeder);
     }
 
-
+    /*
     @DeleteMapping("/{id}")
     public void deleteFeeder(@PathVariable Long id) {
         feederService.deleteById(id);
     }
+     */
 }

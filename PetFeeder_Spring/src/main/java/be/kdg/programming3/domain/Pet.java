@@ -24,20 +24,13 @@ public class Pet {
     private double weight;
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> owners;
-  // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-  // @JoinColumn(name = "feeder_id", referencedColumnName = "id")
-  // private Feeder feeder;
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PetDataLog> petDataLogs;
 
 
-    protected Pet() {
-    } //Encapsulation: You don’t want other parts of the application
-    // (except for subclasses) to use the default constructor. By marking it as
-    // protected, only the JPA framework
-    // (and subclasses of Pet) can use it
+    public Pet(){}
 
-
-    public Pet(Long id, String name, int age, Breed animalType, String gender, double weight) {
-        this.id = id;
+    public Pet(String name, int age, Breed animalType, String gender, double weight) {
         this.name = name;
         this.age = age;
         this.gender = gender;
@@ -99,6 +92,13 @@ public class Pet {
     public void setOwners(List<User> owners) {
         this.owners = owners;
     }
+    public List<PetDataLog> getPetDataLogs() {
+        return petDataLogs;
+    }
+
+    public void setPetDataLogs(List<PetDataLog> petDataLogs) {
+        this.petDataLogs = petDataLogs;
+    }
 
     @Override
     public String toString() {
@@ -106,9 +106,11 @@ public class Pet {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
-                ", animalType=" + animalType +
                 ", gender='" + gender + '\'' +
+                ", animalType=" + animalType +
                 ", weight=" + weight +
+                ", owners=" + owners +
+                ", petDataLogs=" + petDataLogs +
                 '}';
     }
 }

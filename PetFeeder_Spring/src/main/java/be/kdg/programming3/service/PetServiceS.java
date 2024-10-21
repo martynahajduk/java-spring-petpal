@@ -1,6 +1,7 @@
 package be.kdg.programming3.service;
 
 
+import be.kdg.programming3.domain.Breed;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.repository.PetRepository;
 
@@ -21,13 +22,13 @@ public class PetServiceS implements PetService {
     }
 
     public Pet findById(Long id) {
-        return petRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Pet not found with id: " + id));
+        return petRepository.findById(id).orElse(null);
     }
 
     public List<Pet> findAll() {
         return petRepository.findAll();
     }
+
 
     public Pet save(Pet pet) {
         return petRepository.save(pet);

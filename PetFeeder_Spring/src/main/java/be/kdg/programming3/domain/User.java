@@ -19,7 +19,7 @@ public class User {
     @JoinColumn(name = "pet_id", nullable = true)
     private Pet pet;
 
-    protected User() {
+   /* protected User() {
     }
 
    public User(Long id, String name, String email, String password, Pet pet) {
@@ -29,7 +29,15 @@ public class User {
        this.password = password;
        this.pet = pet;
    }
+*/
 
+    public User(String name, String email, String password, Pet pet) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.pet = pet;
+    }
+    public User() {}
 
     public Long getId() {
         return id;
@@ -76,8 +84,9 @@ public class User {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", pet=" + pet +
                 '}';
     }
 }

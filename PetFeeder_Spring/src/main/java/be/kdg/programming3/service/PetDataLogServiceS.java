@@ -15,7 +15,7 @@ public class PetDataLogServiceS implements PetDataLogService {
         this.petDataLogRepository = petDataLogRepository;
     }
 
-    public PetDataLog findPetDataLogById(Long id) {
+    public PetDataLog getPetDataLogById(Long id) {
         return petDataLogRepository.findById(id).orElse(null);
     }
 

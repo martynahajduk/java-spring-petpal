@@ -17,6 +17,7 @@ public class UserServiceS implements UserService {
         this.userRepository = userRepository;
     }
 
+
     public User findUserById(Long id) {
         return userRepository.findById(id).orElse(null);
     }
@@ -26,9 +27,9 @@ public class UserServiceS implements UserService {
         return userRepository.findAll();
     }
 
-    public User save(String name, String email, String password) {
+    /*public User save(String name, String email, String password) {
         return userRepository.save(new User(name,email,password));
-    }
+    }*/
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);

@@ -29,7 +29,7 @@ public class PetDataLogController {
 
     @GetMapping("/{id}")
     public PetDataLog getPetDataLogById(@PathVariable Long id) {
-        return petDataLogService.findPetDataLogById(id);
+        return petDataLogService.getPetDataLogById(id);
     }
 
     @PostMapping("add")

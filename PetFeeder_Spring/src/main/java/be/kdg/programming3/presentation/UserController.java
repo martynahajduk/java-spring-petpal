@@ -36,5 +36,4 @@ public class UserController {
     }
 }
 
-    // Other methods (update, delete) can be added here as needed
 

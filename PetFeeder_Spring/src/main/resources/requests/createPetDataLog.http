@@ -1,5 +1,7 @@
 ### GET request to example server
 ### Create a PetDataLog
 ### POST request to create multiple Schedules
-POST http://localhost:8080/schedules/add
+POST http://localhost:8080/data-logs/add
 Content-Type: application/json
+
+{"animal_type":"HAMSTER","food_ate":15,"pet_weight_log":350}
