@@ -6,9 +6,9 @@ Content-Type: application/json
 
 
 
-{"name": "KK",
-  "email": "alinaaa.dimova@student.kdg.com",
-  "password": "1111111a", "pet":{"id": 1}}
+{"name": "Qosai Abu Ahmed",
+  "email": "qosai.abuahmed@student.kdg.com",
+  "password": "222222", "pet":{"id": 1}}
 
 
 

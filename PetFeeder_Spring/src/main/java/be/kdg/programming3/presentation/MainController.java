@@ -63,23 +63,23 @@ public class MainController {
 
 
 
-    @GetMapping("/pet-data-logs")
+    @GetMapping("/data-logs")
     public List<PetDataLog> getAllPetDataLog() {
         return petDataLogService.findAll();
     }
 
 
-    @GetMapping("/pet-data-logs/{id}")
+    @GetMapping("/data-logs/{id}")
     public PetDataLog getPetDataLogById(@PathVariable Long id) {
         return petDataLogService.getPetDataLogById(id);
     }
 
-    @PostMapping("/pet-data-logs/add")
+    @PostMapping("/data-logs/add")
     public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
         return petDataLogService.save(petDataLog);
     }
 
-    @DeleteMapping("/pet-data-logs/{id}")
+    @DeleteMapping("/data-logs/{id}")
     public void deletePetDataLog(@PathVariable Long id) {
         petDataLogService.deleteById(id);
     }

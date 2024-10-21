@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Controller
-@RequestMapping("/data-logs")
+//@Controller
+//@RequestMapping("/data-logs")
 public class PetDataLogController {
  //  private final PetDataLogService petDataLogService;
 
