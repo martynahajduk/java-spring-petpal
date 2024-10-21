@@ -12,33 +12,35 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/feeders")
+
 public class FeederController {
 
-    private final FeederService feederService;
 
-    @Autowired
-    public FeederController(FeederService feederService) {
-        this.feederService = feederService;
-    }
+//   private final FeederService feederService;
 
-    @GetMapping
-    public List<Feeder> getAllFeeders() {
-        return feederService.findAll();
-    }
+//   @Autowired
+//   public FeederController(FeederService feederService) {
+//       this.feederService = feederService;
+//   }
 
-    @GetMapping("/{id}")
-    public Feeder getFeederById(@PathVariable Long id) {
-        return feederService.findById(id);
-    }
-    @PostMapping("/add")
-    public Feeder createFeeder(@RequestBody Feeder feeder) {
-        return feederService.save(feeder);
-    }
+//   @GetMapping
+//   public List<Feeder> getAllFeeders() {
+//       return feederService.findAll();
+//   }
 
-    /*
-    @DeleteMapping("/{id}")
-    public void deleteFeeder(@PathVariable Long id) {
-        feederService.deleteById(id);
-    }
-     */
+//   @GetMapping("/{id}")
+//   public Feeder getFeederById(@PathVariable Long id) {
+//       return feederService.findById(id);
+//   }
+//   @PostMapping("/add")
+//   public Feeder createFeeder(@RequestBody Feeder feeder) {
+//       return feederService.save(feeder);
+//   }
+
+//
+//   @DeleteMapping("/{id}")
+//   public void deleteFeeder(@PathVariable Long id) {
+//       feederService.deleteById(id);
+//   }
+//
 }

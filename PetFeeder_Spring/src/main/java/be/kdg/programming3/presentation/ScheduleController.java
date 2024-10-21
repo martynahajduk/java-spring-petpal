@@ -13,25 +13,25 @@ import java.util.List;
 @RequestMapping("/schedules")
 public class ScheduleController {
 
-    private final ScheduleService scheduleService;
+ //  private final ScheduleService scheduleService;
 
-    @Autowired
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService;
-    }
+ //  @Autowired
+ //  public ScheduleController(ScheduleService scheduleService) {
+ //      this.scheduleService = scheduleService;
+ //  }
 
-    @GetMapping
-    public List<Schedule> getAllSchedules() {
-        return scheduleService.findAll();
-    }
+ //  @GetMapping
+ //  public List<Schedule> getAllSchedules() {
+ //      return scheduleService.findAll();
+ //  }
 
-    @PostMapping("/add")
-    public List<Schedule> createSchedules(@RequestBody List<Schedule> schedules) {
-        return scheduleService.saveAll(schedules);
-    }
+ //  @PostMapping("/add")
+ //  public List<Schedule> createSchedules(@RequestBody List<Schedule> schedules) {
+ //      return scheduleService.saveAll(schedules);
+ //  }
 
-    @DeleteMapping("/{id}")
-    public void deleteSchedule(@PathVariable Long id) {
-        scheduleService.deleteById(id);
-    }
+ //  @DeleteMapping("/{id}")
+ //  public void deleteSchedule(@PathVariable Long id) {
+ //      scheduleService.deleteById(id);
+ //  }
 }

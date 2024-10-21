@@ -14,31 +14,31 @@ import java.util.List;
 @Controller
 @RequestMapping("/data-logs")
 public class PetDataLogController {
-    private final PetDataLogService petDataLogService;
+ //  private final PetDataLogService petDataLogService;
 
-    @Autowired
-    public PetDataLogController(PetDataLogService petDataLogService) {
-        this.petDataLogService = petDataLogService;
-    }
+ //  @Autowired
+ //  public PetDataLogController(PetDataLogService petDataLogService) {
+ //      this.petDataLogService = petDataLogService;
+ //  }
 
-    @GetMapping
-    public List<PetDataLog> getAllPetDataLog() {
-        return petDataLogService.findAll();
-    }
+ //  @GetMapping
+ //  public List<PetDataLog> getAllPetDataLog() {
+ //      return petDataLogService.findAll();
+ //  }
 
 
-    @GetMapping("/{id}")
-    public PetDataLog getPetDataLogById(@PathVariable Long id) {
-        return petDataLogService.getPetDataLogById(id);
-    }
+ //  @GetMapping("/{id}")
+ //  public PetDataLog getPetDataLogById(@PathVariable Long id) {
+ //      return petDataLogService.getPetDataLogById(id);
+ //  }
 
-    @PostMapping("add")
-    public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
-        return petDataLogService.save(petDataLog);
-    }
+ //  @PostMapping("add")
+ //  public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
+ //      return petDataLogService.save(petDataLog);
+ //  }
 
-    @DeleteMapping("/{id}")
-    public void deletePetDataLog(@PathVariable Long id) {
-        petDataLogService.deleteById(id);
-    }
+ //  @DeleteMapping("/{id}")
+ //  public void deletePetDataLog(@PathVariable Long id) {
+ //      petDataLogService.deleteById(id);
+ //  }
 }
