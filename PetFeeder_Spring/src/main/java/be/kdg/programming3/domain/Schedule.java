@@ -4,8 +4,9 @@ package be.kdg.programming3.domain;
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
-import java.time.LocalDate;
+import java.util.stream.Collectors;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Entity
@@ -14,9 +15,7 @@ public class Schedule {
         return timeToFeed;
     }
 
-    public void setTimeToFeed(List<LocalDateTime> timeToFeed) {
-        this.timeToFeed = timeToFeed;
-    }
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
