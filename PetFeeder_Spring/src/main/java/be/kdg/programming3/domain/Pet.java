@@ -2,6 +2,8 @@ package be.kdg.programming3.domain;
 
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 @Table(name="pet")
 public class Pet {
@@ -18,11 +20,14 @@ public class Pet {
     @Enumerated(EnumType.STRING)
     @Column(name="animal_type", nullable = false)
     private Breed animalType;
-    @Column(name="weight", nullable = true)
+    @Column(name="weight")
     private double weight;
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<User> owners;
   // @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   // @JoinColumn(name = "feeder_id", referencedColumnName = "id")
   // private Feeder feeder;
+
 
     protected Pet() {
     } //Encapsulation: You don’t want other parts of the application
@@ -85,6 +90,14 @@ public class Pet {
 
     public void setWeight(double weight) {
         this.weight = weight;
+    }
+
+    public List<User> getOwners() {
+        return owners;
+    }
+
+    public void setOwners(List<User> owners) {
+        this.owners = owners;
     }
 
     @Override

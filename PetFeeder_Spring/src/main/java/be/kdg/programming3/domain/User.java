@@ -15,15 +15,19 @@ public class User {
     String email;
     @Column(unique = true, nullable = false)
     String password;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "pet_id", nullable = true)
+    private Pet pet;
 
     protected User() {
     }
 
-   public User(Long id, String name, String email, String password) {
+   public User(Long id, String name, String email, String password, Pet pet) {
        this.id = id;
        this.name = name;
        this.email = email;
        this.password = password;
+       this.pet = pet;
    }
 
 
@@ -57,6 +61,14 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Pet getPet() {
+        return pet;
+    }
+
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 
     @Override
