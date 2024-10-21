@@ -21,18 +21,21 @@ public class UserServiceS implements UserService {
         return userRepository.findById(id).orElse(null);
     }
 
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
 
-    public User save(User user) {
-        return userRepository.save(user);
+    public User save(String name, String email, String password) {
+        return userRepository.save(new User(name,email,password));
     }
 
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
 
-
+    public User save(User user) {
+        return userRepository.save(user);
+    }
 
 }

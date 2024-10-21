@@ -16,15 +16,25 @@ public class User {
     @Column(unique = true, nullable = false)
     String password;
 
-    protected User() {
+    public User(String name,String email, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
     }
 
-   public User(Long id, String name, String email, String password) {
-       this.id = id;
-       this.name = name;
-       this.email = email;
-       this.password = password;
-   }
+    public User() {
+
+    }
+
+    //    protected User() {
+//    }
+//
+//   public User(Long id, String name, String email, String password) {
+//       this.id = id;
+//       this.name = name;
+//       this.email = email;
+//       this.password = password;
+//   }
 
 
     public Long getId() {

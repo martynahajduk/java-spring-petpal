@@ -25,6 +25,15 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.findAll());
     }
 
+   /* @GetMapping("/schedule")
+    public String getSchedule(Model model) {
+        Schedule schedule = ... // fetch your schedule entity
+        List<String> formattedTimes = scheduleService.getFormattedFeedingTimes(schedule);
+
+        model.addAttribute("feedingTimes", formattedTimes);
+        return "schedule"; // your Thymeleaf view
+    }
+*/
     /*@PostMapping("/add")
     public ResponseEntity<Schedule> createSchedule(@RequestBody Schedule schedule) {
         Schedule createdSchedule = scheduleService.save(schedule);
