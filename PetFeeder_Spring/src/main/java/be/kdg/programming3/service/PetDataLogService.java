@@ -11,4 +11,5 @@ public interface PetDataLogService {
     PetDataLog getPetDataLogById(Long id);
     PetDataLog save(PetDataLog petDataLog);
     void deleteById(Long id);
+    List<PetDataLog> getAllLogs();
 }

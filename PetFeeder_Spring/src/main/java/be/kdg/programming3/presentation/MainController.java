@@ -43,7 +43,12 @@ public class MainController {
     }
 
 
-
+    @GetMapping("/logs")
+    public String showPetDataLogs(Model model) {
+        List<PetDataLog> petDataLogs = petDataLogService.getAllLogs();
+        model.addAttribute("pet_data_log", petDataLogs); // match the model attribute name in your HTML
+        return "LogDataTestPage";  // Ensure this matches your Thymeleaf template name
+    }
 
 
     @GetMapping("/pets")
@@ -121,7 +126,7 @@ public class MainController {
         userService.save(user);
         return "User added successfully";
     }
-    @GetMapping("/DataPage")
+   /* @GetMapping("/DataPage")
     public String showPetDataLogs(Model model) {
         List<PetDataLog> petDataLogs = petDataLogService.findAll();
         // Force loading of the pet for each log
@@ -129,4 +134,6 @@ public class MainController {
         model.addAttribute("petDataLogs", petDataLogs);
         return "LogDataTestPage";
     }
+
+    */
 }

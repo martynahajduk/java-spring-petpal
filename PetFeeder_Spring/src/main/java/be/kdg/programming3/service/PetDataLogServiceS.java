@@ -31,4 +31,7 @@ public class PetDataLogServiceS implements PetDataLogService {
         petDataLogRepository.deleteById(id);
     }
 
+    public List<PetDataLog> getAllLogs() {
+        return petDataLogRepository.findAll();
+    }
 }
