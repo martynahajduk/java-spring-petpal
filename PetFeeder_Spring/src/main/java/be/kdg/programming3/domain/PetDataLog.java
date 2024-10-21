@@ -8,7 +8,7 @@ public class PetDataLog {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Long id;
-    @Column(name="pet_weight", nullable = false)
+    @Column(name="pet_weight_log", nullable = false)
     private String petWeight;
     @Column(name="food_ate", nullable = false)
     private String foodAte;
@@ -16,7 +16,7 @@ public class PetDataLog {
     @Column(name="animal_type", nullable = false)
     private Breed animalType;
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "pet_id", nullable = false)
+    @JoinColumn(name ="pet_id", nullable = false)
     private Pet pet;
 
     protected PetDataLog(){}

@@ -32,5 +32,8 @@ public class ScheduleServiceS implements ScheduleService{
         scheduleRepository.deleteById(id);
     }
 
+    public List<Schedule> saveAll(List<Schedule> schedules) {
+        return scheduleRepository.saveAll(schedules);
+    }
 
 }

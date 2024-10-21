@@ -5,15 +5,16 @@ import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
 public class Schedule {
-    public List<LocalDate> getTimeToFeed() {
+    public List<LocalDateTime> getTimeToFeed() {
         return timeToFeed;
     }
 
-    public void setTimeToFeed(List<LocalDate> timeToFeed) {
+    public void setTimeToFeed(List<LocalDateTime> timeToFeed) {
         this.timeToFeed = timeToFeed;
     }
 
@@ -21,7 +22,7 @@ public class Schedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ElementCollection
-    private List<LocalDate> timeToFeed;
+    private List<LocalDateTime> timeToFeed;
 
     public Schedule() {}
 

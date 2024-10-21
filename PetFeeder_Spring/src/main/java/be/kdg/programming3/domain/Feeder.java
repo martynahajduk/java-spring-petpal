@@ -19,11 +19,12 @@ public class Feeder {
     @Column(name="resevoir_level", nullable = false)
     private double reservoirLevel;
 
-    @Column(name = "next_feeding_date")
+    /*@Column(name = "next_feeding_date")
     private LocalDate nextFeedingDate;
 
     @Column(name = "next_feeding_time")
     private LocalTime nextFeedingTime;
+*/
 
 
 
@@ -31,11 +32,11 @@ public class Feeder {
 
     protected Feeder() {}
 
-    public Feeder(Long id, double reservoirLevel, LocalTime nextFeedingTime, LocalDate nextFeedingDate, LocalDate emptyIN) {
+    public Feeder(Long id, double reservoirLevel/*, LocalTime nextFeedingTime, LocalDate nextFeedingDate*/) {
         this.id = id;
         this.reservoirLevel = reservoirLevel;
-        this.nextFeedingDate = nextFeedingDate;
-        this.nextFeedingTime = nextFeedingTime;
+        //his.nextFeedingDate = nextFeedingDate;
+        //this.nextFeedingTime = nextFeedingTime;
 
 
     }
@@ -44,10 +45,9 @@ public class Feeder {
     public String toString() {
         return "Feeder{" +
                 "id=" + id +
-                ", reservoirLevel=" + reservoirLevel +
+                ", reservoirLevel=" + reservoirLevel /*+
                 ", nextFeedingDate=" + nextFeedingDate +
-                ", nextFeedingTime=" + nextFeedingTime +
-
+                ", nextFeedingTime=" + nextFeedingTime */+
                 '}';
     }
 }

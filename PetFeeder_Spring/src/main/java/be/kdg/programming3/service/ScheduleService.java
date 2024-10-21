@@ -8,4 +8,5 @@ public interface ScheduleService {
     List<Schedule> findAll();
     Schedule save(Schedule schedule);
     void deleteById(Long id);
+    List<Schedule> saveAll(List<Schedule> schedules);
 }

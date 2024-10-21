@@ -25,10 +25,16 @@ public class ScheduleController {
         return ResponseEntity.ok(scheduleService.findAll());
     }
 
-    @PostMapping("/add")
+    /*@PostMapping("/add")
     public ResponseEntity<Schedule> createSchedule(@RequestBody Schedule schedule) {
         Schedule createdSchedule = scheduleService.save(schedule);
         return ResponseEntity.ok(createdSchedule);
+    }
+     */
+    @PostMapping("/add")
+    public ResponseEntity<List<Schedule>> createSchedules(@RequestBody List<Schedule> schedules) {
+        List<Schedule> savedSchedules = scheduleService.saveAll(schedules);
+        return ResponseEntity.ok(savedSchedules);
     }
 
     @DeleteMapping("/{id}")
