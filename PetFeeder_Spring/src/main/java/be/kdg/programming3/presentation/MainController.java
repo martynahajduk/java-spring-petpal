@@ -19,6 +19,7 @@ public class MainController {
     private final ScheduleService scheduleService;
     private final UserService userService;
 
+
     public MainController(FeederService feederService, PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService) {
         this.feederService = feederService;
         this.petService = petService;
@@ -126,14 +127,21 @@ public class MainController {
         userService.save(user);
         return "User added successfully";
     }
-   /* @GetMapping("/DataPage")
-    public String showPetDataLogs(Model model) {
-        List<PetDataLog> petDataLogs = petDataLogService.findAll();
-        // Force loading of the pet for each log
-        petDataLogs.forEach(log -> log.getPet().getName());
-        model.addAttribute("petDataLogs", petDataLogs);
-        return "LogDataTestPage";
+    /*
+    @PostMapping("/")
+    @ResponseBody
+    public String receiveData(Integer reservoirHeight, Integer bowlWeight, Integer petWeight, Integer id) {
+        // Log the received data
+        logger.info("reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
+        Pet pet = petService.findById(id); // Zakładając, że id odnosi się do id zwierzęcia
+        Breed animalType = pet.getAnimalType(); // Załóżmy, że masz metodę, która zwraca typ zwierzęcia
+
+        // Zapisz dane do logu
+        PetDataLog petDataLog = new PetDataLog(petWeight, animalType, bowlWeight, pet, null);
+        petDataLogService.save(petDataLog);
+        // Return a response message
+        return "Data received successfully!";
     }
 
-    */
+     */
 }
