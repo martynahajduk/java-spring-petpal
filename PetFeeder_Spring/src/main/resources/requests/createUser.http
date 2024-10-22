@@ -3,12 +3,12 @@
 ### POST request to create multiple Users
 POST http://localhost:8080/users/add
 Content-Type: application/json
+app_user
 
 
-
-{"name": "Qosai Abu Ahmed",
-  "email": "qosai.abuahmed@student.kdg.com",
-  "password": "222222", "pet":{"id": 1}}
+{"name": "Alina Dimova",
+  "email": "alina.dimova@student.kdg.be",
+  "password": "1111111", "pet":{"id": 1}}
 
 
 

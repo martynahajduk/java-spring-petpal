@@ -1,6 +1,5 @@
 ### GET request to example server
 ### Create a Feeder
-### POST request to create multiple Schedules
 POST http://localhost:8080/feeders/add
 Content-Type: application/json
 

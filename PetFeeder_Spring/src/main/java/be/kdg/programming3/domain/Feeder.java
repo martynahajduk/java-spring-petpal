@@ -18,6 +18,10 @@ public class Feeder {
 
     @Column(name="reservoir_level", nullable = false)
     private double reservoirLevel;
+    @Column(name = "portion", nullable = false)
+    private double portion;
+    @OneToMany(mappedBy = "feeder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PetDataLog> petDataLogs = new ArrayList<>();
 
     /*@Column(name = "next_feeding_date")
     private LocalDate nextFeedingDate;
@@ -27,26 +31,53 @@ public class Feeder {
 */
 
 
+    public List<PetDataLog> getPetDataLogs() {
+        return petDataLogs;
+    }
 
-
+    public void setPetDataLogs(List<PetDataLog> petDataLogs) {
+        this.petDataLogs = petDataLogs;
+    }
 
     public Feeder() {}
 
-    public Feeder(double reservoirLevel/*, LocalTime nextFeedingTime, LocalDate nextFeedingDate*/) {
+    public Feeder(double reservoirLevel, double portion) {
         this.reservoirLevel = reservoirLevel;
-        //his.nextFeedingDate = nextFeedingDate;
-        //this.nextFeedingTime = nextFeedingTime;
+        this.portion = portion;
 
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public double getReservoirLevel() {
+        return reservoirLevel;
+    }
+
+    public void setReservoirLevel(double reservoirLevel) {
+        this.reservoirLevel = reservoirLevel;
+    }
+
+    public double getPortion() {
+        return portion;
+    }
+
+    public void setPortion(double portion) {
+        this.portion = portion;
     }
 
     @Override
     public String toString() {
         return "Feeder{" +
                 "id=" + id +
-                ", reservoirLevel=" + reservoirLevel /*+
-                ", nextFeedingDate=" + nextFeedingDate +
-                ", nextFeedingTime=" + nextFeedingTime */+
+                ", reservoirLevel=" + reservoirLevel +
+                ", portion=" + portion +
                 '}';
     }
 }
