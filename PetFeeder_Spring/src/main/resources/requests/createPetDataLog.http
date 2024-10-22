@@ -5,10 +5,10 @@ POST http://localhost:8080/data-logs/add
 Content-Type: application/json
 
 {
-  "petWeight": 350,
-  "foodAte": 15,
-  "animalType": "HAMSTER",
   "pet": {
     "id": 1
-  }
+  },
+  "petWeight": 350,
+  "foodAte": 15,
+  "animalType": "HAMSTER"
 }
