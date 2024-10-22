@@ -21,13 +21,8 @@ public class Feeder {
     private double portion;
     @OneToMany(mappedBy = "feeder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<PetDataLog> petDataLogs = new ArrayList<>();
-
-    /*@Column(name = "next_feeding_date")
-    private LocalDate nextFeedingDate;
-
-    @Column(name = "next_feeding_time")
-    private LocalTime nextFeedingTime;
-*/
+    /*@OneToMany(mappedBy = "feeder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Schedule> schedules = new ArrayList<>();*/
 
 
     public List<PetDataLog> getPetDataLogs() {
@@ -45,6 +40,14 @@ public class Feeder {
         this.portion = portion;
 
     }
+/*
+    public List<Schedule> getSchedules() {
+        return schedules;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedules = schedules;
+    }*/
 
     public Long getId() {
         return id;

@@ -5,13 +5,13 @@ POST http://localhost:8080/data-logs/add
 Content-Type: application/json
 
 {
-  "petWeight": 15.0,
+  "petWeight": 16.0,
   "animalType": "HAMSTER",
   "pet": {
     "id": 1
   },
   "feeder": {
-    "portion": 15,
+    "portion": 13,
     "id": 1
   }
 }

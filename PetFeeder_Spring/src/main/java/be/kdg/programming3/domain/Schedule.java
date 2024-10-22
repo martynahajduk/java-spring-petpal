@@ -20,9 +20,9 @@ public class Schedule {
     private Long id;
     @ElementCollection
     private List<LocalDateTime> timeToFeed;
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "feeder_id", nullable = false)
-    private Feeder feeder;
+    private Feeder feeder;*/
 
     public Schedule() {}
 
@@ -35,7 +35,7 @@ public class Schedule {
     public void setTimeToFeed(List<LocalDateTime> timeToFeed) {
         this.timeToFeed = timeToFeed;
     }
-
+/*
     public Feeder getFeeder() {
         return feeder;
     }
@@ -43,4 +43,5 @@ public class Schedule {
     public void setFeeder(Feeder feeder) {
         this.feeder = feeder;
     }
+ */
 }
