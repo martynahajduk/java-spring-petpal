@@ -24,9 +24,9 @@ public class PetDataLog {
 
     public PetDataLog(){}
 
-    public PetDataLog(double petWeight, Breed animalType, Pet pet, Feeder feeder) {
+    public PetDataLog(double petWeight, Breed animalType, double portion, Pet pet, Feeder feeder) {
         this.petWeight = petWeight;
-        this.portion = feeder.getPortion();
+        this.portion = portion;
         this.animalType = animalType;
         this.pet = pet;
         this.feeder=feeder;

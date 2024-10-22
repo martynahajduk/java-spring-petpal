@@ -15,7 +15,6 @@ public class Feeder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false)
     private Long id;
-
     @Column(name="reservoir_level", nullable = false)
     private double reservoirLevel;
     @Column(name = "portion", nullable = false)
@@ -44,7 +43,6 @@ public class Feeder {
     public Feeder(double reservoirLevel, double portion) {
         this.reservoirLevel = reservoirLevel;
         this.portion = portion;
-
 
     }
 
