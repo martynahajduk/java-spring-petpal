@@ -10,22 +10,26 @@ public class PetDataLog {
     private Long id;
     @Column(name="pet_weight_log", nullable = false)
     private double petWeight;
-    @Column(name="food_ate", nullable = false)
-    private double foodAte;
+    @Column(name="portion", nullable = false)
+    private double portion;
     @Enumerated(EnumType.STRING)
     @Column(name="animal_type", nullable = false)
     private Breed animalType;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name ="pet_id", nullable = false)
     private Pet pet;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "feeder_id", nullable = false)
+    private Feeder feeder;
 
     public PetDataLog(){}
 
-    public PetDataLog(double petWeight, double foodAte, Breed animalType, Pet pet) {
+    public PetDataLog(double petWeight, Breed animalType, double portion, Pet pet, Feeder feeder) {
         this.petWeight = petWeight;
-        this.foodAte = foodAte;
+        this.portion = portion;
         this.animalType = animalType;
         this.pet = pet;
+        this.feeder=feeder;
     }
 
     public Long getId() {
@@ -44,12 +48,12 @@ public class PetDataLog {
         this.petWeight = petWeight;
     }
 
-    public double getFoodAte() {
-        return foodAte;
+    public double getPortion() {
+        return portion;
     }
 
-    public void setFoodAte(double foodAte) {
-        this.foodAte = foodAte;
+    public void setPortion(double portion) {
+        this.portion = portion;
     }
 
     public Breed getAnimalType() {
@@ -68,14 +72,26 @@ public class PetDataLog {
         this.pet = pet;
     }
 
+    public Feeder getFeeder() {
+        return feeder;
+    }
+
+    public void setFeeder(Feeder feeder) {
+        this.feeder = feeder;
+        if (feeder != null) {
+            this.portion = feeder.getPortion();
+        }
+    }
+
     @Override
     public String toString() {
-        return "PetDataLogService{" +
+        return "PetDataLog{" +
                 "id=" + id +
-                ", petWeight='" + petWeight + '\'' +
-                ", foodAte='" + foodAte + '\'' +
+                ", petWeight=" + petWeight +
+                ", portion=" + portion +
                 ", animalType=" + animalType +
                 ", pet=" + pet +
+                ", feeder=" + feeder +
                 '}';
     }
 }

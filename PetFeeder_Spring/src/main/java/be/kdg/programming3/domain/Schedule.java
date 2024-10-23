@@ -20,10 +20,39 @@ public class Schedule {
     private Long id;
     @ElementCollection
     private List<LocalDateTime> timeToFeed;
+    @OneToOne(mappedBy = "schedule")
+    private Feeder feeder;
+    /*@ManyToOne
+    @JoinColumn(name = "feeder_id", nullable = false)
+    private Feeder feeder;*/
 
     public Schedule() {}
 
     public void setId(Long id) {this.id = id;}
 
-    public Long getId() {return id;}
+    public Long getId() {
+        return id;
+    }
+
+    public void setTimeToFeed(List<LocalDateTime> timeToFeed) {
+        this.timeToFeed = timeToFeed;
+    }
+
+
+    public Feeder getFeeder() {
+        return feeder;
+    }
+
+    public void setFeeder(Feeder feeder) {
+        this.feeder = feeder;
+    }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "id=" + id +
+                ", timeToFeed=" + timeToFeed +
+                '}';
+    }
 }
+
