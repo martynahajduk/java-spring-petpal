@@ -6,9 +6,10 @@ Content-Type: application/json
 
 {
   "pet": {
-    "id": 1
+    "id": 2
   },
-  "petWeight": 350,
-  "foodAte": 15,
-  "animalType": "HAMSTER"
+  "petWeight": 550,
+  "foodAte": 10,
+  "animalType": "RAT"
 }
+

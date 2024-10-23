@@ -30,6 +30,9 @@ public class Pet {
 
 
     public Pet(){}
+    public Pet(double weight){
+        this.weight = weight;
+    }
 
     public Pet(String name, int age, Breed animalType, String gender, double weight) {
         this.name = name;
