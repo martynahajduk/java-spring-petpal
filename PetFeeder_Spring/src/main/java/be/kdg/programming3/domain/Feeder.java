@@ -19,19 +19,10 @@ public class Feeder {
     private double reservoirLevel;
     @Column(name = "portion", nullable = false)
     private double portion;
-    @OneToMany(mappedBy = "feeder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PetDataLog> petDataLogs = new ArrayList<>();
-    /*@OneToMany(mappedBy = "feeder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Schedule> schedules = new ArrayList<>();*/
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "schedule_id", referencedColumnName = "id")
+    private Schedule schedule;
 
-
-    public List<PetDataLog> getPetDataLogs() {
-        return petDataLogs;
-    }
-
-    public void setPetDataLogs(List<PetDataLog> petDataLogs) {
-        this.petDataLogs = petDataLogs;
-    }
 
     public Feeder() {}
 
@@ -73,12 +64,14 @@ public class Feeder {
         this.portion = portion;
     }
 
+
     @Override
     public String toString() {
         return "Feeder{" +
                 "id=" + id +
                 ", reservoirLevel=" + reservoirLevel +
                 ", portion=" + portion +
+                ", schedule=" + schedule +
                 '}';
     }
 }

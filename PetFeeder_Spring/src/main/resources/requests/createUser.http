@@ -6,8 +6,8 @@ Content-Type: application/json
 app_user
 
 
-{"name": "Alina Dimova",
-  "email": "alina.dimova@student.kdg.be",
+{"name": "Martyna Hajduk",
+  "email": "martyna.hajduk@student.kdg.be",
   "password": "1111111", "pet":{"id": 1}}
 
 

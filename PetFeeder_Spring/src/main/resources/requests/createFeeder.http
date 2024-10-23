@@ -3,4 +3,7 @@
 POST http://localhost:8080/feeders/add
 Content-Type: application/json
 
-{"portion": 12.0,"reservoirLevel": 75.0}
+[
+  {"reservoirLevel": 80.0, "portion": 5.0, "schedule": 1},
+  {"reservoirLevel": 90.0, "portion": 3.0, "schedule": 2}
+]
