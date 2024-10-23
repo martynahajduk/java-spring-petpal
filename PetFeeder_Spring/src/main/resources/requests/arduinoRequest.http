@@ -1,0 +1,11 @@
+### GET request to example server
+### Create a User
+### POST request to create multiple Users
+POST http://localhost:8080/
+Content-Type: application/x-www-form-urlencoded
+### not working for some reason
+
+reservoirHeight=20.00&bowlWeight=40.00&petWeight=20.00&id=0.00
+
+
+

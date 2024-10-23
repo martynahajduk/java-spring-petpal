@@ -79,7 +79,7 @@ public class PetDataLog {
     public void setFeeder(Feeder feeder) {
         this.feeder = feeder;
         if (feeder != null) {
-            this.portion = feeder.getPortion();
+//            this.portion = feeder.getPortion();
         }
     }
 

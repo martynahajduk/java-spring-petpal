@@ -15,10 +15,24 @@ public class Feeder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false)
     private Long id;
-
     @Column(name="reservoir_level", nullable = false)
     private double reservoirLevel;
     private double bowlWeight;
+
+    // Add the OneToOne relationship with Schedule
+    @OneToOne
+    @JoinColumn(name = "schedule_id")
+    private Schedule schedule;
+
+    public Schedule getSchedule() {
+        return schedule;
+    }
+
+    public void setSchedule(Schedule schedule) {
+        this.schedule = schedule;
+    }
+
+
     /*@Column(name = "next_feeding_date")
     private LocalDate nextFeedingDate;
 
@@ -40,6 +54,10 @@ public class Feeder {
 
 
     }
+
+//    public double getPortion() {
+//        return portion
+//    }
 
     @Override
     public String toString() {

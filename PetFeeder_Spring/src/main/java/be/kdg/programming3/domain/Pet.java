@@ -22,7 +22,7 @@ public class Pet {
     @Column(name="animal_type", nullable = false)
     private Breed animalType;
     @Column(name="weight")
-    private double weight;
+    private double petWeight;
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<User> owners;
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -30,16 +30,18 @@ public class Pet {
 
 
     public Pet(){}
-    public Pet(double weight){
-        this.weight = weight;
+    public Pet(double petWeight){
+        this.petWeight = petWeight;
+        System.out.println(1);
     }
 
-    public Pet(String name, int age, Breed animalType, String gender, double weight) {
+    public Pet(String name, int age, Breed animalType, String gender, double petWeight) {
         this.name = name;
         this.age = age;
         this.gender = gender;
         this.animalType = animalType;
-        this.weight = weight;
+        this.petWeight = petWeight;
+        System.out.println(2);
     }
 
     public String getName() {
@@ -81,12 +83,12 @@ public class Pet {
         this.animalType = animalType;
     }
 
-    public double getWeight() {
-        return weight;
+    public double getPetWeight() {
+        return petWeight;
     }
 
-    public void setWeight(double weight) {
-        this.weight = weight;
+    public void setPetWeight(double weight) {
+        this.petWeight = weight;
     }
 
     public List<User> getOwners() {
@@ -112,7 +114,7 @@ public class Pet {
                 ", age=" + age +
                 ", gender='" + gender + '\'' +
                 ", animalType=" + animalType +
-                ", weight=" + weight +
+                ", weight=" + petWeight +
                 ", owners=" + owners +
                 ", petDataLogs=" + petDataLogs +
                 '}';

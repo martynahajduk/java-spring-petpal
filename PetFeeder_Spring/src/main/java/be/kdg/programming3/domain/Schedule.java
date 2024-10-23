@@ -22,6 +22,8 @@ public class Schedule {
     private List<LocalDateTime> timeToFeed;
     @OneToOne(mappedBy = "schedule")
     private Feeder feeder;
+
+
     /*@ManyToOne
     @JoinColumn(name = "feeder_id", nullable = false)
     private Feeder feeder;*/
