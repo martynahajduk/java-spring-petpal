@@ -55,7 +55,7 @@ public class ArduinoController {
             }
         // Log the received data
         logger.info("reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
-            petService.save(new Pet(petWeight));
+            // petService.save(new Pet(petWeight));
        // petService.save(new Pet("name", 5, Breed.HAMSTER, "female", petWeight));
         logger.debug("save2");
         feederService.save(new Feeder(reservoirHeight,bowlWeight,petWeight,id));

@@ -1,28 +1,10 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
-    <title>Arduino Data</title>
+    <meta charset="UTF-8">
+    <title>TestPage</title>
 </head>
 <body>
-<h1>Arduino Data</h1>
 
-
-<h2>Feeders</h2>
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Reservoir Height</th>
-        <th>Bowl Weight</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="feeder : ${feeders}">
-        <td th:text="${feeder.id}">ID</td>
-        <td th:text="${feeder.reservoirLevel}">Reservoir Height</td>
-        <td th:text="${feeder.bowlWeight}">Bowl Weight</td>
-    </tr>
-    </tbody>
-</table>
 </body>
 </html>
