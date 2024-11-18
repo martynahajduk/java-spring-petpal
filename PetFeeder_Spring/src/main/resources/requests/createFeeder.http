@@ -5,7 +5,9 @@ POST http://localhost:8080/feeders/add
 Content-Type: application/json
 
 {
-  "reservoirLevel": 80.5,
-  "bowlWeight": 12.3
+
+  "bowlWeight": 12.3,
+  "petWeight": 60.1,
+  "reservoirLevel": 80.5
 }
 
