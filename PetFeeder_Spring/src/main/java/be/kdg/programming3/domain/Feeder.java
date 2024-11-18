@@ -82,6 +82,14 @@ public class Feeder {
         this.schedule = schedules;
     }
 
+    public double getPetWeight() {
+        return petWeight;
+    }
+
+    public void setPetWeight(double petWeight) {
+        this.petWeight = petWeight;
+    }
+
     @Override
     public String toString() {
         return "Feeder{" +
