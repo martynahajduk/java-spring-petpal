@@ -12,9 +12,13 @@ import be.kdg.programming3.service.ScheduleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class ArduinoController {
@@ -28,6 +32,16 @@ public class ArduinoController {
         this.feederService = feederService;
         this.petService = petService;
 
+    }
+
+    @GetMapping("/view-data")
+    public String viewData(Model model) {
+        List<Feeder> feeders = feederService.findAll();
+
+        // Add data to the model
+        model.addAttribute("feeders", feeders);
+
+        return "TestPage"; // Name of the Thymeleaf template
     }
 
     @PostMapping("/SensorData")
