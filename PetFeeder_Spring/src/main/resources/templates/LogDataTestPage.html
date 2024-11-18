@@ -17,18 +17,19 @@
         <tr>
             <th>ID</th>
             <th>Weight</th>
+            <th>Pet Name</th>
             <th>Quantity Food Eaten</th>
             <th>Animal Type</th>
-            <th>Pet Name</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="log : ${pet_data_log}">
-            <td th:text="${log.id}"></td>
-            <td th:text="${log.petWeight}"></td>
-            <td th:text="${log.portion}"></td>
-            <td th:text="${log.animalType}"></td>
-            <td th:text="${log.pet.name}"></td>
+            <td th:text="${log.bowlWeight}">0.0</td>
+            <td th:text="${log.pet.name}">Pet Name</td>
+            <td th:text="${log.petWeight}">0.0</td>
+            <td th:text="${log.timestamp}">Timestamp</td>
+            <td th:text="${log.feeder.id}">Feeder Name</td>
+            <td th:text="${log.pet.id}">Pet Id</td>
         </tr>
         </tbody>
     </table>

@@ -19,6 +19,9 @@ public class ScheduleServiceS implements ScheduleService{
         this.scheduleRepository = scheduleRepository;
     }
 
+    public Schedule findById(Long id) {
+        return scheduleRepository.findById(id).orElse(null);
+    }
 
     public List<Schedule> findAll() {
         return scheduleRepository.findAll();

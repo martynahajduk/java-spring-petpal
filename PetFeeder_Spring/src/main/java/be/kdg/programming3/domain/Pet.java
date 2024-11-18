@@ -4,49 +4,59 @@ import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="pet")
 public class Pet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
+    @Column(name = "id")
     private Long id;
-    @Column(name="name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String name;
-    @Column(name="age", nullable = false)
+    @Column(name = "age", nullable = false)
     private int age;
-    @Column(name="gender", nullable = false)
-    private String gender;
     @Enumerated(EnumType.STRING)
-    @Column(name="animal_type", nullable = false)
+    @Column(name = "animal_type", nullable = false)
     private Breed animalType;
-    @Column(name="weight")
+    @Column(name = "weight")
     private double petWeight;
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<User> owners;
-    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<PetDataLog> petDataLogs = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id", nullable = false) // Allows null for unassigned pets
+    private User user;
+
+    @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
+    private Set<PetDataLog> petDataLogs;
+
+    //@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    //private List<PetDataLog> petDataLogs = new ArrayList<>();
 
 
-    public Pet(){}
-    public Pet(double petWeight){
+    public Pet() {
+    }
+
+    //for arduino
+    public Pet(double petWeight) {
         this.petWeight = petWeight;
         System.out.println(1);
     }
 
-    public Pet(String name, int age, Breed animalType, String gender, double petWeight) {
-        this.name = name;
+    public Pet(String name, int age, Breed animalType,  double petWeight) {
         this.age = age;
-        this.gender = gender;
+        this.name = name;
         this.animalType = animalType;
         this.petWeight = petWeight;
         System.out.println(2);
     }
 
-    public String getName() {
-        return name;
+    public Pet(String name, Breed animalType, double petWeight, User user) {
+        this.name = name;
+        this.animalType = animalType;
+        this.petWeight = petWeight;
+        this.user = user;
     }
+
     public Long getId() {
         return id;
     }
@@ -55,24 +65,12 @@ public class Pet {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getGender() {
-        return gender;
-    }
-
-    public void setGender(String gender) {
-        this.gender = gender;
     }
 
     public Breed getAnimalType() {
@@ -82,44 +80,36 @@ public class Pet {
     public void setAnimalType(Breed animalType) {
         this.animalType = animalType;
     }
+    public Set<PetDataLog> getPetDataLogs() {
+        return petDataLogs;
+    }
+
+    public void setPetDataLogs(Set<PetDataLog> petDataLogs) {
+        this.petDataLogs = petDataLogs;
+    }
 
     public double getPetWeight() {
         return petWeight;
     }
 
-    public void setPetWeight(double weight) {
-        this.petWeight = weight;
+    public void setPetWeight(double petWeight) {
+        this.petWeight = petWeight;
     }
 
-    public List<User> getOwners() {
-        return owners;
+    public User getUser() {
+        return user;
     }
 
-    public void setOwners(List<User> owners) {
-        this.owners = owners;
-    }
-    public List<PetDataLog> getPetDataLogs() {
-        return petDataLogs;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public void setPetDataLogs(List<PetDataLog> petDataLogs) {
-        this.petDataLogs = petDataLogs;
+    public int getAge() {
+        return age;
     }
 
-    @Override
-    public String toString() {
-        return "Pet{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", age=" + age +
-                ", gender='" + gender + '\'' +
-                ", animalType=" + animalType +
-                ", weight=" + petWeight +
-                ", owners=" + owners +
-                ", petDataLogs=" + petDataLogs +
-                '}';
+    public void setAge(int age) {
+        this.age = age;
     }
 }
-
-
 

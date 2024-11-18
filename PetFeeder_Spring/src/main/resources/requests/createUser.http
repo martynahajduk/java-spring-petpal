@@ -8,7 +8,8 @@ app_user
 
 {"name": "Martyna Hajduk",
   "email": "martyna.hajduk@student.kdg.be",
-  "password": "1111111", "pet":{"id": 1}}
+  "password": "1111111",
+  "feeder":{"id": 1}}
 
 
 

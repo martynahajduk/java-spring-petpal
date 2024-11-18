@@ -1,37 +1,45 @@
 package be.kdg.programming3.domain;
 
+import be.kdg.programming3.domain.Feeder;
+import be.kdg.programming3.domain.Pet;
+import be.kdg.programming3.domain.Schedule;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 @Entity
-@Table(name="pet_data_log")
 public class PetDataLog {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private Long id;
-    @Column(name="pet_weight_log", nullable = false)
-    private double petWeight;
-    @Column(name="portion", nullable = false)
-    private double portion;
-    @Enumerated(EnumType.STRING)
-    @Column(name="animal_type", nullable = false)
-    private Breed animalType;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="pet_id", nullable = false)
-    private Pet pet;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "feeder_id", nullable = false)
+    private Long id; // Primary Key for PetDataLog
+
+    // Many PetDataLogs can be associated with one Feeder
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "feeder_id") // Foreign key to Feeder
     private Feeder feeder;
 
-    public PetDataLog(){}
+    // Many PetDataLogs can be associated with one Pet
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pet_id") // Foreign key to Pet
+    private Pet pet;
 
-    public PetDataLog(double petWeight, Breed animalType, double portion, Pet pet, Feeder feeder) {
-        this.petWeight = petWeight;
-        this.portion = portion;
-        this.animalType = animalType;
+
+
+    private Double petWeight;
+    private Double bowlWeight;
+    private LocalDateTime timestamp; // Timestamp of the feeding
+    private String petName;
+    public PetDataLog() {}
+
+    public PetDataLog(Feeder feeder, Pet pet, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
+        this.feeder = feeder;
         this.pet = pet;
-        this.feeder=feeder;
+        this.petWeight = petWeight;
+        this.bowlWeight = bowlWeight;
+        this.timestamp = timestamp;
     }
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -40,28 +48,20 @@ public class PetDataLog {
         this.id = id;
     }
 
-    public double getPetWeight() {
-        return petWeight;
+    public Feeder getFeeder() {
+        return feeder;
     }
 
-    public void setPetWeight(double petWeight) {
-        this.petWeight = petWeight;
+    public void setFeeder(Feeder feeder) {
+        this.feeder = feeder;
     }
 
-    public double getPortion() {
-        return portion;
+    public String getPetName() {
+        return petName;
     }
 
-    public void setPortion(double portion) {
-        this.portion = portion;
-    }
-
-    public Breed getAnimalType() {
-        return animalType;
-    }
-
-    public void setAnimalType(Breed animalType) {
-        this.animalType = animalType;
+    public void setPetName(String petName) {
+        this.petName = petName;
     }
 
     public Pet getPet() {
@@ -72,26 +72,40 @@ public class PetDataLog {
         this.pet = pet;
     }
 
-    public Feeder getFeeder() {
-        return feeder;
+
+    public Double getPetWeight() {
+        return petWeight;
     }
 
-    public void setFeeder(Feeder feeder) {
-        this.feeder = feeder;
-        if (feeder != null) {
-//            this.portion = feeder.getPortion();
-        }
+    public void setPetWeight(Double petWeight) {
+        this.petWeight = petWeight;
+    }
+
+    public Double getBowlWeight() {
+        return bowlWeight;
+    }
+
+    public void setBowlWeight(Double bowlWeight) {
+        this.bowlWeight = bowlWeight;
+    }
+
+    public LocalDateTime getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(LocalDateTime timestamp) {
+        this.timestamp = timestamp;
     }
 
     @Override
     public String toString() {
         return "PetDataLog{" +
                 "id=" + id +
-                ", petWeight=" + petWeight +
-                ", portion=" + portion +
-                ", animalType=" + animalType +
                 ", pet=" + pet +
+                ", petName='" + petName + '\'' +
+                ", petWeight=" + petWeight +
                 ", feeder=" + feeder +
+                ", bowlWeight=" + bowlWeight +
                 '}';
     }
 }

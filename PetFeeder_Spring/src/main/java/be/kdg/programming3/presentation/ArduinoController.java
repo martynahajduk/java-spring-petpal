@@ -30,7 +30,7 @@ public class ArduinoController {
 
     }
 
-    @PostMapping("/")
+    @PostMapping("/SensorData")
     @ResponseBody
     public String receiveData( Double reservoirHeight, Double bowlWeight, Double petWeight, Double id) {
 
@@ -41,7 +41,8 @@ public class ArduinoController {
             }
         // Log the received data
         logger.info("reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
-        petService.save(new Pet("name", 5, Breed.HAMSTER, "female", petWeight));
+            petService.save(new Pet(petWeight));
+       // petService.save(new Pet("name", 5, Breed.HAMSTER, "female", petWeight));
         logger.debug("save2");
         feederService.save(new Feeder(reservoirHeight,bowlWeight));
         logger.debug("save1");

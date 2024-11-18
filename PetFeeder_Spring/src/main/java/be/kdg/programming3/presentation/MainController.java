@@ -38,6 +38,7 @@ public class MainController {
     public Feeder getFeederById(@PathVariable Long id) {
         return feederService.findById(id);
     }
+
     @PostMapping("/feeders/add")
     public Feeder createFeeder(@RequestBody Feeder feeder) {
         return feederService.save(feeder);
@@ -46,6 +47,7 @@ public class MainController {
 
     @GetMapping("/logs")
     public String showPetDataLogs(Model model) {
+
         List<PetDataLog> petDataLogs = petDataLogService.getAllLogs();
         model.addAttribute("pet_data_log", petDataLogs); // match the model attribute name in your HTML
         return "LogDataTestPage";  // Ensure this matches your Thymeleaf template name
@@ -64,11 +66,11 @@ public class MainController {
 
     @PostMapping("/pets/add")
     public Pet createPet(@RequestBody Pet pet) {
+        User user = userService.findUserById(pet.getUser().getId());
+        pet.setUser(user);
+
         return petService.save(pet);
     }
-
-
-
 
 
     @GetMapping("/data-logs")
@@ -84,6 +86,15 @@ public class MainController {
 
     @PostMapping("/data-logs/add")
     public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
+
+        Feeder feeder = feederService.findById(petDataLog.getFeeder().getId());
+        Pet pet = petService.findById(petDataLog.getPet().getId());
+        // Set the actual entities to the petDataLog object
+        petDataLog.setFeeder(feeder);
+        petDataLog.setPet(pet);
+        petDataLog.setPetName(pet.getName());
+
+
         return petDataLogService.save(petDataLog);
     }
 
@@ -91,8 +102,6 @@ public class MainController {
     public void deletePetDataLog(@PathVariable Long id) {
         petDataLogService.deleteById(id);
     }
-
-
 
 
     @GetMapping("/schedules")
@@ -111,7 +120,6 @@ public class MainController {
     }
 
 
-
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userService.findAll();
@@ -124,24 +132,9 @@ public class MainController {
 
     @PostMapping("/users/add")
     public String addUser(@RequestBody User user) {
+        Feeder feeder = feederService.findById(user.getFeeder().getId());
+        user.setFeeder(feeder);
         userService.save(user);
         return "User added successfully";
     }
-    /*
-    @PostMapping("/")
-    @ResponseBody
-    public String receiveData(Integer reservoirHeight, Integer bowlWeight, Integer petWeight, Integer id) {
-        // Log the received data
-        logger.info("reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
-        Pet pet = petService.findById(id); // Zakładając, że id odnosi się do id zwierzęcia
-        Breed animalType = pet.getAnimalType(); // Załóżmy, że masz metodę, która zwraca typ zwierzęcia
-
-        // Zapisz dane do logu
-        PetDataLog petDataLog = new PetDataLog(petWeight, animalType, bowlWeight, pet, null);
-        petDataLogService.save(petDataLog);
-        // Return a response message
-        return "Data received successfully!";
-    }
-
-     */
 }

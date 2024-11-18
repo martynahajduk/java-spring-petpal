@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name="feeder")
@@ -19,28 +20,14 @@ public class Feeder {
     private double reservoirLevel;
     private double bowlWeight;
 
-    // Add the OneToOne relationship with Schedule
-    @OneToOne
-    @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
 
-    public Schedule getSchedule() {
-        return schedule;
-    }
+    // One Feeder can have multiple PetDataLogs
+    @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
+    private Set<PetDataLog> petDataLogs;
 
-    public void setSchedule(Schedule schedule) {
-        this.schedule = schedule;
-    }
-
-
-    /*@Column(name = "next_feeding_date")
-    private LocalDate nextFeedingDate;
-
-    @Column(name = "next_feeding_time")
-    private LocalTime nextFeedingTime;
-*/
-
-
+    // One Feeder can have multiple Schedules
+    @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
+    private List<Schedule> schedule;
 
 
 
@@ -49,15 +36,48 @@ public class Feeder {
     public Feeder(double reservoirLevel , double bowlWeight/*, LocalTime nextFeedingTime, LocalDate nextFeedingDate*/) {
         this.reservoirLevel = reservoirLevel;
         this.bowlWeight = bowlWeight;
-        //his.nextFeedingDate = nextFeedingDate;
-        //this.nextFeedingTime = nextFeedingTime;
-
 
     }
 
-//    public double getPortion() {
-//        return portion
-//    }
+    public double getBowlWeight() {
+        return bowlWeight;
+    }
+
+    public void setBowlWeight(double bowlWeight) {
+        this.bowlWeight = bowlWeight;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Set<PetDataLog> getPetDataLogs() {
+        return petDataLogs;
+    }
+
+    public void setPetDataLogs(Set<PetDataLog> petDataLogs) {
+        this.petDataLogs = petDataLogs;
+    }
+
+    public double getReservoirLevel() {
+        return reservoirLevel;
+    }
+
+    public void setReservoirLevel(double reservoirLevel) {
+        this.reservoirLevel = reservoirLevel;
+    }
+
+    public List<Schedule> getSchedules() {
+        return schedule;
+    }
+
+    public void setSchedules(List<Schedule> schedules) {
+        this.schedule = schedules;
+    }
 
     @Override
     public String toString() {

@@ -4,6 +4,8 @@ package be.kdg.programming3.domain;
 import jakarta.persistence.*;
 import org.springframework.cglib.core.Local;
 
+import java.time.LocalTime;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -11,35 +13,28 @@ import java.util.List;
 
 @Entity
 public class Schedule {
-    public List<LocalDateTime> getTimeToFeed() {
-        return timeToFeed;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ElementCollection
-    private List<LocalDateTime> timeToFeed;
-    @OneToOne(mappedBy = "schedule")
-    private Feeder feeder;
 
 
-    /*@ManyToOne
-    @JoinColumn(name = "feeder_id", nullable = false)
-    private Feeder feeder;*/
+    // Many Schedules can belong to one Feeder
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "feeder_id")
+    private Feeder feeder;  // Many-to-One relationship with Feeder
+    private LocalTime timeToFeed;
+
+    @Enumerated(EnumType.STRING)
+    private FeedFrequency frequency;
 
     public Schedule() {}
 
-    public void setId(Long id) {this.id = id;}
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setTimeToFeed(List<LocalDateTime> timeToFeed) {
+    public Schedule(Feeder feeder, LocalTime timeToFeed, FeedFrequency frequency) {
+        this.feeder = feeder;
         this.timeToFeed = timeToFeed;
+        this.frequency = frequency;
     }
-
 
     public Feeder getFeeder() {
         return feeder;
@@ -47,6 +42,33 @@ public class Schedule {
 
     public void setFeeder(Feeder feeder) {
         this.feeder = feeder;
+    }
+
+    public FeedFrequency getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(FeedFrequency frequency) {
+        this.frequency = frequency;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalTime getTimeToFeed() {
+        return timeToFeed;
+    }
+
+
+
+
+    public void setTimeToFeed(LocalTime timeToFeed) {
+        this.timeToFeed = timeToFeed;
     }
 
     @Override

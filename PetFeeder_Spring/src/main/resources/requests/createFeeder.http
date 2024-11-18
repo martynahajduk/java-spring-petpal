@@ -4,10 +4,8 @@
 POST http://localhost:8080/feeders/add
 Content-Type: application/json
 
-[
 {
-"bowlWeight": 150,
-  "reservoirLevel": 80.0, "portion": 5.0, "schedule": 1}
-  ]
-
+  "reservoirLevel": 80.5,
+  "bowlWeight": 12.3
+}
 
