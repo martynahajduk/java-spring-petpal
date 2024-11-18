@@ -32,7 +32,7 @@ public class ArduinoController {
 
     @PostMapping("/SensorData")
     @ResponseBody
-    public String receiveData( Double reservoirHeight, Double bowlWeight, Double petWeight, Double id) {
+    public String receiveData( Double reservoirHeight, Double bowlWeight, Double petWeight, Long id) {
 
         try {
             // Validate parameters
@@ -44,7 +44,7 @@ public class ArduinoController {
             petService.save(new Pet(petWeight));
        // petService.save(new Pet("name", 5, Breed.HAMSTER, "female", petWeight));
         logger.debug("save2");
-        feederService.save(new Feeder(reservoirHeight,bowlWeight));
+        feederService.save(new Feeder(reservoirHeight,bowlWeight,petWeight,id));
         logger.debug("save1");
         // Return a response message
         return "Data received successfully!";

@@ -19,6 +19,7 @@ public class Feeder {
     @Column(name="reservoir_level", nullable = false)
     private double reservoirLevel;
     private double bowlWeight;
+    private double petWeight;
 
 
     // One Feeder can have multiple PetDataLogs
@@ -33,9 +34,11 @@ public class Feeder {
 
     public Feeder() {}
 
-    public Feeder(double reservoirLevel , double bowlWeight/*, LocalTime nextFeedingTime, LocalDate nextFeedingDate*/) {
+    public Feeder(double reservoirLevel , double bowlWeight,double petWeight,Long id) {
         this.reservoirLevel = reservoirLevel;
         this.bowlWeight = bowlWeight;
+        this.petWeight = petWeight;
+        this.id= id;
 
     }
 
