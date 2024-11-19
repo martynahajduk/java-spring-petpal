@@ -22,22 +22,30 @@ public class PetDataLog {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet_id") // Foreign key to Pet
     private Pet pet;
+    @Column(name = "animal_type", nullable = false)
+    private Breed animalType;
 
 
-
+    private int age;
     private Double petWeight;
     private Double bowlWeight;
     private LocalDateTime timestamp; // Timestamp of the feeding
     private String petName;
     public PetDataLog() {}
 
-    public PetDataLog(Feeder feeder, Pet pet, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
+    public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
         this.feeder = feeder;
         this.pet = pet;
+        this.animalType = animalType;
+        this.age = age;
         this.petWeight = petWeight;
         this.bowlWeight = bowlWeight;
         this.timestamp = timestamp;
+
+
     }
+
+
 
     // Getters and Setters
     public Long getId() {
@@ -46,6 +54,22 @@ public class PetDataLog {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Breed getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(Breed animalType) {
+        this.animalType = animalType;
     }
 
     public Feeder getFeeder() {
@@ -97,15 +121,19 @@ public class PetDataLog {
         this.timestamp = timestamp;
     }
 
+
     @Override
     public String toString() {
         return "PetDataLog{" +
-                "id=" + id +
-                ", pet=" + pet +
-                ", petName='" + petName + '\'' +
-                ", petWeight=" + petWeight +
+                "age=" + age +
+                ", id=" + id +
                 ", feeder=" + feeder +
+                ", pet=" + pet +
+                ", animalType=" + animalType +
+                ", petWeight=" + petWeight +
                 ", bowlWeight=" + bowlWeight +
+                ", timestamp=" + timestamp +
+                ", petName='" + petName + '\'' +
                 '}';
     }
 }
