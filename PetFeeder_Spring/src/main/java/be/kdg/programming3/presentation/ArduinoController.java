@@ -1,10 +1,13 @@
 package be.kdg.programming3.presentation;
 
 
+import be.kdg.programming3.collector.ArduinoSensorData;
 import be.kdg.programming3.domain.Breed;
 import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.PetDataLog;
+import be.kdg.programming3.processor.DataProcessor;
+import be.kdg.programming3.processor.DataProcessorFactory;
 import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.PetDataLogService;
 import be.kdg.programming3.service.PetService;
@@ -22,16 +25,14 @@ import java.util.List;
 
 @Controller
 public class ArduinoController {
+    private static final Logger logger = LoggerFactory.getLogger(ArduinoController.class);
+    private final FeederService feederService;
+    private final DataProcessorFactory dataProcessorFactory;
 
-    private final static Logger logger = LoggerFactory.getLogger(ArduinoController.class);
-    private FeederService feederService;
-    private PetService petService;
-
-
-    public ArduinoController(FeederService feederService, PetService petService) {
+    // Constructor-based dependency injection
+    public ArduinoController(FeederService feederService, DataProcessorFactory dataProcessorFactory) {
         this.feederService = feederService;
-        this.petService = petService;
-
+        this.dataProcessorFactory = dataProcessorFactory;
     }
 
     @GetMapping("/view-data")
@@ -46,28 +47,20 @@ public class ArduinoController {
 
     @PostMapping("/SensorData")
     @ResponseBody
-    public String receiveData( Double reservoirHeight, Double bowlWeight, Double petWeight, Long id) {
-
+    public String receiveData(@RequestBody ArduinoSensorData data) {
         try {
-            // Validate parameters
-            if (reservoirHeight == null || bowlWeight == null || petWeight == null || id == null) {
-                return "Invalid data received!";
-            }
-        // Log the received data
-        logger.info("reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
-        logger.debug("save2");
-        feederService.save(new Feeder(reservoirHeight,bowlWeight,petWeight,id));
-        logger.debug("save1");
-        // Return a response message
-        return "Data received successfully!";
+            logger.info("Received data: {}", data);
+
+            // Get the appropriate processor and delegate processing
+            DataProcessor processor = dataProcessorFactory.getProcessor(data);
+            processor.saveToDatabase(data);
+
+            return "Data received and processed successfully!";
         } catch (Exception e) {
             logger.error("Error while processing data: {}", e.getMessage());
             return "An error occurred while processing the data!";
         }
     }
-
-
-
 }
 
 
