@@ -1,5 +1,8 @@
 package be.kdg.programming3.domain;
 
+import be.kdg.programming3.domain.Feeder;
+import be.kdg.programming3.domain.Pet;
+import be.kdg.programming3.domain.Schedule;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -19,31 +22,54 @@ public class PetDataLog {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet_id") // Foreign key to Pet
     private Pet pet;
+    @Column(name = "animal_type", nullable = false)
+    private Breed animalType;
 
 
-    @Column(name="reservoir_level", nullable = false)
-    private double reservoirLevel;
+    private int age;
     private Double petWeight;
     private Double bowlWeight;
     private LocalDateTime timestamp; // Timestamp of the feeding
-
+    private String petName;
     public PetDataLog() {}
 
-    public PetDataLog(Feeder feeder, Pet pet, double reservoirLevel, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
+    public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
         this.feeder = feeder;
         this.pet = pet;
-        this.reservoirLevel = reservoirLevel;
+        this.animalType = animalType;
+        this.age = age;
         this.petWeight = petWeight;
         this.bowlWeight = bowlWeight;
         this.timestamp = timestamp;
+
+
     }
 
+
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
+    public Breed getAnimalType() {
+        return animalType;
+    }
+
+    public void setAnimalType(Breed animalType) {
+        this.animalType = animalType;
     }
 
     public Feeder getFeeder() {
@@ -54,6 +80,14 @@ public class PetDataLog {
         this.feeder = feeder;
     }
 
+    public String getPetName() {
+        return petName;
+    }
+
+    public void setPetName(String petName) {
+        this.petName = petName;
+    }
+
     public Pet getPet() {
         return pet;
     }
@@ -62,13 +96,6 @@ public class PetDataLog {
         this.pet = pet;
     }
 
-    public double getReservoirLevel() {
-        return reservoirLevel;
-    }
-
-    public void setReservoirLevel(double reservoirLevel) {
-        this.reservoirLevel = reservoirLevel;
-    }
 
     public Double getPetWeight() {
         return petWeight;
@@ -94,18 +121,19 @@ public class PetDataLog {
         this.timestamp = timestamp;
     }
 
+
     @Override
     public String toString() {
         return "PetDataLog{" +
-                "id=" + id +
+                "age=" + age +
+                ", id=" + id +
                 ", feeder=" + feeder +
                 ", pet=" + pet +
-                ", reservoirLevel=" + reservoirLevel +
+                ", animalType=" + animalType +
                 ", petWeight=" + petWeight +
                 ", bowlWeight=" + bowlWeight +
                 ", timestamp=" + timestamp +
+                ", petName='" + petName + '\'' +
                 '}';
     }
 }
-
-

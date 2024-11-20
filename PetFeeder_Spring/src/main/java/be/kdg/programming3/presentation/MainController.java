@@ -88,6 +88,9 @@ public class MainController {
 
         Feeder feeder = feederService.findById(petDataLog.getFeeder().getId());
         Pet pet = petService.findById(petDataLog.getPet().getId());
+        // Set the actual entities to the petDataLog object
+        petDataLog.setAge(pet.getAge());
+        petDataLog.setAnimalType(pet.getAnimalType());
 
         petDataLog.setFeeder(feeder);
         petDataLog.setPet(pet);

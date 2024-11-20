@@ -1,7 +1,7 @@
 ### GET request to example server
 ### Create a Schedule
 ### POST request to create multiple Schedules
-POST http://localhost:8080/schedules/add
+POST http://localhost:80/schedules/add
 Content-Type: application/json
 
 [
