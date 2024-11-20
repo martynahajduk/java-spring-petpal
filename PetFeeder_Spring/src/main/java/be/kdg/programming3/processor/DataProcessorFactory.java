@@ -19,9 +19,17 @@ public class DataProcessorFactory {
     }
 
     public DataProcessor getProcessor(PetPalData data) {
-        if (data instanceof ArduinoSensorData) {
-            return new FeederDataProcessor(feederService);
+
+        CompositeProcessor compositeProcessor = new CompositeProcessor();
+
+        if (data instanceof PetPalData) {
+            //adding multiple processors to the composite
+            compositeProcessor.addProcessor(new FeederDataProcessor(feederService));
+
         }
-        throw new IllegalArgumentException("No processor found for data type: " + data.getClass().getSimpleName());
-    }
+            if (compositeProcessor != null) {
+                return compositeProcessor;
+            }
+
+        throw new IllegalArgumentException("No processor found for data type: " + data.getClass().getSimpleName());}
 }
