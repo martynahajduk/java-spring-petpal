@@ -53,6 +53,7 @@ public class ArduinoController {
 
             // Get the appropriate processor and delegate processing
             DataProcessor processor = dataProcessorFactory.getProcessor(data);
+            //controller automatically will use composite processor when requesting a processor from the factory
             processor.saveToDatabase(data);
 
             return "Data received and processed successfully!";
