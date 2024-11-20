@@ -1,7 +1,7 @@
 ### GET request to example server
 ### Create a User
 ### POST request to create multiple Users
-POST http://localhost:8080/users/add
+POST http://localhost:80/users/add
 Content-Type: application/json
 app_user
 
@@ -9,7 +9,7 @@ app_user
 {"name": "Martyna Hajduk",
   "email": "martyna.hajduk@student.kdg.be",
   "password": "1111111",
-  "feeder":{"id": 1}}
+  "feederLog":{"id": 1}}
 
 
 

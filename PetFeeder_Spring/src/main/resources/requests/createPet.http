@@ -1,14 +1,14 @@
 ### GET request to example server
 ### Create a Pet
 ### POST request to create multiple Pets
-POST http://localhost:8080/pets/add
+POST http://localhost:80/pets/add
 Content-Type: application/json
 
 
 {
   "name": "Hammy",
   "age": 2,
-  "animalType": "HAMSTER",
+  "animalType": "SYRIAN",
   "petWeight": 0.45,
   "user" : {"id": 2}
 

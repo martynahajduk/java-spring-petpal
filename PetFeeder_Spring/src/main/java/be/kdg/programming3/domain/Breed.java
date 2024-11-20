@@ -1,5 +1,6 @@
 package be.kdg.programming3.domain;
 
 public enum Breed {
-    HAMSTER, MOUSE, RAT
+    SYRIAN, DWARF_CAMPBELL_RUSSIAN,
+    SIBERIAN, ROBOROVSKI, CHINESE
 }

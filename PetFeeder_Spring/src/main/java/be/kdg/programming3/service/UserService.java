@@ -9,7 +9,8 @@ public interface UserService {
     List<User> findAll();
     User findUserById(Long id);
     User save(User user);
-    //User save(String name, String email, String password);
     void deleteById(Long id);
+    User loginUser(String email, String password);
+    User registerUser(String name, String email, String password);
 
-}
+    }

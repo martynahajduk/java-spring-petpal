@@ -1,8 +1,5 @@
 package be.kdg.programming3.domain;
 
-import be.kdg.programming3.domain.Feeder;
-import be.kdg.programming3.domain.Pet;
-import be.kdg.programming3.domain.Schedule;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -24,22 +21,23 @@ public class PetDataLog {
     private Pet pet;
 
 
-
+    @Column(name="reservoir_level", nullable = false)
+    private double reservoirLevel;
     private Double petWeight;
     private Double bowlWeight;
     private LocalDateTime timestamp; // Timestamp of the feeding
-    private String petName;
+
     public PetDataLog() {}
 
-    public PetDataLog(Feeder feeder, Pet pet, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
+    public PetDataLog(Feeder feeder, Pet pet, double reservoirLevel, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
         this.feeder = feeder;
         this.pet = pet;
+        this.reservoirLevel = reservoirLevel;
         this.petWeight = petWeight;
         this.bowlWeight = bowlWeight;
         this.timestamp = timestamp;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -56,14 +54,6 @@ public class PetDataLog {
         this.feeder = feeder;
     }
 
-    public String getPetName() {
-        return petName;
-    }
-
-    public void setPetName(String petName) {
-        this.petName = petName;
-    }
-
     public Pet getPet() {
         return pet;
     }
@@ -72,6 +62,13 @@ public class PetDataLog {
         this.pet = pet;
     }
 
+    public double getReservoirLevel() {
+        return reservoirLevel;
+    }
+
+    public void setReservoirLevel(double reservoirLevel) {
+        this.reservoirLevel = reservoirLevel;
+    }
 
     public Double getPetWeight() {
         return petWeight;
@@ -101,11 +98,14 @@ public class PetDataLog {
     public String toString() {
         return "PetDataLog{" +
                 "id=" + id +
-                ", pet=" + pet +
-                ", petName='" + petName + '\'' +
-                ", petWeight=" + petWeight +
                 ", feeder=" + feeder +
+                ", pet=" + pet +
+                ", reservoirLevel=" + reservoirLevel +
+                ", petWeight=" + petWeight +
                 ", bowlWeight=" + bowlWeight +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }
+
+

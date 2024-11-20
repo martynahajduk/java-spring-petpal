@@ -1,7 +1,7 @@
 ### GET request to example server
 ### Create a PetDataLog
 ### POST request to create multiple PetDataLogs
-POST http://localhost:8080/data-logs/add
+POST http://localhost:80/data-logs/add
 Content-Type: application/json
 
 {
@@ -9,6 +9,6 @@ Content-Type: application/json
   "petName": "Hammy",
   "petWeight": 1.2,
   "timestamp": "2024-11-16T10:30:00",
-  "feeder": { "id": 1 },
+  "feederLog": { "id": 1 },
   "pet": { "id": 2 }
 }

@@ -2,7 +2,6 @@ package be.kdg.programming3.presentation;
 
 import be.kdg.programming3.domain.*;
 import be.kdg.programming3.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -13,19 +12,19 @@ import java.util.List;
 @RequestMapping
 public class MainController {
 
-    private final FeederService feederService;
     private final PetService petService;
     private final PetDataLogService petDataLogService;
     private final ScheduleService scheduleService;
     private final UserService userService;
+    private final FeederService feederService;
 
 
-    public MainController(FeederService feederService, PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService) {
-        this.feederService = feederService;
+    public MainController(PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService, FeederService feederService) {
         this.petService = petService;
         this.petDataLogService = petDataLogService;
         this.scheduleService = scheduleService;
         this.userService = userService;
+        this.feederService = feederService;
     }
 
 
@@ -45,12 +44,12 @@ public class MainController {
     }
 
 
+
     @GetMapping("/logs")
     public String showPetDataLogs(Model model) {
-
         List<PetDataLog> petDataLogs = petDataLogService.getAllLogs();
-        model.addAttribute("pet_data_log", petDataLogs); // match the model attribute name in your HTML
-        return "LogDataTestPage";  // Ensure this matches your Thymeleaf template name
+        model.addAttribute("pet_data_log", petDataLogs);
+        return "LogDataTestPage";
     }
 
 
@@ -89,11 +88,9 @@ public class MainController {
 
         Feeder feeder = feederService.findById(petDataLog.getFeeder().getId());
         Pet pet = petService.findById(petDataLog.getPet().getId());
-        // Set the actual entities to the petDataLog object
+
         petDataLog.setFeeder(feeder);
         petDataLog.setPet(pet);
-        petDataLog.setPetName(pet.getName());
-
 
         return petDataLogService.save(petDataLog);
     }
@@ -136,5 +133,62 @@ public class MainController {
         user.setFeeder(feeder);
         userService.save(user);
         return "User added successfully";
+    }
+
+    @GetMapping("/registerlogin")
+    public String showLoginRegisterPage(Model model) {
+        List<User> users = userService.findAll();
+        model.addAttribute("users", users);
+        return "registerlogin";
+    }
+
+    @PostMapping("/login")
+    public String loginUser(@RequestParam String email, @RequestParam String password, Model model) {
+        try {
+            User user = userService.loginUser(email, password);
+            model.addAttribute("user", user);
+            return "menupage";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "registerlogin";
+        }
+    }
+
+    @PostMapping("/register")
+    public String registerUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, Model model) {
+        try {
+            User newUser = userService.registerUser(name, email, password);
+            model.addAttribute("user", newUser);
+            return "registerlogin";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "registerlogin";
+        }
+    }
+
+
+    @GetMapping("/petchoice")
+    public String showPetChoicePage(Model model) {
+        model.addAttribute("pets", petService.findAll());
+        model.addAttribute("users", userService.findAll());
+        return "petchoice";
+    }
+
+    @PostMapping("/pets/add-form")
+    public String addPet(@RequestParam String name,
+                         @RequestParam int age,
+                         @RequestParam Breed animalType,
+                         @RequestParam double petWeight,
+                         Model model) {
+
+        Pet newPet = new Pet(name, age, animalType, petWeight);
+        petService.save(newPet);
+
+        model.addAttribute("pets", petService.findAll());
+        return "petchoice";
+    }
+    @GetMapping("/menupage")
+    public String showMenuPage(Model model) {
+        return "menupage";
     }
 }

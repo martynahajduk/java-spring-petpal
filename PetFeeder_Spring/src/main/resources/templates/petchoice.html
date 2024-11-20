@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Pet Choice</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<header class="bg-primary text-white py-4">
+    <div class="container text-center">
+        <h1 class="display-4">Your Pet Family</h1>
+    </div>
+</header>
+<div class="container mt-5">
+    <div class="row justify-content-between">
+        <div class="col-12 col-md-5 mb-4">
+            <div class="card rounded-4 bg-light shadow-lg">
+                <div class="card-body">
+                    <h3 class="mb-3"><strong>Add New Pet</strong></h3>
+                    <form th:action="@{/pets/add-form}" method="post">
+                        <div class="mb-3">
+                            <label for="petName" class="form-label">Pet Name</label>
+                            <input type="text" class="form-control" id="petName" name="name" placeholder="Enter pet's name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="petAge" class="form-label">Age (months)</label>
+                            <input type="number" class="form-control" id="petAge" name="age" placeholder="Enter pet's age" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="animalType" class="form-label">Animal Type</label>
+                            <select class="form-select" id="animalType" name="animalType" required>
+                                <option th:each="breed : ${T(be.kdg.programming3.domain.Breed).values()}"
+                                        th:value="${breed}"
+                                        th:text="${breed.name()}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="petWeight" class="form-label">Weight (g)</label>
+                            <input type="number" class="form-control" id="petWeight" name="petWeight" placeholder="Enter pet's weight" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add Pet</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4">
+            <h3 class="mb-3">Your Pets</h3>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-4" th:each="pet : ${pets}">
+                    <div class="card rounded-4 bg-light shadow-lg">
+                        <div class="card-body d-flex">
+                            <div class="rounded-circle" style="width: 5rem; height: 5rem; background-color: #ddd;"></div>
+                            <div class="d-flex flex-column ms-3">
+                                <h4 class="mb-1"><strong>Name:</strong> <span th:text="${pet.name}"></span></h4>
+                                <p class="mb-1"><strong>Age:</strong> <span th:text="${pet.age}"></span></p>
+                                <p class="mb-1"><strong>Animal Type:</strong> <span th:text="${pet.animalType}"></span></p>
+                                <p class="mb-1"><strong>Weight:</strong> <span th:text="${pet.petWeight}"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

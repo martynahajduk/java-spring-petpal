@@ -1,7 +1,6 @@
 package be.kdg.programming3.service;
 
 import be.kdg.programming3.domain.Feeder;
-import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.repository.FeederRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

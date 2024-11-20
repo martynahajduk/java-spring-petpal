@@ -8,7 +8,7 @@ Content-Type: application/json
 {
   "frequency": "DAILY",
   "timeToFeed": "12:30",
-  "feeder": {"id": 1}
+  "feederLog": {"id": 1}
 
 }
 ]

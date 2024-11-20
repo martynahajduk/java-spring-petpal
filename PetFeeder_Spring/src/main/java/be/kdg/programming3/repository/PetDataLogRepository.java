@@ -1,6 +1,5 @@
 package be.kdg.programming3.repository;
 
-import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.PetDataLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

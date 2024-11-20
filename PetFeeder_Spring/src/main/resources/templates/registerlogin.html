@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login & Register</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<header class="bg-primary text-white py-4">
+    <div class="container text-center">
+        <h1 class="display-4">Welcome to PetPal</h1>
+    </div>
+</header>
+
+<div class="container mt-5">
+    <div class="row justify-content-between">
+        <div class="col-12 col-md-5 mb-4">
+            <div class="card rounded-4 bg-light shadow-lg">
+                <div class="card-body">
+                    <h3 class="mb-3"><strong>Login</strong></h3>
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Login</button>
+
+                        <div th:if="${error}" class="mt-2 text-danger">
+                            <p th:text="${error}"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-5 mb-4">
+            <div class="card rounded-4 bg-light shadow-lg">
+                <div class="card-body">
+                    <h3 class="mb-3"><strong>Register</strong></h3>
+                    <form th:action="@{/register}" method="post">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="name" placeholder="Enter your name" name="name" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="emailC" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="emailC" placeholder="Enter your email" name="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="passwordC" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="passwordC" placeholder="Enter your password" name="password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">Register</button>
+
+                        <div th:if="${error}" class="mt-2 text-danger">
+                            <p th:text="${error}"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

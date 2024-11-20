@@ -1,6 +1,7 @@
 package be.kdg.programming3.service;
 
 import be.kdg.programming3.domain.PetDataLog;
+import be.kdg.programming3.domain.PetDataLog;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

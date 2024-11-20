@@ -39,4 +39,26 @@ public class UserServiceS implements UserService {
         return userRepository.save(user);
     }
 
+    public User registerUser(String name, String email, String password) {
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalStateException("Email is already in use");
+        }
+
+        User user = new User();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        return userRepository.save(user);
+    }
+
+    public User loginUser(String email, String password) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
+
+        if (!user.getPassword().equals(password)) {
+            throw new IllegalArgumentException("Invalid email or password");
+        }
+
+        return user;
+    }
 }
