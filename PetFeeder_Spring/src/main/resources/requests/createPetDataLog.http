@@ -9,8 +9,8 @@ Content-Type: application/json
   "petName": "Hammy",
   "petWeight": 1.2,
   "timestamp": "2024-11-16T10:30:00",
-  "feeder": { "id": 4 },
-  "pet": { "id": 4 },
+  "feeder": { "id": 1 },
+  "pet": { "id": 1 },
   "age": 1,
   "animalType": "SYRIAN"
 }

@@ -9,7 +9,7 @@ app_user
 {"name": "Martyna Hajduk",
   "email": "martyna.hajduk@student.kdg.be",
   "password": "1111111",
-  "feederLog":{"id": 1}}
+  "feeder":{"id": 1}}
 
 
 
