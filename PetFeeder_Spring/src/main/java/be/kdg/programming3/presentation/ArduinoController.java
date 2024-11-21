@@ -8,10 +8,7 @@ import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.PetDataLog;
 import be.kdg.programming3.processor.DataProcessor;
 import be.kdg.programming3.processor.DataProcessorFactory;
-import be.kdg.programming3.service.FeederService;
-import be.kdg.programming3.service.PetDataLogService;
-import be.kdg.programming3.service.PetService;
-import be.kdg.programming3.service.ScheduleService;
+import be.kdg.programming3.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -26,21 +23,21 @@ import java.util.List;
 @Controller
 public class ArduinoController {
     private static final Logger logger = LoggerFactory.getLogger(ArduinoController.class);
-    private final FeederService feederService;
     private final DataProcessorFactory dataProcessorFactory;
+    private final PetDataLogService petDataLogService;
 
     // Constructor-based dependency injection
-    public ArduinoController(FeederService feederService, DataProcessorFactory dataProcessorFactory) {
-        this.feederService = feederService;
+    public ArduinoController( DataProcessorFactory dataProcessorFactory, PetDataLogService petDataLogService) {
         this.dataProcessorFactory = dataProcessorFactory;
+        this.petDataLogService = petDataLogService;
     }
 
     @GetMapping("/view-data")
     public String viewData(Model model) {
-        List<Feeder> feeders = feederService.findAll();
+        List<PetDataLog> petDataLogs = petDataLogService.findAll();
 
         // Add data to the model
-        model.addAttribute("feeders", feeders);
+        model.addAttribute("petData", petDataLogs);
 
         return "TestPage"; // Name of the Thymeleaf template
     }

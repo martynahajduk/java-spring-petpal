@@ -16,39 +16,33 @@ public class Feeder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = false)
     private Long id;
-    @Column(name="reservoir_level", nullable = false)
+   /* @Column(name="reservoir_level", nullable = false)
     private double reservoirLevel;
     private double bowlWeight;
     private double petWeight;
-
+*/
 
     // One Feeder can have multiple PetDataLogs
     @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
     private Set<PetDataLog> petDataLogs;
 
+
     // One Feeder can have multiple Schedules
+    /*
     @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
     private List<Schedule> schedule;
-
+*/
 
 
     public Feeder() {}
 
     public Feeder(double reservoirLevel , double bowlWeight,double petWeight,Long id) {
-        this.reservoirLevel = reservoirLevel;
-        this.bowlWeight = bowlWeight;
-        this.petWeight = petWeight;
+
         this.id= id;
 
     }
 
-    public double getBowlWeight() {
-        return bowlWeight;
-    }
 
-    public void setBowlWeight(double bowlWeight) {
-        this.bowlWeight = bowlWeight;
-    }
 
     public Long getId() {
         return id;
@@ -66,38 +60,13 @@ public class Feeder {
         this.petDataLogs = petDataLogs;
     }
 
-    public double getReservoirLevel() {
-        return reservoirLevel;
-    }
 
-    public void setReservoirLevel(double reservoirLevel) {
-        this.reservoirLevel = reservoirLevel;
-    }
-
-    public List<Schedule> getSchedules() {
-        return schedule;
-    }
-
-    public void setSchedules(List<Schedule> schedules) {
-        this.schedule = schedules;
-    }
-
-    public double getPetWeight() {
-        return petWeight;
-    }
-
-    public void setPetWeight(double petWeight) {
-        this.petWeight = petWeight;
-    }
 
     @Override
     public String toString() {
         return "Feeder{" +
                 "id=" + id +
-                ", reservoirLevel=" + reservoirLevel +
-                "bowlWeight=" + bowlWeight/*+
-                ", nextFeedingDate=" + nextFeedingDate +
-                ", nextFeedingTime=" + nextFeedingTime */+
+
                 '}';
     }
 }

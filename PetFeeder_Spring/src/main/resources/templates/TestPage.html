@@ -13,13 +13,16 @@
         <th>ID</th>
         <th>Reservoir Height</th>
         <th>Bowl Weight</th>
+        <th>Pet weight</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="feeder : ${feeders}">
-        <td th:text="${feeder.id}">ID</td>
-        <td th:text="${feeder.reservoirLevel}">Reservoir Height</td>
-        <td th:text="${feeder.bowlWeight}">Bowl Weight</td>
+    <tr th:each="log : ${petData}">
+        <td th:text="${log.id}">ID</td>
+        <td th:text="${log.reservoirHeight}">Reservoir Height</td>
+        <td th:text="${log.bowlWeight}">Bowl Weight</td>
+        <td th:text="${log.petWeight}">Pet Weight</td>
+
     </tr>
     </tbody>
 </table>

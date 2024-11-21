@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping
@@ -64,12 +66,18 @@ public class MainController {
     }
 
     @PostMapping("/pets/add")
-    public Pet createPet(@RequestBody Pet pet) {
-        User user = userService.findUserById(pet.getUser().getId());
-        pet.setUser(user);
-
-        return petService.save(pet);
-    }
+    public String createPet(@RequestBody Pet pet) {
+       //multiple users for a pet
+        Set<User> users = new HashSet<>();
+        for(User user : pet.getUsers()) {
+            User existingUser = userService.findUserById(user.getId());
+            if(existingUser != null) {
+                users.add(existingUser);
+            }
+        }
+        pet.setUsers(users);
+        return petService.save(pet).toString();
+        }
 
 
     @GetMapping("/data-logs")
@@ -132,10 +140,23 @@ public class MainController {
 
     @PostMapping("/users/add")
     public String addUser(@RequestBody User user) {
+        // Validate and fetch the feeder
         Feeder feeder = feederService.findById(user.getFeeder().getId());
+        if (feeder == null) {
+            return "Feeder with ID " + user.getFeeder().getId() + " does not exist.";
+        }
         user.setFeeder(feeder);
+
+        // Validate and fetch the pet
+        Pet pet = petService.findById(user.getPet().getId());
+        if (pet == null) {
+            return "Pet with ID " + user.getPet().getId() + " does not exist.";
+        }
+        user.setPet(pet);
+
+        // Save the user
         userService.save(user);
-        return "User added successfully";
+        return "User added successfully with Feeder ID: " + feeder.getId() + " and Pet ID: " + pet.getId();
     }
 
     @GetMapping("/registerlogin")
@@ -173,8 +194,13 @@ public class MainController {
 
     @GetMapping("/petchoice")
     public String showPetChoicePage(Model model) {
-        model.addAttribute("pets", petService.findAll());
-        model.addAttribute("users", userService.findAll());
+       //fetching all pets and users with their realtion
+        List<Pet> pets = petService.findAll();
+        List<User> users = userService.findAll();
+
+        model.addAttribute("pets", pets);
+        model.addAttribute("users", users);
+
         return "petchoice";
     }
 
@@ -183,9 +209,18 @@ public class MainController {
                          @RequestParam int age,
                          @RequestParam Breed animalType,
                          @RequestParam double petWeight,
+                         @RequestParam List<Long> userIds, //new paramater to associate users
                          Model model) {
-
-        Pet newPet = new Pet(name, age, animalType, petWeight);
+        //fetching users by IDs
+        Set<User> users = new HashSet<>();
+        for(Long userId : userIds) {
+            User user = userService.findUserById(userId);
+            if(user!=null) {
+                users.add(user);
+            }
+        }
+        //creating and saving the pet
+        Pet newPet = new Pet(name,age,animalType, petWeight ,users);
         petService.save(newPet);
 
         model.addAttribute("pets", petService.findAll());

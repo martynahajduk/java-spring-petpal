@@ -24,6 +24,42 @@ public class Schedule {
 
     public Schedule() {}
 
+    public Schedule(FeedFrequency frequency ,LocalTime timeToFeed,Feeder feeder ) {
+        this.frequency = frequency;
+        this.timeToFeed = timeToFeed;
+        this.feeder = feeder;
+    }
 
+    public Feeder getFeeder() {
+        return feeder;
+    }
+
+    public void setFeeder(Feeder feeder) {
+        this.feeder = feeder;
+    }
+
+    public FeedFrequency getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(FeedFrequency frequency) {
+        this.frequency = frequency;
+    }
+
+    public LocalTime getTimeToFeed() {
+        return timeToFeed;
+    }
+
+    public void setTimeToFeed(LocalTime timeToFeed) {
+        this.timeToFeed = timeToFeed;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }
 

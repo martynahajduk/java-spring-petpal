@@ -29,15 +29,17 @@ public class PetDataLog {
     private int age;
     private Double petWeight;
     private Double bowlWeight;
+    private Double reservoirHeight;
     private LocalDateTime timestamp; // Timestamp of the feeding
     private String petName;
     public PetDataLog() {}
 
-    public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
+    public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType,Double reservoirHeight, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
         this.feeder = feeder;
         this.pet = pet;
         this.animalType = animalType;
         this.age = age;
+        this.reservoirHeight = reservoirHeight;
         this.petWeight = petWeight;
         this.bowlWeight = bowlWeight;
         this.timestamp = timestamp;
@@ -96,6 +98,13 @@ public class PetDataLog {
         this.pet = pet;
     }
 
+    public Double getReservoirHeight() {
+        return reservoirHeight;
+    }
+
+    public void setReservoirHeight(Double reservoirHeight) {
+        this.reservoirHeight = reservoirHeight;
+    }
 
     public Double getPetWeight() {
         return petWeight;

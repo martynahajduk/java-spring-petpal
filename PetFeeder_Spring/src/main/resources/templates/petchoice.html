@@ -14,6 +14,7 @@
 </header>
 <div class="container mt-5">
     <div class="row justify-content-between">
+        <!-- Form to Add New Pet -->
         <div class="col-12 col-md-5 mb-4">
             <div class="card rounded-4 bg-light shadow-lg">
                 <div class="card-body">
@@ -40,11 +41,19 @@
                             <label for="petWeight" class="form-label">Weight (g)</label>
                             <input type="number" class="form-control" id="petWeight" name="petWeight" placeholder="Enter pet's weight" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="userIds" class="form-label">Assign Users</label>
+                            <select multiple class="form-select" id="userIds" name="userIds" required>
+                                <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
+                            </select>
+                            <small class="form-text text-muted">Hold CTRL (or CMD) to select multiple users.</small>
+                        </div>
                         <button type="submit" class="btn btn-primary">Add Pet</button>
                     </form>
                 </div>
             </div>
         </div>
+        <!-- Display Existing Pets -->
         <div class="col-12 col-md-6 mb-4">
             <h3 class="mb-3">Your Pets</h3>
             <div class="row">
@@ -64,8 +73,6 @@
             </div>
         </div>
     </div>
-    <!--
--->
 </div>
 </body>
 </html>
