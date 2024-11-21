@@ -195,4 +195,24 @@ public class MainController {
     public String showMenuPage(Model model) {
         return "menupage";
     }
+
+    @GetMapping("/feederpage")
+    public String showFeederPage(Model model) {
+        Feeder feeder = feederService.findById(1L);
+        List<Pet> pets = petService.findAll();
+        List<Schedule> schedules = scheduleService.findAll();
+        model.addAttribute("pets", petService.findAll());
+        model.addAttribute("feeders", feederService.findAll());
+        model.addAttribute("schedules", scheduleService.findAll());
+        return "feederpage";
+    }
+
+    @GetMapping("/healthtracker")
+    public String showHealthPage(Model model) {
+        List<Pet> pets = petService.findAll();
+        List<PetDataLog> petdatalogs = petDataLogService.findAll();
+        model.addAttribute("pets", petService.findAll());
+        model.addAttribute("petdatalogs", petDataLogService.findAll());
+        return "healthtracker";
+    }
 }

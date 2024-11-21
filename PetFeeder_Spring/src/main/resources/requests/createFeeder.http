@@ -8,6 +8,6 @@ Content-Type: application/json
 
   "bowlWeight": 12.3,
   "petWeight": 60.1,
-  "reservoirLevel": 80.5
+  "reservoirLevel": 0.43
 }
 
