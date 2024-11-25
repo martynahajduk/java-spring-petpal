@@ -2,6 +2,7 @@ package be.kdg.programming3.domain;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.List;
 
 
@@ -13,31 +14,39 @@ public class User {
     private Long id;
 
 
-    @Column
+    @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
+    @Column(name = "password", nullable = false)
     private String password;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "feeder_id")
     private Feeder feeder;
 
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Pet> pets;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinColumn(name = "pet_id",nullable = false) // One pet can belong to many users
+    private Pet pet;
 
 
 
-    public User(String name, String email, String password, List<Pet> pets, Feeder feeder) {
+    public User(String name, String email, String password,  Feeder feeder,Pet pet) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.pets = pets;
+        this.feeder = feeder;
+        this.pet = pet;
 
-        // Set the user in each pet
-        for (Pet pet : pets) {
-            pet.setUser(this);
+
+        // Setting this user in the pet's users set
+        if (pet != null) {
+            if (pet.getUsers() == null) {
+                pet.setUsers(new HashSet<>());
+            }
+            pet.getUsers().add(this);
         }
     }
 
@@ -75,12 +84,13 @@ public class User {
         this.password = password;
     }
 
-    public List<Pet> getPets() {
-        return pets;
+
+    public Pet getPet() {
+        return pet;
     }
 
-    public void setPets(List<Pet> pets) {
-        this.pets = pets;
+    public void setPet(Pet pet) {
+        this.pet = pet;
     }
 
     public Feeder getFeeder() {

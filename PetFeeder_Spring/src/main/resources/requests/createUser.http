@@ -1,3 +1,4 @@
+
 ### GET request to example server
 ### Create a User
 ### POST request to create multiple Users
@@ -6,10 +7,34 @@ Content-Type: application/json
 app_user
 
 
-{"name": "Martyna Hajduk",
+{
   "email": "martyna.hajduk@student.kdg.be",
+  "name": "Martyna Hajduk",
+
   "password": "1111111",
-  "feeder":{"id": 1}}
+  "feeder": { "id": 1 },
+  "pet": { "id": 1 }
+}
+
+### GET request to example server
+### Create a User
+### POST request to create multiple Users
+POST http://localhost:80/users/add
+Content-Type: application/json
+app_user
+
+{
+  "email": "alina.dimova@student.kdg.be",
+  "name": "Alina Dimova",
+
+"password": "12345678",
+"feeder": { "id": 1 },
+"pet": { "id": 1 }
+}
+
+
+
+
 
 
 

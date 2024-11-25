@@ -22,4 +22,9 @@ public class CompositeProcessor extends DataProcessor {
             processor.saveToDatabase(data);
         }
     }
+
+    // Check if any processors are added
+    public boolean hasProcessors() {
+        return !processors.isEmpty();
+    }
 }
