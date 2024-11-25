@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -259,5 +260,29 @@ public class MainController {
         model.addAttribute("pets", petService.findAll());
         model.addAttribute("petdatalogs", petDataLogService.findAll());
         return "healthtracker";
+    }
+
+    @GetMapping("/petbreed")
+    public String showPetBreeds(Model model) {
+        List<Breed> breeds = Arrays.asList(Breed.values());
+        model.addAttribute("breeds", breeds);
+        return "petbreed";
+    }
+
+    @GetMapping("/breed/{breed}")
+    public String getBreedDetails(@PathVariable("breed") String breedName, Model model) {
+        List<Breed> breeds = Arrays.asList(Breed.values());
+        model.addAttribute("breeds", breeds);
+        Breed selectedBreed = Arrays.stream(Breed.values())
+                .filter(breed -> breed.name().equalsIgnoreCase(breedName))
+                .findFirst()
+                .orElse(null);
+        model.addAttribute("selectedBreed", selectedBreed);
+        return "petbreed";
+    }
+
+    @GetMapping("/team")
+    public String showTeam(Model model) {
+        return "team";
     }
 }

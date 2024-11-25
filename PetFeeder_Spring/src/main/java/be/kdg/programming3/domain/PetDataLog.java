@@ -22,6 +22,7 @@ public class PetDataLog {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet_id") // Foreign key to Pet
     private Pet pet;
+    @Enumerated(EnumType.STRING)
     @Column(name = "animal_type", nullable = false)
     private Breed animalType;
 
@@ -31,7 +32,6 @@ public class PetDataLog {
     private Double bowlWeight;
     private Double reservoirHeight;
     private LocalDateTime timestamp; // Timestamp of the feeding
-    private String petName;
     public PetDataLog() {}
 
     public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType,Double reservoirHeight, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
@@ -79,13 +79,6 @@ public class PetDataLog {
         this.feeder = feeder;
     }
 
-    public String getPetName() {
-        return petName;
-    }
-
-    public void setPetName(String petName) {
-        this.petName = petName;
-    }
 
     public Pet getPet() {
         return pet;
@@ -138,8 +131,7 @@ public class PetDataLog {
                 ", animalType=" + animalType +
                 ", petWeight=" + petWeight +
                 ", bowlWeight=" + bowlWeight +
-                ", timestamp=" + timestamp +
-                ", petName='" + petName + '\'' +
+                ", timestamp=" + timestamp + '\'' +
                 '}';
     }
 }
