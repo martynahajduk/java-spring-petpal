@@ -28,10 +28,6 @@ public class UserServiceS implements UserService {
         return userRepository.findAll();
     }
 
-    /*public User save(String name, String email, String password) {
-        return userRepository.save(new User(name,email,password));
-    }*/
-
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
@@ -63,5 +59,10 @@ public class UserServiceS implements UserService {
 
         return user;
     }
-    //
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
+    }
+
 }

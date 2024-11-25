@@ -3,6 +3,7 @@ package be.kdg.programming3.domain;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -22,8 +23,11 @@ public class Pet {
     private Breed animalType;
     @Column(name = "weight")
     private double petWeight;
-    @OneToMany(mappedBy="pet",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<User> users; //one pet can belong to multiple users
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "app_user",
+            joinColumns = @JoinColumn(name = "pet_id"),
+            inverseJoinColumns = @JoinColumn(name = "id"))
+    private Set<User> users = new HashSet<>();
 
     @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
     private Set<PetDataLog> petDataLogs;
@@ -42,17 +46,11 @@ public class Pet {
     }
 
     public Pet(String name, int age, Breed animalType,  double petWeight, Set<User> users) {
-
         this.age = age;
         this.name = name;
         this.animalType = animalType;
         this.petWeight = petWeight;
         this.users = users;
-
-        // Set this pet for each user in the set
-        for (User user : users) {
-            user.setPet(this);
-        }
 
     }
 
