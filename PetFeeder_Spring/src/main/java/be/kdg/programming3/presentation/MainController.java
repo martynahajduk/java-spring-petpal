@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -120,15 +121,54 @@ public class MainController {
         return scheduleService.findAll();
     }
 
-    @PostMapping("/schedules/add")
-    public List<Schedule> createSchedules(@RequestBody List<Schedule> schedules) {
-        return scheduleService.saveAll(schedules);
-    }
 
     @DeleteMapping("/schedules/{id}")
     public void deleteSchedule(@PathVariable Long id) {
         scheduleService.deleteById(id);
     }
+    @GetMapping("/schedulecreation")
+    public String showScheduleCreationPage(Model model) {
+        model.addAttribute("feeders", feederService.findAll());
+        model.addAttribute("frequencies", FeedFrequency.values());
+        return "schedule";
+    }
+
+    @PostMapping("/schedule/add")
+    public String handleScheduleCreation(
+            @RequestParam Long feederId,
+            @RequestParam String timeToFeed,
+            @RequestParam FeedFrequency frequency,
+            Model model) {
+
+        Feeder feeder = feederService.findById(feederId);
+        if (feeder == null) {
+            model.addAttribute("errorMessage", "Invalid feeder selected!");
+            return "schedulecreation";
+        }
+
+        LocalTime feedTime;
+        try {
+            feedTime = LocalTime.parse(timeToFeed);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Invalid time format! Use HH:mm.");
+            return "schedulecreation";
+        }
+
+        Schedule newSchedule = new Schedule();
+        newSchedule.setFeeder(feeder); // Associate with the feeder
+        newSchedule.setTimeToFeed(feedTime);
+        newSchedule.setFrequency(frequency);
+
+
+
+        model.addAttribute("successMessage", "Schedule created successfully!");
+        model.addAttribute("feeders", feederService.findAll());
+        model.addAttribute("frequencies", FeedFrequency.values());
+        // Save the Schedule
+        scheduleService.save(newSchedule);
+        return "redirect:/schedulecreation";
+    }
+
 
 
     @GetMapping("/users")
@@ -260,29 +300,5 @@ public class MainController {
         model.addAttribute("pets", petService.findAll());
         model.addAttribute("petdatalogs", petDataLogService.findAll());
         return "healthtracker";
-    }
-
-    @GetMapping("/petbreed")
-    public String showPetBreeds(Model model) {
-        List<Breed> breeds = Arrays.asList(Breed.values());
-        model.addAttribute("breeds", breeds);
-        return "petbreed";
-    }
-
-    @GetMapping("/breed/{breed}")
-    public String getBreedDetails(@PathVariable("breed") String breedName, Model model) {
-        List<Breed> breeds = Arrays.asList(Breed.values());
-        model.addAttribute("breeds", breeds);
-        Breed selectedBreed = Arrays.stream(Breed.values())
-                .filter(breed -> breed.name().equalsIgnoreCase(breedName))
-                .findFirst()
-                .orElse(null);
-        model.addAttribute("selectedBreed", selectedBreed);
-        return "petbreed";
-    }
-
-    @GetMapping("/team")
-    public String showTeam(Model model) {
-        return "team";
     }
 }
