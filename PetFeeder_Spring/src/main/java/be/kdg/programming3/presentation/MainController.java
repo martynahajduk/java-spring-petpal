@@ -153,17 +153,15 @@ public class MainController {
             return "Pet with ID " + user.getPet().getId() + " does not exist.";
         }
         user.setPet(pet);
-
-        // Save the user
         userService.save(user);
         return "User added successfully with Feeder ID: " + feeder.getId() + " and Pet ID: " + pet.getId();
     }
 
-    @GetMapping("/registerlogin")
+    @GetMapping("/")
     public String showLoginRegisterPage(Model model) {
         List<User> users = userService.findAll();
         model.addAttribute("users", users);
-        return "registerlogin";
+        return "index";
     }
 
     @PostMapping("/login")
@@ -174,27 +172,27 @@ public class MainController {
             return "menupage";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            return "registerlogin";
+            return "index";
         }
     }
 
     @PostMapping("/register")
-    public String registerUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, Model model) {
+    public String registerUser(@RequestParam String name, @RequestParam String email, @RequestParam String password, @RequestParam Feeder feeder, Model model) {
         try {
-            User newUser = userService.registerUser(name, email, password);
+            List<Feeder> feeders = feederService.findAll();
+            Long feederId = feeder.getId();
+            User newUser = userService.registerUser(name, email, password, feeder);
             model.addAttribute("user", newUser);
-            return "registerlogin";
+            return "index";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
-            return "registerlogin";
+            return "index";
         }
     }
-    //
 
 
     @GetMapping("/petchoice")
     public String showPetChoicePage(Model model) {
-       //fetching all pets and users with their realtion
         List<Pet> pets = petService.findAll();
         List<User> users = userService.findAll();
 
@@ -209,9 +207,8 @@ public class MainController {
                          @RequestParam int age,
                          @RequestParam Breed animalType,
                          @RequestParam double petWeight,
-                         @RequestParam List<Long> userIds, //new paramater to associate users
+                         @RequestParam List<Long> userIds,
                          Model model) {
-        //fetching users by IDs
         Set<User> users = new HashSet<>();
         for(Long userId : userIds) {
             User user = userService.findUserById(userId);
@@ -219,7 +216,6 @@ public class MainController {
                 users.add(user);
             }
         }
-        //creating and saving the pet
         Pet newPet = new Pet(name,age,animalType, petWeight ,users);
         petService.save(newPet);
 

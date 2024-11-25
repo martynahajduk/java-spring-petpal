@@ -28,7 +28,7 @@ public class User {
 
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "pet_id",nullable = false) // One pet can belong to many users
+    @JoinColumn(name = "pet_id",nullable = true)
     private Pet pet;
 
 

@@ -23,7 +23,7 @@ public class Pet {
     @Column(name = "weight")
     private double petWeight;
     @OneToMany(mappedBy="pet",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-       private Set<User> users; //one pet can belong to multiple users
+    private Set<User> users; //one pet can belong to multiple users
 
     @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
     private Set<PetDataLog> petDataLogs;
