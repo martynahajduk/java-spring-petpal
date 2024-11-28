@@ -139,6 +139,7 @@ public class MainController {
             @RequestParam Long feederId,
             @RequestParam String timeToFeed,
             @RequestParam FeedFrequency frequency,
+            @RequestParam double portion,  // Added portion size parameter
             Model model) {
 
         Feeder feeder = feederService.findById(feederId);
@@ -159,8 +160,7 @@ public class MainController {
         newSchedule.setFeeder(feeder);
         newSchedule.setTimeToFeed(feedTime);
         newSchedule.setFrequency(frequency);
-
-
+        newSchedule.setPortion(portion);  // Set the portion size
 
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());
