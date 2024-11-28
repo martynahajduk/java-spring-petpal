@@ -100,7 +100,6 @@ public class MainController {
 
         Feeder feeder = feederService.findById(petDataLog.getFeeder().getId());
         Pet pet = petService.findById(petDataLog.getPet().getId());
-        // Set the actual entities to the petDataLog object
         petDataLog.setAge(pet.getAge());
         petDataLog.setAnimalType(pet.getAnimalType());
 
@@ -126,10 +125,12 @@ public class MainController {
     public void deleteSchedule(@PathVariable Long id) {
         scheduleService.deleteById(id);
     }
+
     @GetMapping("/schedulecreation")
     public String showScheduleCreationPage(Model model) {
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("frequencies", FeedFrequency.values());
+        model.addAttribute("schedules", scheduleService.findAll());
         return "schedule";
     }
 
@@ -155,7 +156,7 @@ public class MainController {
         }
 
         Schedule newSchedule = new Schedule();
-        newSchedule.setFeeder(feeder); // Associate with the feeder
+        newSchedule.setFeeder(feeder);
         newSchedule.setTimeToFeed(feedTime);
         newSchedule.setFrequency(frequency);
 
@@ -164,7 +165,6 @@ public class MainController {
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("frequencies", FeedFrequency.values());
-        // Save the Schedule
         scheduleService.save(newSchedule);
         return "redirect:/schedulecreation";
     }
@@ -183,14 +183,12 @@ public class MainController {
 
     @PostMapping("/users/add")
     public String addUser(@RequestBody User user) {
-        // Validate and fetch the feeder
         Feeder feeder = feederService.findById(user.getFeeder().getId());
         if (feeder == null) {
             return "Feeder with ID " + user.getFeeder().getId() + " does not exist.";
         }
         user.setFeeder(feeder);
 
-        // Validate and fetch the pet
         Pet pet = petService.findById(user.getPet().getId());
         if (pet == null) {
             return "Pet with ID " + user.getPet().getId() + " does not exist.";
@@ -260,7 +258,7 @@ public class MainController {
                          @RequestParam int age,
                          @RequestParam Breed animalType,
                          @RequestParam double petWeight,
-                         @RequestParam List<Long> userIds,  // Użytkownicy wybrani w formularzu
+                         @RequestParam List<Long> userIds,
                          Model model) {
 
         Pet newPet = new Pet(name, age, animalType, petWeight, new HashSet<>());
@@ -301,4 +299,29 @@ public class MainController {
         model.addAttribute("petdatalogs", petDataLogService.findAll());
         return "healthtracker";
     }
+
+    @GetMapping("/petbreed")
+    public String showPetBreeds(Model model) {
+        List<Breed> breeds = Arrays.asList(Breed.values());
+        model.addAttribute("breeds", breeds);
+        return "petbreed";
+    }
+
+    @GetMapping("/breed/{breed}")
+    public String getBreedDetails(@PathVariable("breed") String breedName, Model model) {
+        List<Breed> breeds = Arrays.asList(Breed.values());
+        model.addAttribute("breeds", breeds);
+        Breed selectedBreed = Arrays.stream(Breed.values())
+                .filter(breed -> breed.name().equalsIgnoreCase(breedName))
+                .findFirst()
+                .orElse(null);
+        model.addAttribute("selectedBreed", selectedBreed);
+        return "petbreed";
+    }
+
+    @GetMapping("/team")
+    public String showTeam(Model model) {
+        return "team";
+    }
+
 }

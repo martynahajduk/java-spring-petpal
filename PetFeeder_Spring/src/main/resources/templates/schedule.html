@@ -7,13 +7,13 @@
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
-<header>
-    <h1>Schedule Choice</h1>
-</header>
-<h1>Create a Schedule</h1>
+<header th:insert="~{navbar.html}"></header>
+
 <div class="container mt-5">
+
     <div class="row justify-content-between">
-        <div class="col-12 col-md-5 mb-4">
+        <h3 class="mb-3">Create Schedule</h3>
+        <div class="col-12 col-md-5 mb-4 pb-5">
             <div class="card rounded-4 bg-light shadow-lg">
                 <div class="card-body">
                     <form action="/schedule/add" method="POST">
@@ -54,6 +54,22 @@
                 </div>
             </div>
         </div>
+        <div class="col-12 col-md-6 mb-4 pb-5">
+            <h3 class="mb-3">Scheduled Feedings</h3>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-4" th:each="schedule : ${schedules}">
+                    <div class="card rounded-4 bg-light shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title">Feeder: <span th:text="${schedule.feeder.id}"></span></h5>
+                            <p class="card-text">
+                                <strong>Time to Feed:</strong> <span th:text="${schedule.timeToFeed}"></span><br>
+                                <strong>Frequency:</strong> <span th:text="${schedule.frequency}"></span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div th:if="${successMessage}">
@@ -62,5 +78,6 @@
 <div th:if="${errorMessage}">
     <p th:text="${errorMessage}"></p>
 </div>
+<footer th:insert="~{footer.html}"></footer>
 </body>
 </html>
