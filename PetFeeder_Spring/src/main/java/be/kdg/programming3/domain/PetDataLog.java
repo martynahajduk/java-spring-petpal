@@ -4,6 +4,7 @@ import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.Schedule;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -30,11 +31,15 @@ public class PetDataLog {
     private int age;
     private Double petWeight;
     private Double bowlWeight;
-    private Double reservoirHeight;
+    private Double reservoirFoodLeftPercentage = 0.0;
+    private Double reservoirHeight = 30.3;
+    private Double reservoirHeightFoodLevel = 20.0;
     private LocalDateTime timestamp; // Timestamp of the feeding
-    public PetDataLog() {}
 
-    public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType,Double reservoirHeight, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
+    public PetDataLog() {
+    }
+
+    public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType, Double reservoirHeight, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
         this.feeder = feeder;
         this.pet = pet;
         this.animalType = animalType;
@@ -120,6 +125,21 @@ public class PetDataLog {
         this.timestamp = timestamp;
     }
 
+    public Double getReservoirFoodLeftPercentage() {
+        return reservoirFoodLeftPercentage;
+    }
+
+    public void setReservoirFoodLeftPercentage(Double reservoirFoodLeftPercentage) {
+        this.reservoirFoodLeftPercentage = reservoirFoodLeftPercentage;
+    }
+
+    public Double getReservoirHeightFoodLevel() {
+        return reservoirHeightFoodLevel;
+    }
+
+    public void setReservoirHeightFoodLevel(Double reservoirHeightFoodLevel) {
+        this.reservoirHeightFoodLevel = reservoirHeightFoodLevel;
+    }
 
     @Override
     public String toString() {

@@ -13,4 +13,7 @@ public interface PetDataLogService {
     PetDataLog save(PetDataLog petDataLog);
     void deleteById(Long id);
     List<PetDataLog> getAllLogs();
+
+    //Calculate food left in the reservoir in Percentage
+    Double getFoodLevelPercentage(Long petDataLogId);
 }

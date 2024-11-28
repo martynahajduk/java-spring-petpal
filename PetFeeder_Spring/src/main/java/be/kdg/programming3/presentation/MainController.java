@@ -285,9 +285,15 @@ public class MainController {
         Feeder feeder = feederService.findById(1L);
         List<Pet> pets = petService.findAll();
         List<Schedule> schedules = scheduleService.findAll();
+
+        //get teh reservoir level
+        Double reservoirLevel = petDataLogService.getFoodLevelPercentage(feeder.getId());
+
         model.addAttribute("pets", petService.findAll());
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("schedules", scheduleService.findAll());
+        model.addAttribute("reservoirLevel", reservoirLevel);
+
         return "feederpage";
     }
 
