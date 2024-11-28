@@ -35,4 +35,10 @@ public class PetDataLogServiceS implements PetDataLogService {
     public List<PetDataLog> getAllLogs() {
         return petDataLogRepository.findAll();
     }
+
+    public Double getFoodLevelPercentage(Long petDataLogId) {
+        PetDataLog petDataLog = new PetDataLog();
+        Double percentage =  (petDataLog.getReservoirHeightFoodLevel() / petDataLog.getReservoirHeight()) * 100;
+        return (double) Math.round(percentage);
+    }
 }
