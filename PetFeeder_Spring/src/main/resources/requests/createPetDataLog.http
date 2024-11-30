@@ -7,7 +7,7 @@ Content-Type: application/json
 {
   "bowlWeight": 0.8,
   "petWeight": 34,
-  "reservoirHeight": 1.5,
+  "reservoirHeight": 0.45,
   "timestamp": "2024-11-16T10:30:00",
   "feeder": { "id": 1 },
   "pet": { "id": 1 },

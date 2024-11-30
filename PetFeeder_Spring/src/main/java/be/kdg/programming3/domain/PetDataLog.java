@@ -31,7 +31,7 @@ public class PetDataLog {
     private int age;
     private Double petWeight;
     private Double bowlWeight;
-    private Double reservoirHeight = 0.0;
+    private Double reservoirHeight;
     private LocalDateTime timestamp; // Timestamp of the feeding
 
     public PetDataLog() {
