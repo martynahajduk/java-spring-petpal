@@ -49,7 +49,6 @@ public class MainController {
     }
 
 
-
     @GetMapping("/logs")
     public String showPetDataLogs(Model model) {
         List<PetDataLog> petDataLogs = petDataLogService.getAllLogs();
@@ -170,7 +169,6 @@ public class MainController {
     }
 
 
-
     @GetMapping("/users")
     public List<User> getAllUsers() {
         return userService.findAll();
@@ -224,11 +222,14 @@ public class MainController {
                                @RequestParam String password,
                                @RequestParam(required = false) Long feederId,
                                Model model) {
-        Feeder feeder = feederId != null ? feederService.findById(feederId) : null;
-        if (feeder == null) {
-            feeder = new Feeder();
-            feeder = feederService.save(feeder);
+        Feeder feeder = null;
+
+        if (feederId != null) {
+            feeder = feederService.findById(feederId);
+        } else {
+            feeder = feederService.save(new Feeder());
         }
+
 
         User newUser = new User();
         newUser.setName(name);

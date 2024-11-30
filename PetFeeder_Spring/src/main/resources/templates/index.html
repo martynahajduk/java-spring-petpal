@@ -55,9 +55,10 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="feeder" class="form-label">Feeder id</label>
-                            <input type="text" class="form-control" id="feeder" placeholder="Enter your feeder ID" name="feeder">
+                            <label for="feeder" class="form-label">Feeder ID</label>
+                            <input type="number" class="form-control" id="feeder" placeholder="Enter your feeder ID" name="feederId" min="1">
                         </div>
+
                         <button type="submit" class="btn btn-primary">Register</button>
 
                         <div th:if="${error}" class="mt-2 text-danger">
