@@ -155,6 +155,41 @@ public class ArduinoController {
         // Return a response message
         return "IP received successfully!";
     }
+    @PostMapping("/feedNow")
+    public static void feedNow( @RequestParam int amount) {
+        // Define the request payload, if any
+        String requestPayload = String.format("amount=%s", amount);
+
+        // Set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setContentLength(requestPayload.length());
+
+        // Create the request entity
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestPayload, headers);
+
+        // Set the URL of the API endpoint
+        String apiUrl = "http://" + ip + "/feedNow";
+
+        URI uri = URI.create(apiUrl);
+
+        // Create a RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+        logger.info("oi");
+        // Send the POST request
+        ResponseEntity<String> responseEntity =
+                restTemplate.postForEntity(uri, requestEntity, String.class);
+
+        // Handle the response
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            String responseBody = responseEntity.getBody();
+            logger.info("Response body: " + responseBody);
+        } else {
+            logger.error("POST request failed with status code: " + responseEntity.getStatusCodeValue());
+        }
+        logger.info("oi2");
+    }
 }
 
 

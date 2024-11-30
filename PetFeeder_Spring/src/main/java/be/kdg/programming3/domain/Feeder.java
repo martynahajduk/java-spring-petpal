@@ -14,7 +14,7 @@ import java.util.Set;
 public class Feeder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", nullable = false)
+    @Column(name="id", nullable = true)
     private Long id;
    /* @Column(name="reservoir_level", nullable = false)
     private double reservoirLevel;
@@ -67,9 +67,6 @@ public class Feeder {
 
     @Override
     public String toString() {
-        return "Feeder{" +
-                "id=" + id +
-
-                '}';
+        return "" + id;
     }
 }
