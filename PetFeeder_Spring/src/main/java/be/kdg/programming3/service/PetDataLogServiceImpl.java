@@ -9,13 +9,13 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class PetDataLogServiceS implements PetDataLogService {
+public class PetDataLogServiceImpl implements PetDataLogService {
     private final PetDataLogRepository petDataLogRepository;
     //private final PetDataLogService petDataLogService;
 //    private final PetDataLogService petDataLogService;
 
     @Autowired
-    public PetDataLogServiceS(PetDataLogRepository petDataLogRepository /*@Qualifier("petDataLogService") PetDataLogService petDataLogService*/) {
+    public PetDataLogServiceImpl(PetDataLogRepository petDataLogRepository /*@Qualifier("petDataLogService") PetDataLogService petDataLogService*/) {
         this.petDataLogRepository = petDataLogRepository;
 //        this.petDataLogService = petDataLogService;
        // this.petDataLogService = petDataLogService;

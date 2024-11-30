@@ -4,27 +4,29 @@ import be.kdg.programming3.domain.Breed;
 import be.kdg.programming3.domain.PetDataLog;
 
 import be.kdg.programming3.service.PetDataLogService;
-import be.kdg.programming3.service.PetDataLogServiceS;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.time.LocalDateTime;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
-
+import java.util.Map;
 
 
 @RestController
 public class DataController {
 
-    private final PetDataLogService petDataLogService;
+    private final JdbcTemplate jdbcTemplate;
     private final String pythonServerURL = "http://localhost:5000/receiveData"; // Python server endpoint
 
     @Autowired
-    public DataController(PetDataLogService petDataLogService) {
-        this.petDataLogService = petDataLogService;
+    public DataController(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+
     }
 
     /*@GetMapping("/api/sendData")
@@ -50,33 +52,37 @@ public class DataController {
     }
 
      */
+
+
+
+
     @PostMapping("/api/sendData")
-    public ResponseEntity<String> sendDataViaPost() {
+    public ResponseEntity<String> sendDataToPython() {
         try {
-            // Create a sample list of PetDataLog objects
-            List<PetDataLog> petDataLogs = List.of(
-                    new PetDataLog(1L, 2, Breed.CHINESE, 10.0, 0.5, 0.3)
-            );
+            // Query the static hamster_data table from prediction_data schema
+            String query = "SELECT * FROM prediction_data.hamster_data";
+            List<Map<String, Object>> hamsterDataList = jdbcTemplate.queryForList(query);
 
-            // Convert to JSON
+            // Convert the query result (List of Maps) into JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(petDataLogs);
+            String json = objectMapper.writeValueAsString(hamsterDataList);
 
-            // Set headers
+            // Prepare the request headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            // Create request
+            // Prepare the request with JSON payload
             HttpEntity<String> request = new HttpEntity<>(json, headers);
 
-            // Send POST request
+            // Send the data to the Python server using RestTemplate
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL, request, String.class);
 
+            // Return the response from the Python server
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Failed to send data via POST");
+            return ResponseEntity.badRequest().body("Failed to send data to Python server");
         }
     }
 }

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class FeederServiceS implements FeederService {
+public class FeederServiceImpl implements FeederService {
 
     private final FeederRepository feederRepository;
 
     @Autowired
-    public FeederServiceS(FeederRepository feederRepository) {
+    public FeederServiceImpl(FeederRepository feederRepository) {
         this.feederRepository = feederRepository;
     }
 
