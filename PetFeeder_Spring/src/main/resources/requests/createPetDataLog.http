@@ -6,11 +6,11 @@ Content-Type: application/json
 
 {
   "bowlWeight": 0.8,
-  "petWeight": 34,
-  "reservoirHeight": 0.45,
+  "petWeight": 57,
+  "reservoirHeight": 0.2,
   "timestamp": "2024-11-16T10:30:00",
   "feeder": { "id": 1 },
   "pet": { "id": 1 },
-  "age": 12,
-  "animalType": "SYRIAN"
+  "age": 1,
+  "animalType": "CHINESE"
 }
