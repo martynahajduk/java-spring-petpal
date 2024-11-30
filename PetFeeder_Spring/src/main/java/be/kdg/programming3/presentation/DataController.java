@@ -1,88 +1,74 @@
 package be.kdg.programming3.presentation;
 
-import be.kdg.programming3.domain.Breed;
-import be.kdg.programming3.domain.PetDataLog;
-
-import be.kdg.programming3.service.PetDataLogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
-
 @RestController
+@RequestMapping("/api")
 public class DataController {
 
     private final JdbcTemplate jdbcTemplate;
-    private final String pythonServerURL = "http://localhost:5000/receiveData"; // Python server endpoint
 
-    @Autowired
+    @Value("${python.server.url}")
+    private String pythonServerURL;
+
     public DataController(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
-
     }
 
-    /*@GetMapping("/api/sendData")
-    public ResponseEntity<String> sendData() {
+    // Endpoint 1: Send Real Data
+    @PostMapping("/sendRealData")
+    public ResponseEntity<String> sendRealData(@RequestBody Map<String, Object> realData) {
+        return sendDataToPythonServer(realData);
+    }
+
+    // Endpoint 2: Send Research Data
+    @PostMapping("/sendResearchData")
+    public ResponseEntity<String> sendResearchData() {
         try {
-            // Fetch data from the service layer
-            List<PetDataLog> petDataLogs = petDataLogService.getAllLogs();
+            // Query the hamster_data table
+            String query = "SELECT * FROM prediction_data.hamster_data";
+            List<Map<String, Object>> researchData = jdbcTemplate.queryForList(query);
 
-            // Convert the data to JSON
+            // Convert data to JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(petDataLogs);
+            String json = objectMapper.writeValueAsString(researchData);
 
-            // Send data to Python server using RestTemplate (GET with query parameter)
-            RestTemplate restTemplate = new RestTemplate();
-            String url = pythonServerURL + "?data=" + json; // Append JSON as query parameter
-            String response = restTemplate.getForObject(url, String.class);
-
-            return ResponseEntity.ok(response);
+            // Send data to Python server
+            return sendDataToPythonServer(json);
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Failed to send data");
+            return ResponseEntity.badRequest().body("Failed to send research data: " + e.getMessage());
         }
     }
 
-     */
-
-
-
-
-    @PostMapping("/api/sendData")
-    public ResponseEntity<String> sendDataToPython() {
+    // Helper: Send data to Python server
+    private ResponseEntity<String> sendDataToPythonServer(Object data) {
         try {
-            // Query the static hamster_data table from prediction_data schema
-            String query = "SELECT * FROM prediction_data.hamster_data";
-            List<Map<String, Object>> hamsterDataList = jdbcTemplate.queryForList(query);
-
-            // Convert the query result (List of Maps) into JSON
+            // Convert data to JSON
             ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(hamsterDataList);
+            String json = objectMapper.writeValueAsString(data);
 
-            // Prepare the request headers
+            // Prepare headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            // Prepare the request with JSON payload
+            // Send POST request to Python server
             HttpEntity<String> request = new HttpEntity<>(json, headers);
-
-            // Send the data to the Python server using RestTemplate
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL, request, String.class);
 
-            // Return the response from the Python server
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Failed to send data to Python server");
+            return ResponseEntity.badRequest().body("Failed to send data to Python server: " + e.getMessage());
         }
     }
 }

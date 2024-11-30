@@ -29,8 +29,8 @@ public class Pet {
             inverseJoinColumns = @JoinColumn(name = "id"))
     private Set<User> users = new HashSet<>();
 
-    @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
-    private Set<PetDataLog> petDataLogs;
+//    @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
+//    private Set<PetDataLog> petDataLogs;
 
     //@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     //private List<PetDataLog> petDataLogs = new ArrayList<>();
@@ -84,13 +84,14 @@ public class Pet {
     public void setAnimalType(Breed animalType) {
         this.animalType = animalType;
     }
-    public Set<PetDataLog> getPetDataLogs() {
-        return petDataLogs;
-    }
 
-    public void setPetDataLogs(Set<PetDataLog> petDataLogs) {
-        this.petDataLogs = petDataLogs;
-    }
+//    public Set<PetDataLog> getPetDataLogs() {
+//        return petDataLogs;
+//    }
+//
+//    public void setPetDataLogs(Set<PetDataLog> petDataLogs) {
+//        this.petDataLogs = petDataLogs;
+//    }
 
     public double getPetWeight() {
         return petWeight;

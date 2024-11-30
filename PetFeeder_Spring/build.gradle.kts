@@ -9,7 +9,7 @@ version = "0.0.1-SNAPSHOT"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(21)
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 
@@ -23,13 +23,12 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web-services")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation ("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation ("org.postgresql:postgresql")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.postgresql:postgresql")
     implementation("org.webjars:bootstrap:5.3.2")
     implementation("org.webjars:webjars-locator-core:0.59")
-    //jackson library for converting the object to JSON
-    implementation("com.fasterxml.jackson.core:jackson-databind")
-
+    implementation("com.fasterxml.jackson.core:jackson-databind") // Jackson library for JSON
+    implementation("org.apache.commons:commons-csv:1.10.0") // Apache Commons CSV
 }
 
 tasks.withType<Test> {

@@ -7,6 +7,8 @@ import be.kdg.programming3.service.PetDataLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
+
 //concrete processor for processing the ArduinoSensorData
 //saves the data of sensors in database through FeederService
 
@@ -40,6 +42,8 @@ public class FeederDataProcessor extends DataProcessor {
                 petDataLog.setBowlWeight(sensorData.getBowlWeight());
                 petDataLog.setPetWeight(sensorData.getPetWeight());
                 petDataLog.setId(sensorData.getId());
+                petDataLog.setTimestamp(LocalDateTime.now());
+
 
                 // Save to database
                 petDataLogService.save(petDataLog);

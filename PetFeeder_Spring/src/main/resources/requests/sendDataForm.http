@@ -1,0 +1,8 @@
+### GET request to example server
+
+POST /api/sendDataForm HTTP/1.1
+Host: localhost:80
+Content-Type: application/x-www-form-urlencoded
+Connection: close
+
+id=1&age_weeks=40&weight_grams=57&breed=Syrian&food_intake=17&sex=Female

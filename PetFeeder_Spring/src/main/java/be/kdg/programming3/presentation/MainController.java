@@ -97,19 +97,20 @@ public class MainController {
         return petDataLogService.getPetDataLogById(id);
     }
 
-    @PostMapping("/data-logs/add")
-    public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
-
-        Feeder feeder = feederService.findById(petDataLog.getFeeder().getId());
-        Pet pet = petService.findById(petDataLog.getPet().getId());
-        petDataLog.setAge(pet.getAge());
-        petDataLog.setAnimalType(pet.getAnimalType());
-
-        petDataLog.setFeeder(feeder);
-        petDataLog.setPet(pet);
-
-        return petDataLogService.save(petDataLog);
-    }
+//    //? Is someone going to use this method
+//    @PostMapping("/data-logs/add")
+//    public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
+//
+//        Feeder feeder = feederService.findById(petDataLog.getFeeder().getId());
+//        Pet pet = petService.findById(petDataLog.getPet().getId());
+//        petDataLog.setAge(pet.getAge());
+//        petDataLog.setAnimalType(pet.getAnimalType());
+//
+//        petDataLog.setFeeder(feeder);
+//        petDataLog.setPet(pet);
+//
+//        return petDataLogService.save(petDataLog);
+//    }
 
     @DeleteMapping("/data-logs/{id}")
     public void deletePetDataLog(@PathVariable Long id) {
