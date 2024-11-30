@@ -13,7 +13,7 @@
 
 <div class="container mt-5">
     <div class="border p-4 rounded bg-light">
-        <h4 th:text="'Feeder ' + ${feeders}"></h4>
+        <h4 th:text="'Feeder id: ' + ${feeders}"></h4>
 
         <div>
             <p><strong>Next Feeding:</strong> <span th:text="${schedules.get(0).timeToFeed}"></span></p>
@@ -26,9 +26,12 @@
             </div>
         </div>
 
+        <div th:if="${isFoodLevelLow}" class="alert alert-danger" role="alert">
+            <strong>Warning!</strong> Food level is low. Please refill the reservoir.
+        </div>
 
         <div class="text-center">
-            <button class="btn btn-primary">Change Feeding</button>
+            <a href="/schedulecreation" class="btn btn-primary">Change Feeding</a>
         </div>
     </div>
 </div>
