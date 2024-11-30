@@ -23,6 +23,7 @@ public class PetDataLog {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "pet_id") // Foreign key to Pet
     private Pet pet;
+    @Enumerated(EnumType.STRING)
     @Column(name = "animal_type", nullable = false)
     private Breed animalType;
 
@@ -30,9 +31,7 @@ public class PetDataLog {
     private int age;
     private Double petWeight;
     private Double bowlWeight;
-    private Double reservoirFoodLeftPercentage = 0.0;
-    private Double reservoirHeight = 30.3;
-    private Double reservoirHeightFoodLevel = 20.0;
+    private Double reservoirHeight = 0.0;
     private LocalDateTime timestamp; // Timestamp of the feeding
 
     public PetDataLog() {
@@ -51,6 +50,17 @@ public class PetDataLog {
 
     }
 
+    public PetDataLog(Long id, int age, Breed animalType, Double petWeight, Double bowlWeight, Double reservoirHeight) {
+        this.id = id;
+        this.age = age;
+        this.animalType = animalType;
+        this.petWeight = petWeight;
+        this.bowlWeight = bowlWeight;
+        this.reservoirHeight = reservoirHeight;
+    }
+
+
+
 
 
     // Getters and Setters
@@ -61,6 +71,7 @@ public class PetDataLog {
     public void setId(Long id) {
         this.id = id;
     }
+
 
     public int getAge() {
         return age;
@@ -128,21 +139,6 @@ public class PetDataLog {
         this.timestamp = timestamp;
     }
 
-    public Double getReservoirFoodLeftPercentage() {
-        return reservoirFoodLeftPercentage;
-    }
-
-    public void setReservoirFoodLeftPercentage(Double reservoirFoodLeftPercentage) {
-        this.reservoirFoodLeftPercentage = reservoirFoodLeftPercentage;
-    }
-
-    public Double getReservoirHeightFoodLevel() {
-        return reservoirHeightFoodLevel;
-    }
-
-    public void setReservoirHeightFoodLevel(Double reservoirHeightFoodLevel) {
-        this.reservoirHeightFoodLevel = reservoirHeightFoodLevel;
-    }
 
     @Override
     public String toString() {
@@ -154,7 +150,8 @@ public class PetDataLog {
                 ", animalType=" + animalType +
                 ", petWeight=" + petWeight +
                 ", bowlWeight=" + bowlWeight +
-                ", timestamp=" + timestamp + '\'' +
+                ", reservoirHeight=" + reservoirHeight +
+                ", timestamp=" + timestamp +
                 '}';
     }
 }
