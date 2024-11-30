@@ -15,6 +15,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,7 @@ public class ArduinoController {
         this.petDataLogService = petDataLogService;
     }
 
-    @GetMapping("/view-data")
+    @GetMapping("/view-data")       //? should this be in arduino controller?
     public String viewData(Model model) {
         List<PetDataLog> petDataLogs = petDataLogService.findAll();
 
@@ -51,14 +52,14 @@ public class ArduinoController {
 
     @PostMapping("/SensorData")
     @ResponseBody
-    public String receiveData(@RequestBody ArduinoSensorData data) {
+    public String receiveData(Double reservoirHeight, Double bowlWeight, Double petWeight, Double id) {
         try {
-            logger.info("Received data: {}", data);
+            logger.info("reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
 
             // Get the appropriate processor and delegate processing
-            DataProcessor processor = dataProcessorFactory.getProcessor(data);
+//            DataProcessor processor = dataProcessorFactory.getProcessor(data);
             //controller automatically will use composite processor when requesting a processor from the factory
-            processor.saveToDatabase(data);
+//            processor.saveToDatabase(data);
 
             return "Data received and processed successfully!";
         } catch (Exception e) {
@@ -67,10 +68,10 @@ public class ArduinoController {
         }
     }
 
-    public String receiveSchedule(List<Long> times, List<Integer> amount) {
+    public static void sendSchedule(List<Long> times, List<Integer> amount) {
 //        List<Long> times = List.of((long)5000, (long)20000);
 //        List<Integer> amount = List.of(20, 20);
-//        // Define the request payload, if any
+        // Define the request payload, if any
         String requestPayload = String.format("times=%s&amount=%s", times, amount).replace(" ","").replace("[","").replace("]","");
 
         // Set headers
@@ -83,6 +84,40 @@ public class ArduinoController {
 
         // Set the URL of the API endpoint
         String apiUrl = "http://" + ip + "/schedule";
+
+        URI uri = URI.create(apiUrl);
+
+        // Create a RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+        logger.info("oi");
+        // Send the POST request
+        ResponseEntity<String> responseEntity =
+                restTemplate.postForEntity(uri, requestEntity, String.class);
+
+        // Handle the response
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            String responseBody = responseEntity.getBody();
+            logger.info("Response body: " + responseBody);
+        } else {
+            logger.error("POST request failed with status code: " + responseEntity.getStatusCodeValue());
+        }
+        logger.info("oi2");
+    }
+
+    @Scheduled(cron = "0 0 0 * * *") // Runs every day at midnight
+    public static String zero() {  //? should we use HttpClient or the one shown below?
+
+        // Set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//        headers.setContentLength(requestPayload.length());
+
+        // Create the request entity
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+
+        // Set the URL of the API endpoint
+        String apiUrl = "http://" + ip + "/zero";
 
         URI uri = URI.create(apiUrl);
 

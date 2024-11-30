@@ -6,12 +6,11 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import be.kdg.programming3.presentation.ArduinoController;
 
-import java.util.Arrays;
+import java.time.temporal.ChronoField;
+import java.util.*;
 import java.time.LocalTime;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping
@@ -131,6 +130,10 @@ public class MainController {
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("frequencies", FeedFrequency.values());
         model.addAttribute("schedules", scheduleService.findAll());
+
+        //TODO add day choices for weekly feeding schedule, figure something out for monthly
+        //? We can also disable it for now and add it later, a biweekly option is also possible
+
         return "schedule";
     }
 
@@ -162,14 +165,26 @@ public class MainController {
         newSchedule.setFrequency(frequency);
         newSchedule.setPortion(portion);  // Set the portion size
 
+        //TODO add method that converts daily feeding to weekly feeding
+        //? just an idea:
+        List<Long> feedTimeList = new ArrayList<>();
+//        long time = feedTime.getLong(ChronoField.SECOND_OF_DAY);
+//         if (frequency == FeedFrequency.DAILY) {
+//             for (int i = 0; i < 6; i++) {
+//                 feedTimeList.add(time + i*86400);   // can be 2 times to add
+//             }
+//         }else{
+//             feedTimeList.add(time);  // need a list of feeding times here to add
+//         }
+//
+        ArduinoController.sendSchedule(feedTimeList, List.of(5));
+
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("frequencies", FeedFrequency.values());
         scheduleService.save(newSchedule);
         return "redirect:/schedulecreation";
     }
-
-
 
     @GetMapping("/users")
     public List<User> getAllUsers() {
