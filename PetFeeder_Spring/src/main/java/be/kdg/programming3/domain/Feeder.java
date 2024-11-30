@@ -67,9 +67,6 @@ public class Feeder {
 
     @Override
     public String toString() {
-        return "Feeder{" +
-                "id=" + id +
-
-                '}';
+        return "" + id;
     }
 }

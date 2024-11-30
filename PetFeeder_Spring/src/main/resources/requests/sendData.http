@@ -4,9 +4,10 @@ Content-Type: application/json
 
 {
   "id": 1,
-  "age": 2,
-  "animalType": "CHINESE",
-  "petWeight": 10.0,
-  "bowlWeight": 0.5,
-  "reservoirHeight": 0.3
+  "age_weeks": 8,
+  "weight_grams": 148.29,
+  "breed": "Syrian",
+  "food_intake": 10.33,
+  "reservoir_height": 0.3,
+  "sex": "Female"
 }

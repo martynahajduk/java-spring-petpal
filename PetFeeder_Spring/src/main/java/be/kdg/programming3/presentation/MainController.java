@@ -180,7 +180,7 @@ public class MainController {
 //             feedTimeList.add(time);  // need a list of feeding times here to add
 //         }
 //
-        ArduinoController.sendSchedule(feedTimeList, List.of(5));
+        //ArduinoController.sendSchedule(feedTimeList, List.of(5));
 
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());

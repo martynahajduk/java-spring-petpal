@@ -1,21 +1,19 @@
 package be.kdg.programming3.service;
 
-import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.Schedule;
 import be.kdg.programming3.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
-public class ScheduleServiceS implements ScheduleService{
+public class ScheduleServiceImpl implements ScheduleService{
     private final ScheduleRepository scheduleRepository;
 
 
     @Autowired
-    public ScheduleServiceS(ScheduleRepository scheduleRepository) {
+    public ScheduleServiceImpl(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
     }
 

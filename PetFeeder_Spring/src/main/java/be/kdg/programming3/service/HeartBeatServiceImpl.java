@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class HeartBeatServiceS implements HeartBeatService {
+public class HeartBeatServiceImpl implements HeartBeatService {
     private final SimulatedHeartbeatRepository heartbeatRepository;
 
     @Autowired
-    public HeartBeatServiceS(SimulatedHeartbeatRepository simulatedHeartbeatRepository) {
+    public HeartBeatServiceImpl(SimulatedHeartbeatRepository simulatedHeartbeatRepository) {
         this.heartbeatRepository = simulatedHeartbeatRepository;
     }
 

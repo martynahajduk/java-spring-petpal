@@ -1,25 +1,22 @@
 package be.kdg.programming3.collector;
 
+public class ArduinoSensorData extends PetPalData {
 
-
-public class ArduinoSensorData extends PetPalData{
-
-    //this class is created to support any new data type parsed
-    //contains all the attributes
+    // Attributes
     private Double reservoirHeight;
     private Double bowlWeight;
     private Double petWeight;
-    private Double sensorValue;
+    private Double sensorId; // Add id as a field
 
-    public ArduinoSensorData(Double reservoirHeight, Double bowlWeight, Double petWeight,Double sensorValue,Long id){
+    // Constructor
+    public ArduinoSensorData(Double reservoirHeight, Double bowlWeight, Double petWeight, Double id) {
         this.reservoirHeight = reservoirHeight;
         this.bowlWeight = bowlWeight;
         this.petWeight = petWeight;
-        this.sensorValue = sensorValue;
-        this.setId(id);
-    }
+        this.sensorId = sensorId; // Assign to sensorId
+         }
 
-
+    // Getters and Setters
     public Double getBowlWeight() {
         return bowlWeight;
     }
@@ -44,13 +41,15 @@ public class ArduinoSensorData extends PetPalData{
         this.reservoirHeight = reservoirHeight;
     }
 
-    public Double getSensorValue() {
-        return sensorValue;
+    public Double getSensorId() {
+        return sensorId;
     }
 
-    public void setSensorValue(Double sensorValue) {
-        this.sensorValue = sensorValue;
+    public void setSensorId(Double sensorId) {
+        this.sensorId = sensorId;
     }
+
+    // Process data method
     @Override
     public void processData() {
         System.out.println("Processing Arduino Sensor Data with ID: " + getId());

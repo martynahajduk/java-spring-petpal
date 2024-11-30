@@ -16,7 +16,7 @@
         <div class="col-12 col-md-5 mb-4 pb-5">
             <div class="card rounded-4 bg-light shadow-lg">
                 <div class="card-body">
-                    <form action="/schedule/add" method="POST">
+                    <form th:action="@{/schedule/add}" method="POST">
                         <div class="mb-3">
                             <label for="feeder">Select Feeder:</label>
                             <select id="feeder" name="feederId" required>

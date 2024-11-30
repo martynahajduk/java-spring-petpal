@@ -18,10 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -50,20 +47,27 @@ public class ArduinoController {
         return "TestPage"; // Name of the Thymeleaf template
     }
 
-    @PostMapping("/SensorData")
+    @PostMapping(value = "/SensorData", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseBody
-    public String receiveData(Double reservoirHeight, Double bowlWeight, Double petWeight, Double id) {
+    public String receiveData(
+            @RequestParam("reservoirHeight") Double reservoirHeight,
+            @RequestParam("bowlWeight") Double bowlWeight,
+            @RequestParam("petWeight") Double petWeight,
+            @RequestParam("id") Double id
+    ) {
         try {
-            logger.info("reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
+            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
 
-            // Get the appropriate processor and delegate processing
-//            DataProcessor processor = dataProcessorFactory.getProcessor(data);
-            //controller automatically will use composite processor when requesting a processor from the factory
-//            processor.saveToDatabase(data);
+            // Wrap the data in the appropriate object (ArduinoSensorData in this case)
+            ArduinoSensorData sensorData = new ArduinoSensorData(reservoirHeight, bowlWeight, petWeight, id);
+
+            // Get the appropriate processor and process the data
+            DataProcessor processor = dataProcessorFactory.getProcessor(sensorData);
+            processor.saveToDatabase(sensorData);
 
             return "Data received and processed successfully!";
         } catch (Exception e) {
-            logger.error("Error while processing data: {}", e.getMessage());
+            logger.error("Error while processing data: {}", e.getMessage(), e);
             return "An error occurred while processing the data!";
         }
     }
@@ -150,6 +154,41 @@ public class ArduinoController {
 
         // Return a response message
         return "IP received successfully!";
+    }
+    @PostMapping("/feedNow")
+    public static void feedNow( @RequestParam int amount) {
+        // Define the request payload, if any
+        String requestPayload = String.format("amount=%s", amount);
+
+        // Set headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+        headers.setContentLength(requestPayload.length());
+
+        // Create the request entity
+        HttpEntity<String> requestEntity = new HttpEntity<>(requestPayload, headers);
+
+        // Set the URL of the API endpoint
+        String apiUrl = "http://" + ip + "/feedNow";
+
+        URI uri = URI.create(apiUrl);
+
+        // Create a RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+        logger.info("oi");
+        // Send the POST request
+        ResponseEntity<String> responseEntity =
+                restTemplate.postForEntity(uri, requestEntity, String.class);
+
+        // Handle the response
+        if (responseEntity.getStatusCode().is2xxSuccessful()) {
+            String responseBody = responseEntity.getBody();
+            logger.info("Response body: " + responseBody);
+        } else {
+            logger.error("POST request failed with status code: " + responseEntity.getStatusCodeValue());
+        }
+        logger.info("oi2");
     }
 }
 

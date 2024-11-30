@@ -39,6 +39,7 @@ public class FeederDataProcessor extends DataProcessor {
                 petDataLog.setReservoirHeight(sensorData.getReservoirHeight());
                 petDataLog.setBowlWeight(sensorData.getBowlWeight());
                 petDataLog.setPetWeight(sensorData.getPetWeight());
+                petDataLog.setId(sensorData.getId());
 
                 // Save to database
                 petDataLogService.save(petDataLog);
