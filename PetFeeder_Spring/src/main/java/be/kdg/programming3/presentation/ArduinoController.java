@@ -19,9 +19,16 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -152,8 +159,27 @@ public class ArduinoController {
         logger.info("IP: {}", address);
         ip = address;
 
+        LocalDateTime date = LocalDateTime.now();
+        System.out.println("Date = " + date);
+        LocalDateTime start = date;
+
+        while (start.getDayOfWeek() != DayOfWeek.MONDAY) {
+            start = start.minusDays(1);
+        }
+        while (start.getHour() > 0) {
+            start = start.minusHours(1);
+        }
+        while (start.getMinute() > 0) {
+            start = start.minusMinutes(1);
+        }
+        while (start.getSecond() > 0) {
+            start = start.minusSeconds(1);
+        }
+
+        ZoneId zoneId = ZoneId.systemDefault(); // or: ZoneId.of("Europe/Oslo");
+        long seconds = LocalDateTime.now().atZone(zoneId).toEpochSecond() - start.atZone(zoneId).toEpochSecond();
         // Return a response message
-        return "IP received successfully!";
+        return String.valueOf(seconds);
     }
     @PostMapping("/feedNow")
     public static void feedNow( @RequestParam int amount) {

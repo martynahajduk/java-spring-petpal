@@ -18,15 +18,15 @@ public class PetDataLog {
     private Feeder feeder;
 
     // Many PetDataLogs can be associated with one Pet
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pet_id") // Foreign key to Pet
-    private Pet pet;
-    @Enumerated(EnumType.STRING)
-    @Column(name = "animal_type", nullable = false)
-    private Breed animalType;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "pet_id") // Foreign key to Pet
+//    private Pet pet;
+//    @Enumerated(EnumType.STRING)
+//    @Column(name = "animal_type", nullable = true)
+//    private Breed animalType;
 
 
-    private int age;
+//    private int age;
     private Double petWeight;
     private Double bowlWeight;
     private Double reservoirHeight;
@@ -35,11 +35,11 @@ public class PetDataLog {
     public PetDataLog() {
     }
 
-    public PetDataLog(Feeder feeder, Pet pet, int age, Breed animalType, Double reservoirHeight, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
+    public PetDataLog(Feeder feeder,/* Pet pet, int age, Breed animalType,*/ Double reservoirHeight, Double petWeight, Double bowlWeight, LocalDateTime timestamp) {
         this.feeder = feeder;
-        this.pet = pet;
-        this.animalType = animalType;
-        this.age = age;
+//        this.pet = pet;
+//        this.animalType = animalType;
+//        this.age = age;
         this.reservoirHeight = reservoirHeight;
         this.petWeight = petWeight;
         this.bowlWeight = bowlWeight;
@@ -48,10 +48,10 @@ public class PetDataLog {
 
     }
 
-    public PetDataLog(Long id, int age, Breed animalType, Double petWeight, Double bowlWeight, Double reservoirHeight) {
+    public PetDataLog(Long id,/* int age, Breed animalType,*/ Double petWeight, Double bowlWeight, Double reservoirHeight) {
         this.id = id;
-        this.age = age;
-        this.animalType = animalType;
+//        this.age = age;
+//        this.animalType = animalType;
         this.petWeight = petWeight;
         this.bowlWeight = bowlWeight;
         this.reservoirHeight = reservoirHeight;
@@ -70,21 +70,21 @@ public class PetDataLog {
     }
 
 
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public Breed getAnimalType() {
-        return animalType;
-    }
-
-    public void setAnimalType(Breed animalType) {
-        this.animalType = animalType;
-    }
+//    public int getAge() {
+//        return age;
+//    }
+//
+//    public void setAge(int age) {
+//        this.age = age;
+//    }
+//
+//    public Breed getAnimalType() {
+//        return animalType;
+//    }
+//
+//    public void setAnimalType(Breed animalType) {
+//        this.animalType = animalType;
+//    }
 
     public Feeder getFeeder() {
         return feeder;
@@ -96,13 +96,13 @@ public class PetDataLog {
 
 
 
-    public Pet getPet() {
-        return pet;
-    }
-
-    public void setPet(Pet pet) {
-        this.pet = pet;
-    }
+//    public Pet getPet() {
+//        return pet;
+//    }
+//
+//    public void setPet(Pet pet) {
+//        this.pet = pet;
+//    }
 
     public Double getReservoirHeight() {
         return reservoirHeight;
@@ -140,11 +140,11 @@ public class PetDataLog {
     @Override
     public String toString() {
         return "PetDataLog{" +
-                "age=" + age +
+//                "age=" + age +
                 ", id=" + id +
                 ", feeder=" + feeder +
-                ", pet=" + pet +
-                ", animalType=" + animalType +
+//                ", pet=" + pet +
+//                ", animalType=" + animalType +
                 ", petWeight=" + petWeight +
                 ", bowlWeight=" + bowlWeight +
                 ", reservoirHeight=" + reservoirHeight +
