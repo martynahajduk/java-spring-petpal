@@ -1,8 +1,6 @@
 package be.kdg.programming3.domain;
 
-import be.kdg.programming3.domain.Feeder;
-import be.kdg.programming3.domain.Pet;
-import be.kdg.programming3.domain.Schedule;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
