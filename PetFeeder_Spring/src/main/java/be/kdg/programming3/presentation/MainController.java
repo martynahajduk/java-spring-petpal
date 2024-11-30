@@ -297,6 +297,7 @@ public class MainController {
     }
 
 
+
     @GetMapping("/menupage")
     public String showMenuPage(Model model) {
         return "menupage";
@@ -307,6 +308,7 @@ public class MainController {
         Feeder feeder = feederService.findById(1L);
         List<Pet> pets = petService.findAll();
         List<Schedule> schedules = scheduleService.findAll();
+
 
         //get teh reservoir level
         Double reservoirLevel = petDataLogService.getFoodLevelPercentage(feeder.getId());
