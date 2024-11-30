@@ -27,6 +27,9 @@ dependencies {
     implementation ("org.postgresql:postgresql")
     implementation("org.webjars:bootstrap:5.3.2")
     implementation("org.webjars:webjars-locator-core:0.59")
+    //jackson library for converting the object to JSON
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+
 }
 
 tasks.withType<Test> {

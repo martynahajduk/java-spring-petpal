@@ -2,9 +2,7 @@ package be.kdg.programming3.processor;
 
 import be.kdg.programming3.collector.ArduinoSensorData;
 import be.kdg.programming3.collector.PetPalData;
-import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.PetDataLog;
-import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.PetDataLogService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

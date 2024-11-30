@@ -1,0 +1,12 @@
+### GET request to example server
+POST http://localhost:80/api/sendData
+Content-Type: application/json
+
+{
+  "id": 1,
+  "age": 2,
+  "animalType": "CHINESE",
+  "petWeight": 10.0,
+  "bowlWeight": 0.5,
+  "reservoirHeight": 0.3
+}

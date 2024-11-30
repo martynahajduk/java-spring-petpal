@@ -1,5 +1,7 @@
 package be.kdg.programming3.collector;
 
+
+
 public class ArduinoSensorData extends PetPalData{
 
     //this class is created to support any new data type parsed
