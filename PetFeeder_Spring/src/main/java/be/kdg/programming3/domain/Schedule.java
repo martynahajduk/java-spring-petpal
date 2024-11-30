@@ -17,7 +17,9 @@ public class Schedule {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "feeder_id")
     private Feeder feeder;  // Many-to-One relationship with Feeder
+
     private LocalTime timeToFeed;
+    private double portion;
 
     @Enumerated(EnumType.STRING)
     private FeedFrequency frequency;
@@ -60,6 +62,14 @@ public class Schedule {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public double getPortion() {
+        return portion;
+    }
+
+    public void setPortion(double portion) {
+        this.portion = portion;
     }
 }
 

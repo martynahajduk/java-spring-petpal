@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Schedule choice</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+</head>
+<body>
+<header th:insert="~{navbar.html}"></header>
+
+<div class="container mt-5">
+
+    <div class="row justify-content-between">
+        <h3 class="mb-3">Create Schedule</h3>
+        <div class="col-12 col-md-5 mb-4 pb-5">
+            <div class="card rounded-4 bg-light shadow-lg">
+                <div class="card-body">
+                    <form action="/schedule/add" method="POST">
+                        <div class="mb-3">
+                            <label for="feeder">Select Feeder:</label>
+                            <select id="feeder" name="feederId" required>
+                                <option value="">-- Choose Feeder --</option>
+                                <th:block th:each="feeder : ${feeders}">
+                                    <option th:value="${feeder.id}" th:text="${feeder.id}"></option>
+                                </th:block>
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                        <label for="timeToFeed">Time to Feed (HH:mm):</label>
+                        <input type="Time" id="timeToFeed" name="timeToFeed" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label for="portion">Portion Size (grams):</label>
+                            <input type="number" id="portion" name="portion" min="1" step="0.1" required/>
+                        </div>
+                        <div class="mb-3">
+                        <label for="frequency">Feed Frequency:</label>
+                        <select id="frequency" name="frequency" required>
+                            <option value="">-- Choose Frequency --</option>
+                            <th:block th:each="frequency : ${frequencies}">
+                                <option th:value="${frequency}" th:text="${frequency}"></option>
+                            </th:block>
+                        </select>
+                        </div>
+
+                        <button type="submit">Create Schedule</button>
+
+                        <div th:if="${successMessage}">
+                            <p th:text="${successMessage}"></p>
+                        </div>
+                        <div th:if="${errorMessage}">
+                            <p th:text="${errorMessage}"></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 mb-4 pb-5">
+            <h3 class="mb-3">Scheduled Feedings</h3>
+            <div class="row">
+                <div class="col-12 col-md-6 mb-4" th:each="schedule : ${schedules}">
+                    <div class="card rounded-4 bg-light shadow-lg">
+                        <div class="card-body">
+                            <h5 class="card-title">Feeder: <span th:text="${schedule.feeder.id}"></span></h5>
+                            <p class="card-text">
+                                <strong>Time to Feed:</strong> <span th:text="${schedule.timeToFeed}"></span><br>
+                                <strong>Frequency:</strong> <span th:text="${schedule.frequency}"></span><br>
+                                <strong>Portion:</strong> <span th:text="${schedule.portion}"></span> grams
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:if="${successMessage}">
+    <p th:text="${successMessage}"></p>
+</div>
+<div th:if="${errorMessage}">
+    <p th:text="${errorMessage}"></p>
+</div>
+<footer th:insert="~{footer.html}"></footer>
+</body>
+</html>

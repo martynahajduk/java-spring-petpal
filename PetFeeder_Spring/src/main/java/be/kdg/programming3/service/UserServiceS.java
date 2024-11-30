@@ -1,5 +1,6 @@
 package be.kdg.programming3.service;
 
+import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.User;
 
 import be.kdg.programming3.repository.UserRepository;
@@ -27,10 +28,6 @@ public class UserServiceS implements UserService {
         return userRepository.findAll();
     }
 
-    /*public User save(String name, String email, String password) {
-        return userRepository.save(new User(name,email,password));
-    }*/
-
     public void deleteById(Long id) {
         userRepository.deleteById(id);
     }
@@ -39,7 +36,7 @@ public class UserServiceS implements UserService {
         return userRepository.save(user);
     }
 
-    public User registerUser(String name, String email, String password) {
+    public User registerUser(String name, String email, String password, Feeder feeder) {
         if (userRepository.findByEmail(email).isPresent()) {
             throw new IllegalStateException("Email is already in use");
         }
@@ -48,6 +45,7 @@ public class UserServiceS implements UserService {
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
+        user.setFeeder(feeder);
         return userRepository.save(user);
     }
 
@@ -61,5 +59,10 @@ public class UserServiceS implements UserService {
 
         return user;
     }
-    //
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
+    }
+
 }

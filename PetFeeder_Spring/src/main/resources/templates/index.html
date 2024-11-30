@@ -7,12 +7,6 @@
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
 </head>
 <body>
-<header class="bg-primary text-white py-4">
-    <div class="container text-center">
-        <h1 class="display-4">Welcome to PetPal</h1>
-    </div>
-</header>
-
 <div class="container mt-5">
     <div class="row justify-content-between">
         <div class="col-12 col-md-5 mb-4">
@@ -60,6 +54,10 @@
                             <input type="password" class="form-control" id="passwordC" placeholder="Enter your password" name="password" required>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="feeder" class="form-label">Feeder id</label>
+                            <input type="text" class="form-control" id="feeder" placeholder="Enter your feeder ID" name="feeder">
+                        </div>
                         <button type="submit" class="btn btn-primary">Register</button>
 
                         <div th:if="${error}" class="mt-2 text-danger">
@@ -69,9 +67,8 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>
-<!--
--->
 </body>
 </html>

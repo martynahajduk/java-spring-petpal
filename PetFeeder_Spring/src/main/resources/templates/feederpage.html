@@ -4,73 +4,36 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feeder Dashboard</title>
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"/>
-    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"
-            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
-    <style>
-        .reservoir {
-            width: 100px;
-            height: 200px;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            position: relative;
-            overflow: hidden;
-            margin: auto;
-        }
-
-        .reservoir-level {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            background-color: #8b0000;
-        }
-
-        .reservoir-text {
-            position: absolute;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-weight: bold;
-            font-size: 16px;
-        }
-    </style>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 <body>
+
+<header th:insert="~{navbar.html}"></header>
+
 <div class="container mt-5">
-    <h1 class="text-center mb-4">Pet Feeding Dashboard</h1>
-    <div class="row">
-        <!-- Left Column -->
-        <div class="col-md-6">
-            <div class="card mb-3">
-                <div class="card-body text-center">
-                    <h4>Feeder 1</h4>
-                    <!-- Poziom zapasu w procentach -->
-                    <p>Food left: <span th:text="${#numbers.formatDecimal(feeder.reservoirLevel * 100, 0)} + '%'"></span></p>
-                    <p>Empty in: 2 days</p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Schedule</h5>
-                    <ul class="list-group list-group-flush">
-                        <!-- Wyświetlanie harmonogramu karmienia -->
-                        <li class="list-group-item" th:each="schedule : ${feeder.schedules}"
-                            th:text="${schedule.timeToFeed} + ' - ' + ${schedule.frequency}"></li>
-                    </ul>
-                </div>
+    <div class="border p-4 rounded bg-light">
+        <h4 th:text="'Feeder ' + ${feeders}"></h4>
+
+        <div>
+            <p><strong>Next Feeding:</strong> <span th:text="${schedules.get(0).timeToFeed}"></span></p>
+        </div>
+
+        <div class="progress mb-3">
+            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
+                 th:style="'width: ' + ${reservoirLevel} + '%'" aria-valuenow="${reservoirLevel}" aria-valuemin="0" aria-valuemax="10">
+                <span th:text="${reservoirLevel} + '%'"></span>
             </div>
         </div>
 
-        <!-- Right Column -->
-        <div class="col-md-6 d-flex flex-column justify-content-center align-items-center">
-            <div class="reservoir">
-                <!-- Wysokość paska zależna od poziomu zapasu -->
-                <div class="reservoir-level" th:style="'height: ' + (${feeder.reservoirLevel} * 100) + '%'"></div>
-                <div class="reservoir-text" th:text="${#numbers.formatDecimal(feeder.reservoirLevel * 100, 0)} + '% left'"></div>
-            </div>
+        <div class="text-center">
+            <button class="btn btn-primary">Change Feeding</button>
         </div>
     </div>
 </div>
+
+
+<footer th:insert="~{footer.html}"></footer>
 </body>
 </html>

@@ -25,7 +25,10 @@ public class Feeder {
     // One Feeder can have multiple PetDataLogs
     @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
     private Set<PetDataLog> petDataLogs;
-
+//
+//    @ManyToOne
+//    @JoinColumn(name = "feeder_device_id") // Creates the foreign key column in the database
+//    private FeederDevice feederDevice;
 
     // One Feeder can have multiple Schedules
     /*

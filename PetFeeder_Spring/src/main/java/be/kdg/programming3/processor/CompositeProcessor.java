@@ -14,7 +14,6 @@ public class CompositeProcessor extends DataProcessor {
         processors.add(processor);
     }
 
-
     //sequentially process data using all processors
     @Override
     public void saveToDatabase(PetPalData data) {
