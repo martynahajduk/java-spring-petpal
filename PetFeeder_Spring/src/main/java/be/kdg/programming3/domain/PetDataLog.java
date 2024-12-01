@@ -32,6 +32,8 @@ public class PetDataLog {
     @Column(name="breed")
     @Enumerated(EnumType.STRING)
     private Breed breed;
+    @JoinColumn(name="sex")
+    private String sex;
     private Double petWeight;
     private Double bowlWeight;
     private Double reservoirHeight;
@@ -156,6 +158,14 @@ public class PetDataLog {
 
     public void setBreed(Breed breed) {
         this.breed = breed;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 
     @Override

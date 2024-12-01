@@ -48,11 +48,12 @@ public class FeederDataProcessor extends DataProcessor {
                 petDataLog.setReservoirHeight(sensorData.getReservoirHeight());
                 petDataLog.setBowlWeight(sensorData.getBowlWeight());
                 petDataLog.setPetWeight(sensorData.getPetWeight());
-                petDataLog.setId(sensorData.getId());
+                // petDataLog.setId(sensorData.getId());
                 petDataLog.setFeeder(sensorData.getFeeder());
 //                petDataLog.setBreed(Breed.values()[petto.getAnimalType().ordinal()]);
                 petDataLog.setBreed(petto.getAnimalType());
                 petDataLog.setAgeWeeks(petto.calculateAgeWeeks());
+                petDataLog.setSex(petto.getSex());
 
 
                 petDataLog.setTimestamp(LocalDateTime.now());
