@@ -5,6 +5,7 @@ public class SimulatedHeartbeatData extends PetPalData {
         private final Long petId;  // Added petId field
 
     public SimulatedHeartbeatData(int heartbeatRate, Long petId) {
+        super(petId);
         this.heartbeatRate = heartbeatRate;
         this.petId = petId;
     }

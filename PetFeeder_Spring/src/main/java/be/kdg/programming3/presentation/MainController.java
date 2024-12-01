@@ -3,11 +3,14 @@ package be.kdg.programming3.presentation;
 import be.kdg.programming3.domain.*;
 import be.kdg.programming3.service.*;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import be.kdg.programming3.presentation.ArduinoController;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.util.*;
 import java.time.LocalTime;
@@ -18,6 +21,8 @@ import java.util.Set;
 @Controller
 @RequestMapping
 public class MainController {
+
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
     private final PetService petService;
     private final PetDataLogService petDataLogService;
@@ -97,20 +102,23 @@ public class MainController {
         return petDataLogService.getPetDataLogById(id);
     }
 
-//    //? Is someone going to use this method
+    //? Is someone going to use this method
 //    @PostMapping("/data-logs/add")
 //    public PetDataLog createPetDataLog(@RequestBody PetDataLog petDataLog) {
 //
 //        Feeder feeder = feederService.findById(petDataLog.getFeeder().getId());
-//        Pet pet = petService.findById(petDataLog.getPet().getId());
-//        petDataLog.setAge(pet.getAge());
-//        petDataLog.setAnimalType(pet.getAnimalType());
+//        Pet pet = petService.findById(petDataLog.getId());
+//        petDataLog.setAgeWeeks(pet.getAgeWeeks());
+//        petDataLog.setBreed(pet.getAnimalType().toString());
 //
 //        petDataLog.setFeeder(feeder);
 //        petDataLog.setPet(pet);
 //
 //        return petDataLogService.save(petDataLog);
 //    }
+
+    @PostMapping("/data-logs/{id}")
+    public PetDataLog getPetDataLohById(@PathVariable Long id) {return petDataLogService.getPetDataLogById(id);}
 
     @DeleteMapping("/data-logs/{id}")
     public void deletePetDataLog(@PathVariable Long id) {
@@ -205,6 +213,8 @@ public class MainController {
     @PostMapping("/users/add")
     public String addUser(@RequestBody User user) {
         Feeder feeder = feederService.findById(user.getFeeder().getId());
+        logger.info("aaaaaa");
+
         if (feeder == null) {
             return "Feeder with ID " + user.getFeeder().getId() + " does not exist.";
         }
@@ -278,13 +288,15 @@ public class MainController {
 
     @PostMapping("/pets/add-form")
     public String addPet(@RequestParam String name,
-                         @RequestParam int age,
+                         @RequestParam LocalDate birthDate,
                          @RequestParam Breed animalType,
                          @RequestParam double petWeight,
+                         @RequestParam String sex,
                          @RequestParam List<Long> userIds,
                          Model model) {
 
-        Pet newPet = new Pet(name, age, animalType, petWeight, new HashSet<>());
+        Pet newPet = new Pet(name, birthDate, animalType, petWeight, sex,  new HashSet<>());
+        newPet.setAgeWeeks(newPet.calculateAgeWeeks());
         petService.save(newPet);
         for (Long userId : userIds) {
             User user = userService.findUserById(userId);

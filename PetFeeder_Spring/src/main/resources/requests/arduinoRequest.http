@@ -6,7 +6,7 @@ Host: localhost:80
 Content-Type: application/x-www-form-urlencoded
 Connection: close
 
-reservoirHeight=-278&bowlWeight=0.00&petWeight=0.01&feederId=34:B7:DA:5D:7B:18&msgId=1
+reservoirHeight=-278&bowlWeight=0.00&petWeight=0.01&feederId=1&msgId=1&id=1
 
 
 

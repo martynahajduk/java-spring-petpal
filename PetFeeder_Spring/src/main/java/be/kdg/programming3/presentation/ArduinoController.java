@@ -37,11 +37,15 @@ public class ArduinoController {
     private final DataProcessorFactory dataProcessorFactory;
     private final PetDataLogService petDataLogService;
     private static String ip = "192.168.0.159";
+    private final FeederService feederService;
+    private final PetService petService;
 
     // Constructor-based dependency injection
-    public ArduinoController( DataProcessorFactory dataProcessorFactory, PetDataLogService petDataLogService) {
+    public ArduinoController( DataProcessorFactory dataProcessorFactory, PetDataLogService petDataLogService, FeederService feederService, PetService petService) {
         this.dataProcessorFactory = dataProcessorFactory;
         this.petDataLogService = petDataLogService;
+        this.feederService = feederService;
+        this.petService = petService;
     }
 
     @GetMapping("/view-data")       //? should this be in arduino controller?
@@ -60,18 +64,22 @@ public class ArduinoController {
             @RequestParam("reservoirHeight") Double reservoirHeight,
             @RequestParam("bowlWeight") Double bowlWeight,
             @RequestParam("petWeight") Double petWeight,
-            @RequestParam("feederId") String feederId,
-            @RequestParam("msgId") Double msgId
+            @RequestParam(required = false) Long feederId,
+             @RequestParam("msgId") Double msgId
+
     ) {
         try {
-            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, feeder id: {}, message id: {}", reservoirHeight, bowlWeight, petWeight, feederId, msgId);
+            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, feederId);
 
             // Wrap the data in the appropriate object (ArduinoSensorData in this case)
-            ArduinoSensorData sensorData = new ArduinoSensorData(reservoirHeight, bowlWeight, petWeight, msgId);
+            Feeder feeder = feederService.findById(feederId);
+
+
+            ArduinoSensorData sensorData = new ArduinoSensorData(reservoirHeight, bowlWeight, petWeight,feederId,feeder);
 
             // Get the appropriate processor and process the data
             DataProcessor processor = dataProcessorFactory.getProcessor(sensorData);
-            processor.saveToDatabase(sensorData);
+            processor.saveToDatabase(sensorData,petService);
 
             return "Data received and processed successfully!";
         } catch (Exception e) {

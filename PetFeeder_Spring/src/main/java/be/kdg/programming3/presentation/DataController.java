@@ -23,11 +23,6 @@ public class DataController {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // Endpoint 1: Send Real Data
-    @PostMapping("/sendRealData")
-    public ResponseEntity<String> sendRealData(@RequestBody Map<String, Object> realData) {
-        return sendDataToPythonServer(realData);
-    }
 
     // Endpoint 2: Send Research Data
     @PostMapping("/sendResearchData")
@@ -36,12 +31,16 @@ public class DataController {
             // Query the hamster_data table
             String query = "SELECT * FROM prediction_data.hamster_data";
             List<Map<String, Object>> researchData = jdbcTemplate.queryForList(query);
+            System.out.println("CUNT");
+            System.out.println(researchData);
 
-            // Convert data to JSON
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(researchData);
+            researchData.forEach(record -> record.remove("reservoir_height"));
 
             // Send data to Python server
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = objectMapper.writeValueAsString(researchData);
+//            System.out.println("PURR");
+            System.out.println(json);
             return sendDataToPythonServer(json);
         } catch (Exception e) {
             e.printStackTrace();
@@ -49,21 +48,14 @@ public class DataController {
         }
     }
 
-    // Helper: Send data to Python server
-    private ResponseEntity<String> sendDataToPythonServer(Object data) {
+    private ResponseEntity<String> sendDataToPythonServer(String json) {
         try {
-            // Convert data to JSON
-            ObjectMapper objectMapper = new ObjectMapper();
-            String json = objectMapper.writeValueAsString(data);
-
-            // Prepare headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-            // Send POST request to Python server
             HttpEntity<String> request = new HttpEntity<>(json, headers);
             RestTemplate restTemplate = new RestTemplate();
-            ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL, request, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL + "/train", request, String.class);
 
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {

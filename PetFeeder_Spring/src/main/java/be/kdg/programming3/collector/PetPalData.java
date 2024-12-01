@@ -11,6 +11,9 @@ public abstract class PetPalData {
         this.id = id;
     }
 
+    public PetPalData(Long id) {
+        this.id = id;
+    }
     //method to allow subclasses to provide data handling logic
 
     public abstract void processData();

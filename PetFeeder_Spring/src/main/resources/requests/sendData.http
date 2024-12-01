@@ -1,13 +1,12 @@
 ### GET request to example server
-POST http://localhost:80/api/sendData
+POST http://localhost:80/api/sendResearchData
 Content-Type: application/json
 
 {
   "id": 1,
   "age_weeks": 40,
   "weight_grams": 57,
-  "breed": "Syrian",
-  "food_intake": 17,
-  "sex": "Female"
+  "breed": "CHINESE",
+  "food_intake": 7,
+  "sex": "Male"
 }
-

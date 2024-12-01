@@ -2,6 +2,9 @@ package be.kdg.programming3.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,18 +19,23 @@ public class Pet {
     private Long id;
     @Column(name = "name", nullable = false)
     private String name;
-    @Column(name = "age", nullable = false)
-    private int age;
-    @Enumerated(EnumType.STRING)
+    @Column(name = "birthDate", nullable = true)
+    private LocalDate birthDate;
+
     @Column(name = "animal_type", nullable = false)
+    @Enumerated(EnumType.STRING)
     private Breed animalType;
     @Column(name = "weight")
     private double petWeight;
+    @Column(name = "age_weeks", nullable = false)
+    private int ageWeeks;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "app_user",
             joinColumns = @JoinColumn(name = "pet_id"),
             inverseJoinColumns = @JoinColumn(name = "id"))
     private Set<User> users = new HashSet<>();
+    @Column(name="sex")
+    private String sex;
 
 //    @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
 //    private Set<PetDataLog> petDataLogs;
@@ -45,11 +53,12 @@ public class Pet {
         System.out.println(1);
     }
 
-    public Pet(String name, int age, Breed animalType,  double petWeight, Set<User> users) {
-        this.age = age;
+    public Pet(String name, LocalDate birthDate, Breed animalType,  double petWeight, String sex,Set<User> users) {
+        this.birthDate = birthDate;
         this.name = name;
         this.animalType = animalType;
         this.petWeight = petWeight;
+        this.sex=sex;
         this.users = users;
 
     }
@@ -59,6 +68,13 @@ public class Pet {
         this.animalType = animalType;
         this.petWeight = petWeight;
 
+    }
+    public Integer getAgeWeeks() {
+        return ageWeeks;
+    }
+
+    public void setAgeWeeks(int ageWeeks) {
+        this.ageWeeks = ageWeeks;
     }
 
     public Long getId() {
@@ -93,6 +109,16 @@ public class Pet {
 //        this.petDataLogs = petDataLogs;
 //    }
 
+    public int calculateAgeWeeks() {
+        if (birthDate == null) {
+            throw new IllegalStateException("birthDate is null");
+        }
+
+            Integer ageWeeks = (int) ChronoUnit.WEEKS.between(birthDate, LocalDate.now());
+            setAgeWeeks(ageWeeks);
+            return ageWeeks;
+    }
+
     public double getPetWeight() {
         return petWeight;
     }
@@ -109,12 +135,20 @@ public class Pet {
         this.users = users;
     }
 
-    public int getAge() {
-        return age;
+    public LocalDate getBirthDate() {
+        return birthDate;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
     }
 }
 

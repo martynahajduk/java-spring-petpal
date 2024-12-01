@@ -5,6 +5,7 @@ import be.kdg.programming3.collector.SimulatedHeartbeatData;
 import be.kdg.programming3.domain.SimulatedHeartbeatEntity;
 import be.kdg.programming3.repository.SimulatedHeartbeatRepository;
 import be.kdg.programming3.service.HeartBeatService;
+import be.kdg.programming3.service.PetService;
 
 public class HeartbeatDataProcessor extends DataProcessor {
     private final HeartBeatService HeartBeatService;
@@ -14,7 +15,7 @@ public class HeartbeatDataProcessor extends DataProcessor {
     }
 
     @Override
-    public void saveToDatabase(PetPalData data) {
+    public void saveToDatabase(PetPalData data, PetService petService) {
         if (data instanceof SimulatedHeartbeatData) {
             SimulatedHeartbeatData heartbeatData = (SimulatedHeartbeatData) data;
 

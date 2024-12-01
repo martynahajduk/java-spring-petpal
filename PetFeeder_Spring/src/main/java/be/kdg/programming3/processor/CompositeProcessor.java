@@ -1,6 +1,7 @@
 package be.kdg.programming3.processor;
 
 import be.kdg.programming3.collector.PetPalData;
+import be.kdg.programming3.service.PetService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,9 +17,9 @@ public class CompositeProcessor extends DataProcessor {
 
     //sequentially process data using all processors
     @Override
-    public void saveToDatabase(PetPalData data) {
+    public void saveToDatabase(PetPalData data, PetService petService) {
         for (DataProcessor processor : processors) {
-            processor.saveToDatabase(data);
+            processor.saveToDatabase(data, petService);
         }
     }
 

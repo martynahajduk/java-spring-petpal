@@ -1,19 +1,22 @@
 package be.kdg.programming3.collector;
 
+import be.kdg.programming3.domain.Feeder;
+
 public class ArduinoSensorData extends PetPalData {
 
     // Attributes
     private Double reservoirHeight;
     private Double bowlWeight;
     private Double petWeight;
-    private Double sensorId; // Add id as a field
+    private Feeder feeder;
 
     // Constructor
-    public ArduinoSensorData(Double reservoirHeight, Double bowlWeight, Double petWeight, Double id) {
+    public ArduinoSensorData(Double reservoirHeight, Double bowlWeight, Double petWeight, Long id, Feeder feeder) {
+        super(id);
         this.reservoirHeight = reservoirHeight;
         this.bowlWeight = bowlWeight;
         this.petWeight = petWeight;
-        this.sensorId = sensorId; // Assign to sensorId
+        this.feeder = feeder;
          }
 
     // Getters and Setters
@@ -41,12 +44,12 @@ public class ArduinoSensorData extends PetPalData {
         this.reservoirHeight = reservoirHeight;
     }
 
-    public Double getSensorId() {
-        return sensorId;
+    public Feeder getFeeder() {
+        return feeder;
     }
 
-    public void setSensorId(Double sensorId) {
-        this.sensorId = sensorId;
+    public void setFeeder(Feeder feeder) {
+        this.feeder = feeder;
     }
 
     // Process data method

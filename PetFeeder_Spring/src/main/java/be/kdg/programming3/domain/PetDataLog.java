@@ -27,10 +27,16 @@ public class PetDataLog {
 
 
 //    private int age;
+    @Column(name="age_weeks")
+    private int ageWeeks;
+    @Column(name="breed")
+    @Enumerated(EnumType.STRING)
+    private Breed breed;
     private Double petWeight;
     private Double bowlWeight;
     private Double reservoirHeight;
     private LocalDateTime timestamp; // Timestamp of the feeding
+
 
     public PetDataLog() {
     }
@@ -136,11 +142,26 @@ public class PetDataLog {
         this.timestamp = timestamp;
     }
 
+    public int getAgeWeeks() {
+        return ageWeeks;
+    }
+
+    public void setAgeWeeks(int ageWeeks) {
+        this.ageWeeks = ageWeeks;
+    }
+
+    public Breed getBreed() {
+        return breed;
+    }
+
+    public void setBreed(Breed breed) {
+        this.breed = breed;
+    }
 
     @Override
     public String toString() {
         return "PetDataLog{" +
-//                "age=" + age +
+//
                 ", id=" + id +
                 ", feeder=" + feeder +
 //                ", pet=" + pet +

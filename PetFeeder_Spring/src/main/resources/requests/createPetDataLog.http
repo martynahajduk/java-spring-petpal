@@ -1,16 +1,9 @@
 ### GET request to example server
 ### Create a PetDataLog
 ### POST request to create multiple PetDataLogs
-POST http://localhost:80/data-logs/add
-Content-Type: application/json
+POST /SensorData HTTP/1.1
+Host: localhost:80
+Content-Type: application/x-www-form-urlencoded
+Connection: close
 
-{
-  "bowlWeight": 0.8,
-  "petWeight": 57,
-  "reservoirHeight": 0.2,
-  "timestamp": "2024-11-16T10:30:00",
-  "feeder": { "id": 1 },
-  "pet": { "id": 1 },
-  "age": 1,
-  "animalType": "CHINESE"
-}
+reservoirHeight=0.2&bowlWeight=0.8&petWeight=57&feederId=2&id=1

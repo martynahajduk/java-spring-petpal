@@ -2,8 +2,9 @@ package be.kdg.programming3.processor;
 
 import be.kdg.programming3.collector.ArduinoSensorData;
 import be.kdg.programming3.collector.PetPalData;
-import be.kdg.programming3.domain.PetDataLog;
+import be.kdg.programming3.domain.*;
 import be.kdg.programming3.service.PetDataLogService;
+import be.kdg.programming3.service.PetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,21 +16,27 @@ import java.time.LocalDateTime;
 public class FeederDataProcessor extends DataProcessor {
     private static final Logger logger = LoggerFactory.getLogger(FeederDataProcessor.class);
     private final PetDataLogService petDataLogService;
+    private final PetService petService;
 
-    public FeederDataProcessor(PetDataLogService petDataLogService) {
+    public FeederDataProcessor(PetDataLogService petDataLogService,PetService petService) {
         this.petDataLogService = petDataLogService;
+        this.petService = petService;
     }
 
     @Override
-    public void saveToDatabase(PetPalData data) {
+    public void saveToDatabase(PetPalData data, PetService petService) {
         if (data instanceof ArduinoSensorData) {
             ArduinoSensorData sensorData = (ArduinoSensorData) data;
 
             // Log the sensor data
+//            logger.info("BirthDate: {}", sensorData.)
+            Pet petto = petService.findRandUserByFeederId(sensorData.getId()).getPet();
+//            petto.setPetWeight();
             logger.info("Processing Sensor Data for Feeder ID: {}", sensorData.getId());
             logger.info("Reservoir Height: {}", sensorData.getReservoirHeight());
             logger.info("Bowl Weight: {}", sensorData.getBowlWeight());
             logger.info("Pet Weight: {}", sensorData.getPetWeight());
+
 
             // Ensure all required attributes are present
             if (sensorData.getReservoirHeight() != null &&
@@ -42,7 +49,14 @@ public class FeederDataProcessor extends DataProcessor {
                 petDataLog.setBowlWeight(sensorData.getBowlWeight());
                 petDataLog.setPetWeight(sensorData.getPetWeight());
                 petDataLog.setId(sensorData.getId());
+                petDataLog.setFeeder(sensorData.getFeeder());
+//                petDataLog.setBreed(Breed.values()[petto.getAnimalType().ordinal()]);
+                petDataLog.setBreed(petto.getAnimalType());
+                petDataLog.setAgeWeeks(petto.calculateAgeWeeks());
+
+
                 petDataLog.setTimestamp(LocalDateTime.now());
+
 
 
                 // Save to database
@@ -55,5 +69,7 @@ public class FeederDataProcessor extends DataProcessor {
             throw new IllegalArgumentException("Unsupported data type for FeederDataProcessor");
         }
     }
+
+
 }
 

@@ -21,7 +21,15 @@
                         </div>
                         <div class="mb-3">
                             <label for="petAge" class="form-label">Age (months)</label>
-                            <input type="number" class="form-control" id="petAge" name="age" placeholder="Enter pet's age" required>
+                            <input type="date" class="form-control" id="petAge" name="birthDate" placeholder="Enter pet's birthday" required>
+                        </div>
+                        <div class="mb3">
+                            <label for="sex" class="form-label">Sex</label>
+                            <select class="form-select" id="sex" name="sex" required>
+                                <option>Male</option>
+                                <option>Female</option>
+                            </select>
+
                         </div>
                         <div class="mb-3">
                             <label for="animalType" class="form-label">Animal Type</label>
@@ -57,7 +65,8 @@
                             <div class="rounded-circle" style="width: 5rem; height: 5rem; background-color: #ddd;"></div>
                             <div class="d-flex flex-column ms-3">
                                 <h4 class="mb-1"><strong>Name:</strong> <span th:text="${pet.name}"></span></h4>
-                                <p class="mb-1"><strong>Age:</strong> <span th:text="${pet.age}"></span></p>
+                                <p class="mb-1"><strong>Birthday:</strong> <span th:text="${pet.birthDate}"></span></p>
+                                <p class="mb-1"><strong>Sex:</strong> <span th:text="${pet.sex}"></span></p>
                                 <p class="mb-1"><strong>Animal Type:</strong> <span th:text="${pet.animalType}"></span></p>
                                 <p class="mb-1"><strong>Weight:</strong> <span th:text="${pet.petWeight}"></span></p>
                             </div>
