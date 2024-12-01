@@ -60,13 +60,14 @@ public class ArduinoController {
             @RequestParam("reservoirHeight") Double reservoirHeight,
             @RequestParam("bowlWeight") Double bowlWeight,
             @RequestParam("petWeight") Double petWeight,
-            @RequestParam("id") Double id
+            @RequestParam("feederId") String feederId,
+            @RequestParam("msgId") Double msgId
     ) {
         try {
-            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, id);
+            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, feeder id: {}, message id: {}", reservoirHeight, bowlWeight, petWeight, feederId, msgId);
 
             // Wrap the data in the appropriate object (ArduinoSensorData in this case)
-            ArduinoSensorData sensorData = new ArduinoSensorData(reservoirHeight, bowlWeight, petWeight, id);
+            ArduinoSensorData sensorData = new ArduinoSensorData(reservoirHeight, bowlWeight, petWeight, msgId);
 
             // Get the appropriate processor and process the data
             DataProcessor processor = dataProcessorFactory.getProcessor(sensorData);
