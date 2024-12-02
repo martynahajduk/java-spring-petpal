@@ -35,14 +35,12 @@
                     <img th:src="${image}" alt="Image of breed" width="300" height="auto" style="border: 4px solid #ddd; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
                 </div>
             </div>
-            </div>
-
             <div th:if="${selectedBreed == null}">
                 <p>Please select a breed to see its details.</p>
             </div>
+            </div>
         </div>
     </div>
-</div>
 
 <footer th:insert="~{footer.html}"></footer>
 </body>
