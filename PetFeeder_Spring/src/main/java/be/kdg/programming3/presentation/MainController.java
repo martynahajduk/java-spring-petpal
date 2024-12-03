@@ -364,57 +364,9 @@ public class MainController {
                 .findFirst()
                 .orElse(null);
 
-        if (selectedBreed != null) {
-            model.addAttribute("selectedBreed", selectedBreed.name());
-            model.addAttribute("description", getBreedDescription(selectedBreed));
-            model.addAttribute("image", getBreedImageUrl(selectedBreed));
-        } else {
-            model.addAttribute("selectedBreed", null);
-            model.addAttribute("description", "Breed not found.");
-            model.addAttribute("image", "/images/not_found.jpg");
-        }
+        model.addAttribute("selectedBreed", selectedBreed);
 
         return "petbreed";
-    }
-
-    private String getBreedDescription(Breed breed) {
-        switch (breed) {
-            case SYRIAN:
-                return "The Syrian hamster, also known as the golden hamster, is a solitary breed growing up to 6-7 inches (15-18 cm) " +
-                        "and weighing around 100-150 grams. They live for 2-3 years and need spacious cages, wheels, and a balanced diet of " +
-                        "pellets, fresh vegetables, and occasional fruits.";
-            case DWARF_CAMPBELL_RUSSIAN:
-                return "The Dwarf Campbell Russian hamster is a small, sociable breed, ideal for groups if introduced early. " +
-                        "They grow to about 3-4 inches (8-10 cm), weigh 30-50 grams, and live for 1.5-2 years. Their diet includes hamster mix, vegetables, and mealworms.";
-            case SIBERIAN:
-                return "The Siberian (Winter White) hamster is known for its seasonal fur changes. Growing up to 3.5-4 inches (9-10 cm) and weighing 30-45 grams, " +
-                        "they are calm and can live in pairs. They live for 1.5-2 years and enjoy burrowing and running.";
-            case ROBOROVSKI:
-                return "The Roborovski hamster is the smallest and fastest breed, growing up to 2-3 inches (5-7 cm) and weighing 20-30 grams. " +
-                        "With a lifespan of 3-3.5 years, they are active and require ample space, wheels, and toys.";
-            case CHINESE:
-                return "The Chinese hamster is mouse-like and shy but bonds well with owners. They grow up to 4 inches (10 cm), " +
-                        "weigh 30-50 grams, and live for 2-3 years. They require climbing accessories and a vertical cage layout.";
-            default:
-                return "Description not available for this breed.";
-        }
-    }
-
-    private String getBreedImageUrl(Breed breed) {
-        switch (breed) {
-            case SYRIAN:
-                return "/images/syrian_hamster.jpg";
-            case DWARF_CAMPBELL_RUSSIAN:
-                return "/images/dwarf_campbell_russian_hamster.jpg";
-            case SIBERIAN:
-                return "/images/siberian_hamster.jpg";
-            case ROBOROVSKI:
-                return "/images/roborovski_hamster.jpg";
-            case CHINESE:
-                return "/images/chinese_hamster.jpg";
-            default:
-                return "/images/not_found.jpg";
-        }
     }
 
     @GetMapping("/team")

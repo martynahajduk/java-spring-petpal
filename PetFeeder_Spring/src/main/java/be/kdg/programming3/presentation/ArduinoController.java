@@ -15,6 +15,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -65,11 +66,11 @@ public class ArduinoController {
             @RequestParam("bowlWeight") Double bowlWeight,
             @RequestParam("petWeight") Double petWeight,
             @RequestParam(required = false) Long feederId,
-             @RequestParam("msgId") Double msgId
+            @RequestParam("msgId") Double msgId
 
     ) {
         try {
-            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}", reservoirHeight, bowlWeight, petWeight, feederId);
+            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, feederId: {}, msgId: {}", reservoirHeight, bowlWeight, petWeight, feederId, msgId);
 
             // Wrap the data in the appropriate object (ArduinoSensorData in this case)
             Feeder feeder = feederService.findById(feederId);
@@ -190,8 +191,9 @@ public class ArduinoController {
         // Return a response message
         return String.valueOf(seconds);
     }
+
     @PostMapping("/feedNow")
-    public static void feedNow( @RequestParam int amount) {
+    public String feedNow( @RequestParam int amount) {
         // Define the request payload, if any
         String requestPayload = String.format("amount=%s", amount);
 
@@ -224,6 +226,7 @@ public class ArduinoController {
             logger.error("POST request failed with status code: " + responseEntity.getStatusCodeValue());
         }
         logger.info("oi2");
+        return "redirect:/feederpage";
     }
 }
 
