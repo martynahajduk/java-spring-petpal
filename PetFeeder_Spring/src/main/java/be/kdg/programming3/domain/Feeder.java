@@ -16,25 +16,11 @@ public class Feeder {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id", nullable = true)
     private Long id;
-   /* @Column(name="reservoir_level", nullable = false)
-    private double reservoirLevel;
-    private double bowlWeight;
-    private double petWeight;
-*/
 
     // One Feeder can have multiple PetDataLogs
     @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
     private Set<PetDataLog> petDataLogs;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "feeder_device_id") // Creates the foreign key column in the database
-//    private FeederDevice feederDevice;
 
-    // One Feeder can have multiple Schedules
-    /*
-    @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
-    private List<Schedule> schedule;
-*/
 
 
     public Feeder() {}

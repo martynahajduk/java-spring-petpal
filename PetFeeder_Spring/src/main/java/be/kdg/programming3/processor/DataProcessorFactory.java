@@ -12,29 +12,19 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataProcessorFactory {
 
-    private final PetDataLogService petDataLogService;
-    private final HeartBeatService HeartBeatService;
-    private final PetService petService;
 
-    public DataProcessorFactory(PetDataLogService petDataLogService, HeartBeatService HeartBeatService, PetService petService) {
-        this.petDataLogService = petDataLogService;
-        this.HeartBeatService = HeartBeatService;
-        this.petService = petService;
+    private final CompositeProcessor compositeProcessor;
+
+    public DataProcessorFactory(CompositeProcessor compositeProcessor) {
+        this.compositeProcessor = compositeProcessor;
     }
 
 
     public DataProcessor getProcessor(PetPalData data) {
-        CompositeProcessor compositeProcessor = new CompositeProcessor();
-
-        // Add FeederDataProcessor if data is ArduinoSensorData
-        if (data instanceof ArduinoSensorData) {
-            compositeProcessor.addProcessor(new FeederDataProcessor(petDataLogService,petService));
-        }else if (data instanceof SimulatedHeartbeatData) {
-            compositeProcessor.addProcessor(new HeartbeatDataProcessor(HeartBeatService));
-        }
-
-        if (compositeProcessor.hasProcessors()) {
+         //check if it contains the specific processor
+        if(compositeProcessor.hasProcessors()) {
             return compositeProcessor;
+
         }
 
         throw new IllegalArgumentException("No processor found for data type: " + data.getClass().getSimpleName());
