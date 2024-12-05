@@ -29,24 +29,21 @@ import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Calendar;
 import java.util.List;
 
 @Controller
 public class ArduinoController {
     private static final Logger logger = LoggerFactory.getLogger(ArduinoController.class);
-    private final DataProcessorFactory dataProcessorFactory;
     private final PetDataLogService petDataLogService;
     private static String ip = "192.168.0.159";
-    private final FeederService feederService;
-    private final PetService petService;
+    private final ArduinoService arduinoService;
+    ;
 
     // Constructor-based dependency injection
-    public ArduinoController( DataProcessorFactory dataProcessorFactory, PetDataLogService petDataLogService, FeederService feederService, PetService petService) {
-        this.dataProcessorFactory = dataProcessorFactory;
+    public ArduinoController(PetDataLogService petDataLogService, ArduinoService arduinoService) {
         this.petDataLogService = petDataLogService;
-        this.feederService = feederService;
-        this.petService = petService;
+        this.arduinoService = arduinoService;
+
     }
 
     @GetMapping("/view-data")       //? should this be in arduino controller?
@@ -67,20 +64,13 @@ public class ArduinoController {
             @RequestParam("petWeight") Double petWeight,
             @RequestParam(required = false) Long feederId,
             @RequestParam("msgId") Double msgId
-
     ) {
         try {
-            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, feederId: {}, msgId: {}", reservoirHeight, bowlWeight, petWeight, feederId, msgId);
+            logger.info("Received Data -> reservoirHeight: {}, bowlWeight: {}, petWeight: {}, id: {}",
+                    reservoirHeight, bowlWeight, petWeight, feederId);
 
-            // Wrap the data in the appropriate object (ArduinoSensorData in this case)
-            Feeder feeder = feederService.findById(feederId);
-
-
-            ArduinoSensorData sensorData = new ArduinoSensorData(reservoirHeight, bowlWeight, petWeight,feederId,feeder);
-
-            // Get the appropriate processor and process the data
-            DataProcessor processor = dataProcessorFactory.getProcessor(sensorData);
-            processor.saveToDatabase(sensorData,petService);
+            // Delegate processing to the ArduinoService
+            arduinoService.processSensorData(reservoirHeight, bowlWeight, petWeight, feederId);
 
             return "Data received and processed successfully!";
         } catch (Exception e) {

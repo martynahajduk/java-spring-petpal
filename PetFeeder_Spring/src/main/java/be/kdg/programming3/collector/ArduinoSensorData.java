@@ -2,6 +2,7 @@ package be.kdg.programming3.collector;
 
 import be.kdg.programming3.domain.Feeder;
 
+
 public class ArduinoSensorData extends PetPalData {
 
     // Attributes
@@ -11,8 +12,8 @@ public class ArduinoSensorData extends PetPalData {
     private Feeder feeder;
 
     // Constructor
-    public ArduinoSensorData(Double reservoirHeight, Double bowlWeight, Double petWeight, Long id, Feeder feeder) {
-        super(id);
+    public ArduinoSensorData(Double reservoirHeight, Double bowlWeight, Double petWeight,Feeder feeder) {
+        super(feeder.getId());
         this.reservoirHeight = reservoirHeight;
         this.bowlWeight = bowlWeight;
         this.petWeight = petWeight;

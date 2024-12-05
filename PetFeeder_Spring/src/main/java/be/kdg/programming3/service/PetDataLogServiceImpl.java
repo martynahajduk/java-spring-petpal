@@ -3,8 +3,8 @@ package be.kdg.programming3.service;
 
 import be.kdg.programming3.domain.PetDataLog;
 import be.kdg.programming3.repository.PetDataLogRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,33 +17,49 @@ public class PetDataLogServiceImpl implements PetDataLogService {
     @Autowired
     public PetDataLogServiceImpl(PetDataLogRepository petDataLogRepository /*@Qualifier("petDataLogService") PetDataLogService petDataLogService*/) {
         this.petDataLogRepository = petDataLogRepository;
-//        this.petDataLogService = petDataLogService;
-       // this.petDataLogService = petDataLogService;
-    }
 
+    }
+    @Override
     public PetDataLog getPetDataLogById(Long id) {
         return petDataLogRepository.findById(id).orElse(null);
     }
-
+    @Override
     public List<PetDataLog> findAll() {
         return petDataLogRepository.findAll();
     }
-
+    @Override
     public PetDataLog save(PetDataLog petDataLog) {
         return petDataLogRepository.save(petDataLog);
     }
-
+    @Override
     public void deleteById(Long id) {
         petDataLogRepository.deleteById(id);
     }
 
+    @Override
     public List<PetDataLog> getAllLogs() {
         return petDataLogRepository.findAll();
     }
 
+    @Override
     public Double getFoodLevelPercentage(Long petDataLogId) {
         PetDataLog latestLog = petDataLogRepository.findLatestLog();
         Double percentage =  (latestLog.getReservoirHeight()) * 100;
         return (double) Math.round(percentage);
     }
-}
+
+    @Override
+    public String getRealDataAsJson() {
+        try{
+            List<PetDataLog> realData = petDataLogRepository.findAll();
+            ObjectMapper objectMapper = new ObjectMapper();
+            return objectMapper.writeValueAsString(realData);
+
+        }catch (Exception e) {
+            throw new RuntimeException("Failed to serialize real data: " + e.getMessage());
+        }
+    }
+
+
+    }
+

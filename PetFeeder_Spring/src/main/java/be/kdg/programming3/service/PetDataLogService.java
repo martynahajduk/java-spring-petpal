@@ -16,4 +16,6 @@ public interface PetDataLogService {
 
     //Calculate food left in the reservoir in Percentage
     Double getFoodLevelPercentage(Long petDataLogId);
+
+    String getRealDataAsJson();
 }
