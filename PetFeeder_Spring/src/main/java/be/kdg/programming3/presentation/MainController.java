@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import be.kdg.programming3.presentation.ArduinoController;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoField;
@@ -117,6 +116,7 @@ public class MainController {
 //        return petDataLogService.save(petDataLog);
 //    }
 
+    //! this should not be a post and a delete is not possible with HTML, only get and post
     @PostMapping("/data-logs/{id}")
     public PetDataLog getPetDataLohById(@PathVariable Long id) {return petDataLogService.getPetDataLogById(id);}
 
@@ -131,7 +131,7 @@ public class MainController {
         return scheduleService.findAll();
     }
 
-
+    //! delete mapping again
     @DeleteMapping("/schedules/{id}")
     public void deleteSchedule(@PathVariable Long id) {
         scheduleService.deleteById(id);
@@ -143,12 +143,14 @@ public class MainController {
         model.addAttribute("frequencies", FeedFrequency.values());
         model.addAttribute("schedules", scheduleService.findAll());
 
+        model.addAttribute("daysOfWeek", DayOfWeek.values());
         //TODO add day choices for weekly feeding schedule, figure something out for monthly
         //? We can also disable it for now and add it later, a biweekly option is also possible
 
         return "schedule";
     }
 
+    //TODO change into view object
     @PostMapping("/schedule/add")
     public String handleScheduleCreation(
             @RequestParam Long feederId,
@@ -160,7 +162,7 @@ public class MainController {
         Feeder feeder = feederService.findById(feederId);
         if (feeder == null) {
             model.addAttribute("errorMessage", "Invalid feeder selected!");
-            return "schedulecreation";
+            return "redirect:/schedulecreation";
         }
 
         LocalTime feedTime;
@@ -168,7 +170,7 @@ public class MainController {
             feedTime = LocalTime.parse(timeToFeed);
         } catch (Exception e) {
             model.addAttribute("errorMessage", "Invalid time format! Use HH:mm.");
-            return "schedulecreation";
+            return "redirect:/schedulecreation";
         }
 
         Schedule newSchedule = new Schedule();
@@ -177,19 +179,22 @@ public class MainController {
         newSchedule.setFrequency(frequency);
         newSchedule.setPortion(portion);  // Set the portion size
 
-        //TODO add method that converts daily feeding to weekly feeding
-        //? just an idea:
+        //TODO:
+        //sql Select frequency, portion, timetofeed where feederid = x
+        //put in a list
+        //modify list to chronical whole schedule
+
         List<Long> feedTimeList = new ArrayList<>();
-//        long time = feedTime.getLong(ChronoField.SECOND_OF_DAY);
-//         if (frequency == FeedFrequency.DAILY) {
-//             for (int i = 0; i < 6; i++) {
-//                 feedTimeList.add(time + i*86400);   // can be 2 times to add
-//             }
-//         }else{
-//             feedTimeList.add(time);  // need a list of feeding times here to add
-//         }
+        long time = feedTime.getLong(ChronoField.SECOND_OF_DAY);
+         if (frequency == FeedFrequency.DAILY) {
+             for (int i = 0; i < 6; i++) {
+                 feedTimeList.add(time + i*86400);   // can be 2 times to add
+             }
+         }else{
+             feedTimeList.add(time);  // need a list of feeding times here to add
+         }
 //
-        //ArduinoController.sendSchedule(feedTimeList, List.of(5));
+        ArduinoController.sendSchedule(feedTimeList, List.of(5));
 
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());
@@ -236,6 +241,7 @@ public class MainController {
         return "index";
     }
 
+    //TODO change into view object
     @PostMapping("/login")
     public String loginUser(@RequestParam String email, @RequestParam String password, HttpSession session, Model model) {
         try {
@@ -249,6 +255,7 @@ public class MainController {
         }
     }
 
+    //TODO change into view model
     @PostMapping("/register")
     public String registerUser(@RequestParam String name,
                                @RequestParam String email,
@@ -286,6 +293,7 @@ public class MainController {
         return "petchoice";
     }
 
+    //TODO change into view object
     @PostMapping("/pets/add-form")
     public String addPet(@RequestParam String name,
                          @RequestParam LocalDate birthDate,
@@ -335,6 +343,12 @@ public class MainController {
         model.addAttribute("isFoodLevelLow", isFoodLevelLow);
 
         return "feederpage";
+    }
+
+    @PostMapping("/feedNow")
+    public String feedNow( @RequestParam int amount) {
+        ArduinoController.feedNow(amount);
+        return "redirect:/feederpage";
     }
 
     @GetMapping("/healthtracker")

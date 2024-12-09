@@ -2,9 +2,7 @@ package be.kdg.programming3.presentation;
 
 
 import be.kdg.programming3.collector.ArduinoSensorData;
-import be.kdg.programming3.domain.Breed;
 import be.kdg.programming3.domain.Feeder;
-import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.PetDataLog;
 import be.kdg.programming3.processor.DataProcessor;
 import be.kdg.programming3.processor.DataProcessorFactory;
@@ -15,7 +13,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -80,75 +77,14 @@ public class ArduinoController {
     }
 
     public static void sendSchedule(List<Long> times, List<Integer> amount) {
-//        List<Long> times = List.of((long)5000, (long)20000);
-//        List<Integer> amount = List.of(20, 20);
-        // Define the request payload, if any
         String requestPayload = String.format("times=%s&amount=%s", times, amount).replace(" ","").replace("[","").replace("]","");
 
-        // Set headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setContentLength(requestPayload.length());
-
-        // Create the request entity
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestPayload, headers);
-
-        // Set the URL of the API endpoint
-        String apiUrl = "http://" + ip + "/schedule";
-
-        URI uri = URI.create(apiUrl);
-
-        // Create a RestTemplate instance
-        RestTemplate restTemplate = new RestTemplate();
-
-        logger.info("oi");
-        // Send the POST request
-        ResponseEntity<String> responseEntity =
-                restTemplate.postForEntity(uri, requestEntity, String.class);
-
-        // Handle the response
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            String responseBody = responseEntity.getBody();
-            logger.info("Response body: " + responseBody);
-        } else {
-            logger.error("POST request failed with status code: " + responseEntity.getStatusCodeValue());
-        }
-        logger.info("oi2");
+        sendData(requestPayload);
     }
 
     @Scheduled(cron = "0 0 0 * * *") // Runs every day at midnight
-    public static String zero() {  //? should we use HttpClient or the one shown below?
-
-        // Set headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//        headers.setContentLength(requestPayload.length());
-
-        // Create the request entity
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-
-        // Set the URL of the API endpoint
-        String apiUrl = "http://" + ip + "/zero";
-
-        URI uri = URI.create(apiUrl);
-
-        // Create a RestTemplate instance
-        RestTemplate restTemplate = new RestTemplate();
-
-        logger.info("oi");
-        // Send the POST request
-        ResponseEntity<String> responseEntity =
-                restTemplate.postForEntity(uri, requestEntity, String.class);
-
-        // Handle the response
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            String responseBody = responseEntity.getBody();
-            logger.info("Response body: " + responseBody);
-        } else {
-            logger.error("POST request failed with status code: " + responseEntity.getStatusCodeValue());
-        }
-        logger.info("oi2");
-        return "send";
+    public static void zero() {  //? should we use HttpClient or the one shown below?
+        sendData("");
     }
 
 
@@ -182,21 +118,23 @@ public class ArduinoController {
         return String.valueOf(seconds);
     }
 
-    @PostMapping("/feedNow")
-    public String feedNow( @RequestParam int amount) {
-        // Define the request payload, if any
-        String requestPayload = String.format("amount=%s", amount);
+    public static void feedNow( @RequestParam int amount) {
 
+        String requestPayload = String.format("amount=%s", amount);
+        sendData(requestPayload);
+    }
+
+    private static void sendData(String payload) {
         // Set headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setContentLength(requestPayload.length());
+        headers.setContentLength(payload.length());
 
         // Create the request entity
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestPayload, headers);
+        HttpEntity<String> requestEntity = new HttpEntity<>(payload, headers);
 
         // Set the URL of the API endpoint
-        String apiUrl = "http://" + ip + "/feedNow";
+        String apiUrl = "http://" + ip + "/schedule";
 
         URI uri = URI.create(apiUrl);
 
@@ -211,12 +149,11 @@ public class ArduinoController {
         // Handle the response
         if (responseEntity.getStatusCode().is2xxSuccessful()) {
             String responseBody = responseEntity.getBody();
-            logger.info("Response body: " + responseBody);
+            logger.info("Response body: {}", responseBody);
         } else {
-            logger.error("POST request failed with status code: " + responseEntity.getStatusCodeValue());
+            logger.error("POST request failed with status code: {}", responseEntity.getStatusCodeValue());
         }
         logger.info("oi2");
-        return "redirect:/feederpage";
     }
 }
 

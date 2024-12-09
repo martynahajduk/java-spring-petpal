@@ -45,6 +45,14 @@
                         </select>
                         </div>
 
+                        <div class="mb-3">
+                            <label for="days">Feed Frequency:</label>
+                            <select id="days" name="days" th:each="day : ${daysOfWeek}" required>
+                                <option value="">-- Choose Frequency --</option>
+                                <option th:value="${day}" th:text="${day}"></option>
+                            </select>
+                        </div>
+
                         <button type="submit">Create Schedule</button>
 
                         <div th:if="${successMessage}">
