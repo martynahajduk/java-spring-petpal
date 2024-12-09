@@ -5,17 +5,24 @@
     <title>Schedule choice</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
 <header th:insert="~{navbar.html}"></header>
 
 <div class="container mt-5">
+    <h1 class="text-center mb-4">
+        Feeder Schedule Management
+        <button type="button" class="btn btn-lg btn-sm custom-btn-transparent" data-bs-toggle="modal" data-bs-target="#infoModal">
+            <i class="bi bi-info-square fs-4" style="color: #F27244;"></i>
+        </button>
+    </h1>
 
     <div class="row justify-content-between">
-        <h3 class="mb-3">Create Schedule</h3>
         <div class="col-12 col-md-5 mb-4 pb-5">
             <div class="card rounded-4 bg-light shadow-lg">
                 <div class="card-body">
+                    <h3 class="mb-3" style="color: #F27244;">Create Schedule</h3>
                     <form th:action="@{/schedule/add}" method="POST">
                         <div class="mb-3">
                             <label for="feeder">Select Feeder:</label>
@@ -45,7 +52,7 @@
                             </th:block>
                         </div>
 
-                        <button type="submit">Create Schedule</button>
+                        <button type="submit" class="btn" style="background-color: #F27244; color: white;">Create Schedule</button>
 
                         <div th:if="${successMessage}">
                             <p th:text="${successMessage}"></p>
@@ -58,12 +65,12 @@
             </div>
         </div>
         <div class="col-12 col-md-6 mb-4 pb-5">
-            <h3 class="mb-3">Scheduled Feedings</h3>
+            <h3 class="mb-3" style="color: #F27244;">Scheduled Feedings</h3>
             <div class="row">
                 <div class="col-12 col-md-6 mb-4" th:each="schedule : ${schedules}">
                     <div class="card rounded-4 bg-light shadow-lg">
                         <div class="card-body">
-<!--                            <h5 class="card-title">Feeder: <span th:text="${schedule.feeder.id}"></span></h5>-->
+                            <h5 class="card-title">Feeder: <span th:text="${schedule.feeder.id}"></span></h5>
                             <p class="card-text">
                                 <strong>Time to Feed:</strong> <span th:text="${schedule.timeToFeed}"></span><br>
                                 <strong>Days:</strong><br>
@@ -85,6 +92,26 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Feeder Schedule Management</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>This page allows you to manage feeding schedules for your feeder system.</p>
+                <p><strong>Create Schedule:</strong> Set up a feeding schedule for your feeder, including time, frequency, and portion size.</p>
+                <p><strong>Scheduled Feedings:</strong> View all the scheduled feedings for your feeders.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div th:if="${successMessage}">
     <p th:text="${successMessage}"></p>
 </div>

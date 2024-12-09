@@ -5,71 +5,99 @@
     <title>Login & Register</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
-<div class="container mt-5">
-    <div class="row justify-content-between">
+<div class="text-white text-center py-5" style="background: url('/images/background.jpg') no-repeat center center/cover; height: 100vh;">
+    <div class="container h-100 d-flex flex-column justify-content-center align-items-center">
+        <h1 class="display-4 fw-bold">Making Life Easier for Pet Owners</h1>
+        <p class="lead">Ensuring every pet is healthy and well-fed, every day.</p>
+        <a href="#login-register" class="btn btn-lg" style="background-color: #F27244; color: white;">Start Now!</a>
+    </div>
+</div>
+
+<div id="login-register" class="container my-5">
+    <div class="container text-center mt-5">
+        <h1 class="fw-bold" style="color: #F27244;">Join Our Pet Family!</h1>
+    </div>
+    <div class="row justify-content-center">
         <div class="col-12 col-md-5 mb-4">
-            <div class="card rounded-4 bg-light shadow-lg">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <h3 class="mb-3"><strong>Login</strong></h3>
+                    <h3 class="card-title mb-3" style="color: #F27244;">Login</h3>
                     <form th:action="@{/login}" method="post">
                         <div class="mb-3">
                             <label for="email" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="email" placeholder="Enter your email" name="email" required>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
                         </div>
-
                         <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" placeholder="Enter your password" name="password" required>
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Enter your password" required>
                         </div>
-
-                        <button type="submit" class="btn btn-primary">Login</button>
-
-                        <div th:if="${error}" class="mt-2 text-danger">
-                            <p th:text="${error}"></p>
-                        </div>
+                        <button type="submit" class="btn w-100" style="background-color: #F27244; color: white;">Login</button>
                     </form>
                 </div>
             </div>
         </div>
 
         <div class="col-12 col-md-5 mb-4">
-            <div class="card rounded-4 bg-light shadow-lg">
+            <div class="card border-0 shadow-sm">
                 <div class="card-body">
-                    <h3 class="mb-3"><strong>Register</strong></h3>
+                    <h3 class="card-title mb-3" style="color: #F27244;">Register</h3>
                     <form th:action="@{/register}" method="post">
                         <div class="mb-3">
                             <label for="name" class="form-label">Name</label>
-                            <input type="text" class="form-control" id="name" placeholder="Enter your name" name="name" required>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Enter your name" required>
                         </div>
-
                         <div class="mb-3">
                             <label for="emailC" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="emailC" placeholder="Enter your email" name="email" required>
+                            <input type="email" class="form-control" id="emailC" name="email" placeholder="Enter your email" required>
                         </div>
-
                         <div class="mb-3">
                             <label for="passwordC" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="passwordC" placeholder="Enter your password" name="password" required>
+                            <input type="password" class="form-control" id="passwordC" name="password" placeholder="Enter your password" required>
                         </div>
-
                         <div class="mb-3">
                             <label for="feeder" class="form-label">Feeder ID</label>
-                            <input type="number" class="form-control" id="feeder" placeholder="Enter your feeder ID" name="feederId" min="1">
+                            <input type="number" class="form-control" id="feeder" name="feederId" placeholder="Enter your feeder ID" min="1">
                         </div>
-
-                        <button type="submit" class="btn btn-primary">Register</button>
-
-                        <div th:if="${error}" class="mt-2 text-danger">
-                            <p th:text="${error}"></p>
-                        </div>
+                        <button type="submit" class="btn w-100" style="background-color: #F27244; color: white;">Register</button>
                     </form>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
+
+<div class="bg-light py-5">
+    <div class="container text-center">
+        <h1 class="fw-bold" style="color: #F27244;">Why Choose Our Product?</h1>
+        <img src="/images/logo.png" alt="Our Logo" class="img-fluid my-3" style="max-width: 150px;">
+        <p class="mt-3">Our company is committed to making pet care easier, smarter, and more efficient. Our innovative pet feeder combines advanced technology with user-friendly features, ensuring your pets are well-fed even when you're not at home.</p>
+        <div class="row mt-4">
+            <div class="col-md-4 text-center">
+                <i class="bi bi-smartwatch fs-1" style="color: #F27244;"></i>
+                <h5 class="mt-3">Smart Technology</h5>
+                <p>Monitor and schedule feedings remotely through a dedicated app, giving you control no matter where you are.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="bi bi-heart-pulse fs-1" style="color: #F27244;"></i>
+                <h5 class="mt-3">Health Monitoring</h5>
+                <p>Track your pet's feeding habits to ensure they stay on a healthy diet and avoid overfeeding.</p>
+            </div>
+            <div class="col-md-4 text-center">
+                <i class="bi bi-chat-square-heart fs-1" style="color: #F27244;"></i>
+                <h5 class="mt-3">Built with Love</h5>
+                <p>Designed by a team of pet lovers, our feeders ensure reliability, convenience, and peace of mind for owners.</p>
+            </div>
+        </div>
+    </div>
+</div>
+<footer class="py-3" style="background-color: rgba(255,255,255,0.43); color: #000000;">
+    <div class="container text-center">
+        <p class="mb-0">PetPal &copy; Integration 3, Team 5</p>
+        <p class="mb-0">Contact: <a href="mailto:support@petpal.com" style="color: #F27244;">support@petpal.com</a></p>
+    </div>
+</footer>
 </body>
 </html>

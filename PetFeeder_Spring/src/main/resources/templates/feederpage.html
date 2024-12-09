@@ -6,46 +6,75 @@
     <title>Feeder Dashboard</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
 
 <header th:insert="~{navbar.html}"></header>
-
-<div class="container mt-5">
-    <div class="border p-4 rounded bg-light">
-        <h4 th:text="'Feeder id: ' + ${feeders}"></h4>
-
-        <div>
-            <p><strong>Next Feeding:</strong> <span th:text="${schedules.get(0).timeToFeed}"></span></p>
-        </div>
-
-        <div class="progress mb-3">
-            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
-                 th:style="'width: ' + ${reservoirLevel} + '%'" aria-valuenow="${reservoirLevel}" aria-valuemin="0" aria-valuemax="10">
-                <span th:text="${reservoirLevel} + '%'"></span>
+<div class="container mt-3 pt-4 pb-5">
+    <h1 class="text-center mb-4">
+        Your Feeder
+        <button type="button" class="btn btn-lg btn-sm custom-btn-transparent" data-bs-toggle="modal" data-bs-target="#infoModal">
+            <i class="bi bi-info-square fs-4" style="color: #F27244;"></i>
+        </button>
+    </h1>
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <h3 class="card-title" style="color: #F27244;">Reservoir Level</h3>
+            <h5 class="card-title" th:text="'Feeder id: ' + ${feeders}"></h5>
+            <div class="progress mb-3">
+                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
+                     th:style="'width: ' + ${reservoirLevel} + '%'" aria-valuenow="${reservoirLevel}" aria-valuemin="0" aria-valuemax="10">
+                    <span th:text="${reservoirLevel} + '%'"></span>
+                </div>
+            </div>
+            <div th:if="${isFoodLevelLow}" class="alert alert-danger" role="alert">
+                <strong>Warning!</strong> Food level is low. Please refill the reservoir.
             </div>
         </div>
-
-        <div th:if="${isFoodLevelLow}" class="alert alert-danger" role="alert">
-            <strong>Warning!</strong> Food level is low. Please refill the reservoir.
+    </div>
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body">
+            <h3 class="card-title" style="color: #F27244;">Current Schedule</h3>
+            <p><strong>Next Feeding:</strong> <span th:text="${schedules.get(0).timeToFeed}"></span></p>
+            <div class="text-start">
+                <a href="/schedulecreation" class="btn" style="background-color: #F27244; color: white;">Change Feeding Schedule</a>
+            </div>
         </div>
-
-        <div class="text-center">
-            <a href="/schedulecreation" class="btn btn-primary">Change Feeding</a>
+    </div>
+    <div class="card border-0 shadow-sm mb-4">
+        <div class="card-body text-start">
+            <h3 class="card-title" style="color: #F27244;">Distribute Food Now</h3>
+            <form th:action="@{/feedNow}" method="post">
+                <div class="mb-3">
+                    <label for="feedNow" class="form-label">Choose Amount to Feed</label>
+                    <input type="number" id="feedNow" name="amount" required class="form-control" min="1">
+                </div>
+                <button type="submit" class="btn" style="background-color: #F27244; color: white;">Feed Now</button>
+            </form>
         </div>
     </div>
 </div>
 
-<div class="container mt-5 pb-5">
-    <div class="border p-4 rounded bg-light">
-<form th:action="@{/feedNow}" method="post">
-    <label for="feedNow"> Choose Amount to Feed</label>
-    <input type="number" id="feedNow" name="amount" required>
-    <button type="submit">feedNow</button>
-</form>
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Your Feeder Page</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>This page helps you manage your feeder system. You can check the current reservoir level, schedule the next feeding, and manually distribute food.</p>
+                <p><strong>Reservoir Level:</strong> Displays the current percentage of food in the reservoir. If it's low, you will receive a warning.</p>
+                <p><strong>Next Feeding:</strong> Displays the time for the next automatic feeding.</p>
+                <p><strong>Distribute Food Now:</strong> Allows you to manually feed your system by selecting the amount of food to distribute.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
     </div>
 </div>
-
 
 <footer th:insert="~{footer.html}"></footer>
 </body>
