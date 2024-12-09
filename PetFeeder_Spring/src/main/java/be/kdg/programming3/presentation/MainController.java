@@ -28,14 +28,16 @@ public class MainController {
     private final ScheduleService scheduleService;
     private final UserService userService;
     private final FeederService feederService;
+    private final ArduinoController arduinoController;
 
 
-    public MainController(PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService, FeederService feederService) {
+    public MainController(PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService, FeederService feederService, ArduinoController arduinoController) {
         this.petService = petService;
         this.petDataLogService = petDataLogService;
         this.scheduleService = scheduleService;
         this.userService = userService;
         this.feederService = feederService;
+        this.arduinoController = arduinoController;
     }
 
 
@@ -193,13 +195,14 @@ public class MainController {
          }else{
              feedTimeList.add(time);  // need a list of feeding times here to add
          }
-//
-        ArduinoController.sendSchedule(feedTimeList, List.of(5));
+
 
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("frequencies", FeedFrequency.values());
         scheduleService.save(newSchedule);
+        arduinoController.sendSchedule(feedTime,(int)portion);
+
         return "redirect:/schedulecreation";
     }
 

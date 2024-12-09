@@ -25,7 +25,10 @@ import org.springframework.web.client.RestTemplate;
 import java.net.URI;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -76,7 +79,12 @@ public class ArduinoController {
         }
     }
 
-    public static void sendSchedule(List<Long> times, List<Integer> amount) {
+    public  void sendSchedule(LocalTime localTime, int amount) {
+//        List<Long> times = List.of((long)5000, (long)20000);
+//        List<Integer> amount = List.of(20, 20);
+        int times = localTime.toSecondOfDay();
+        logger.debug("{}",times);
+        // Define the request payload, if any
         String requestPayload = String.format("times=%s&amount=%s", times, amount).replace(" ","").replace("[","").replace("]","");
 
         sendData(requestPayload);
@@ -95,13 +103,13 @@ public class ArduinoController {
         logger.info("IP: {}", address);
         ip = address;
 
-        LocalDateTime date = LocalDateTime.now();
+        LocalTime date = LocalTime.now();
         System.out.println("Date = " + date);
-        LocalDateTime start = date;
+        LocalTime start = date;
 
-        while (start.getDayOfWeek() != DayOfWeek.MONDAY) {
-            start = start.minusDays(1);
-        }
+//        while (start.getDayOfWeek() != DayOfWeek.MONDAY) {
+//            start = start.minusDays(1);
+//        }
         while (start.getHour() > 0) {
             start = start.minusHours(1);
         }
@@ -113,7 +121,8 @@ public class ArduinoController {
         }
 
         ZoneId zoneId = ZoneId.systemDefault(); // or: ZoneId.of("Europe/Oslo");
-        long seconds = LocalDateTime.now().atZone(zoneId).toEpochSecond() - start.atZone(zoneId).toEpochSecond();
+//        long seconds = LocalTime.now().atZone(zoneId).toEpochSecond() - start.atZone(zoneId).toEpochSecond();
+        long seconds = start.until(LocalTime.now(), ChronoUnit.SECONDS);
         // Return a response message
         return String.valueOf(seconds);
     }
