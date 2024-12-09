@@ -1,6 +1,5 @@
 package be.kdg.programming3.domain;
 
-
 import jakarta.persistence.*;
 
 import java.time.LocalTime;
@@ -21,13 +20,13 @@ public class Schedule {
     private LocalTime timeToFeed;
     private double portion;
 
-    private boolean monday = false;
-    private boolean tuesday = false;
-    private boolean wednesday = false;
-    private boolean thursday = false;
-    private boolean friday = false;
-    private boolean saturday = false;
-    private boolean sunday = false;
+    private boolean monday = true;
+    private boolean tuesday = true;
+    private boolean wednesday = true;
+    private boolean thursday = true;
+    private boolean friday = true;
+    private boolean saturday = true;
+    private boolean sunday = true;
 
     public Schedule() {}
 
@@ -129,6 +128,23 @@ public class Schedule {
 
     public void setSunday(boolean sunday) {
         this.sunday = sunday;
+    }
+
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "id=" + id +
+                ", feeder=" + feeder +
+                ", timeToFeed=" + timeToFeed +
+                ", portion=" + portion +
+                ", monday=" + monday +
+                ", tuesday=" + tuesday +
+                ", wednesday=" + wednesday +
+                ", thursday=" + thursday +
+                ", friday=" + friday +
+                ", saturday=" + saturday +
+                ", sunday=" + sunday +
+                '}';
     }
 }
 

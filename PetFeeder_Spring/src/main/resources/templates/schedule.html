@@ -19,14 +19,14 @@
     </h1>
 
     <div class="row justify-content-between">
+        <h3 class="mb-3">Create Schedule</h3>
         <div class="col-12 col-md-5 mb-4 pb-5">
             <div class="card rounded-4 bg-light shadow-lg">
                 <div class="card-body">
-                    <h3 class="mb-3" style="color: #F27244;">Create Schedule</h3>
-                    <form th:action="@{/schedule/add}" method="POST">
+                    <form th:action="@{/schedule/add}" th:object="${scheduleObject}" method="POST">
                         <div class="mb-3">
                             <label for="feeder">Select Feeder:</label>
-                            <select id="feeder" name="feederId" required>
+                            <select id="feeder" name="feederId" th:field="*{feeder}" required>
                                 <option value="">-- Choose Feeder --</option>
                                 <th:block th:each="feeder : ${feeders}">
                                     <option th:value="${feeder.id}" th:text="${feeder.id}"></option>
@@ -36,7 +36,7 @@
 
                         <div class="mb-3">
                         <label for="timeToFeed">Time to Feed (HH:mm):</label>
-                        <input type="Time" id="timeToFeed" name="timeToFeed" required/>
+                        <input type="Time" id="timeToFeed" name="timeToFeed" th:field="*{timeToFeed}" required/>
                         </div>
                         <div class="mb-3">
                             <label for="portion">Portion Size (grams):</label>
@@ -46,7 +46,7 @@
                         <div class="mb-3">
                             <th:block th:each="day : ${daysOfWeek}">
                                 <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" th:id="${day.name()}" th:name="${day.name()}" checked>
+                                    <input class="form-check-input" type="checkbox" th:id="${day.name()}" th:name="${day.name()}" th:field="*{__${day.name().toLowerCase()}__}">
                                     <label class="form-check-label" th:for="${day.name()}" th:text="${day.displayName}"></label>
                                 </div>
                             </th:block>
@@ -70,7 +70,10 @@
                 <div class="col-12 col-md-6 mb-4" th:each="schedule : ${schedules}">
                     <div class="card rounded-4 bg-light shadow-lg">
                         <div class="card-body">
-                            <h5 class="card-title">Feeder: <span th:text="${schedule.feeder.id}"></span></h5>
+                            <h5 class="card-title">
+                                Feeder: <span th:text="${schedule.feeder.id}"></span>
+                                <a th:href="@{'/deleteSchedule/'+${schedule.id}}"><button class="btn btn-sm btn-danger position-absolute end-0 m-2">Remove</button></a>
+                            </h5>
                             <p class="card-text">
                                 <strong>Time to Feed:</strong> <span th:text="${schedule.timeToFeed}"></span><br>
                                 <strong>Days:</strong><br>
