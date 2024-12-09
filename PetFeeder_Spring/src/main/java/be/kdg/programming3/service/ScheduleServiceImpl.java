@@ -5,6 +5,7 @@ import be.kdg.programming3.repository.ScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -35,6 +36,10 @@ public class ScheduleServiceImpl implements ScheduleService{
 
     public List<Schedule> saveAll(List<Schedule> schedules) {
         return scheduleRepository.saveAll(schedules);
+    }
+
+    public List<Schedule> findSchedulesByFeederId(Long feederId) {
+       return scheduleRepository.findByFeederId(feederId);
     }
 
 }

@@ -10,4 +10,5 @@ public interface ScheduleService {
     Schedule save(Schedule schedule);
     void deleteById(Long id);
     List<Schedule> saveAll(List<Schedule> schedules);
+    public List<Schedule> findSchedulesByFeederId(Long feederId);
 }

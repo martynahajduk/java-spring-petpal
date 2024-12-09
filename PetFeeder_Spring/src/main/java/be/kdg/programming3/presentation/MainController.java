@@ -141,10 +141,12 @@ public class MainController {
     }
 
     @GetMapping("/schedulecreation")
-    public String showScheduleCreationPage(Model model) {
-        model.addAttribute("feeders", feederService.findAll());
+    public String showScheduleCreationPage(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        Feeder feeder = feederService.findById(user.getFeeder().getId());
+        model.addAttribute("feeders", feeder);
         model.addAttribute("frequencies", FeedFrequency.values());
-        model.addAttribute("schedules", scheduleService.findAll());
+        model.addAttribute("schedules", scheduleService.findSchedulesByFeederId(feeder.getId()));
 
         model.addAttribute("daysOfWeek", DayOfWeek.values());
 
@@ -350,10 +352,11 @@ Long feederId = user.getFeeder().getId();
     }
 
     @GetMapping("/feederpage")
-    public String showFeederPage(Model model) {
-        Feeder feeder = feederService.findById(1L);
-        List<Pet> pets = petService.findAll();
-        List<Schedule> schedules = scheduleService.findAll();
+    public String showFeederPage(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+
+        Feeder feeder = feederService.findById(user.getFeeder().getId());
+        List<Schedule> schedules = scheduleService.findSchedulesByFeederId(feeder.getId());
 
 
         //get teh reservoir level
@@ -362,8 +365,8 @@ Long feederId = user.getFeeder().getId();
         boolean isFoodLevelLow = reservoirLevel <= 20;
 
         model.addAttribute("pets", petService.findAll());
-        model.addAttribute("feeders", feederService.findAll());
-        model.addAttribute("schedules", scheduleService.findAll());
+        model.addAttribute("feeders", feeder);
+        model.addAttribute("schedules", schedules);
         model.addAttribute("reservoirLevel", reservoirLevel);
         model.addAttribute("isFoodLevelLow", isFoodLevelLow);
 
