@@ -147,20 +147,26 @@ public class MainController {
         model.addAttribute("schedules", scheduleService.findAll());
 
         model.addAttribute("daysOfWeek", DayOfWeek.values());
-        //TODO add day choices for weekly feeding schedule, figure something out for monthly
-        //? We can also disable it for now and add it later, a biweekly option is also possible
 
         return "schedule";
     }
 
-    //TODO change into view object
+    //TODO change into view object and converter
     @PostMapping("/schedule/add")
     public String handleScheduleCreation(
             @RequestParam Long feederId,
             @RequestParam String timeToFeed,
-            @RequestParam FeedFrequency frequency,
             @RequestParam double portion,  // Added portion size parameter
+            @RequestParam boolean MONDAY,
+            @RequestParam boolean TUESDAY,
+            @RequestParam boolean WEDNESDAY,
+            @RequestParam boolean THURSDAY,
+            @RequestParam boolean FRIDAY,
+            @RequestParam boolean SATURDAY,
+            @RequestParam boolean SUNDAY,
             Model model) {
+
+        logger.debug("{}, {}, {}, {}, {}, {}, {}",MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY);
 
         Feeder feeder = feederService.findById(feederId);
         if (feeder == null) {
@@ -179,8 +185,14 @@ public class MainController {
         Schedule newSchedule = new Schedule();
         newSchedule.setFeeder(feeder);
         newSchedule.setTimeToFeed(feedTime);
-        newSchedule.setFrequency(frequency);
         newSchedule.setPortion(portion);  // Set the portion size
+        newSchedule.setMonday(MONDAY);
+        newSchedule.setTuesday(TUESDAY);
+        newSchedule.setWednesday(WEDNESDAY);
+        newSchedule.setThursday(THURSDAY);
+        newSchedule.setFriday(FRIDAY);
+        newSchedule.setSaturday(SATURDAY);
+        newSchedule.setSunday(SUNDAY);
 
         //TODO:
         //sql Select frequency, portion, timetofeed where feederid = x
@@ -189,20 +201,20 @@ public class MainController {
 
         List<Long> feedTimeList = new ArrayList<>();
         long time = feedTime.getLong(ChronoField.SECOND_OF_DAY);
-         if (frequency == FeedFrequency.DAILY) {
-             for (int i = 0; i < 6; i++) {
-                 feedTimeList.add(time + i*86400);   // can be 2 times to add
-             }
-         }else{
-             feedTimeList.add(time);  // need a list of feeding times here to add
-         }
+//         if (frequency == FeedFrequency.DAILY) {
+//             for (int i = 0; i < 6; i++) {
+//                 feedTimeList.add(time + i*86400);   // can be 2 times to add
+//             }
+//         }else{
+//             feedTimeList.add(time);  // need a list of feeding times here to add
+//         }
 
 
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("frequencies", FeedFrequency.values());
         scheduleService.save(newSchedule);
-        arduinoController.sendSchedule(feedTime,(int)portion);
+//        arduinoController.sendSchedule(feedTime,(int)portion);
 
         return "redirect:/schedulecreation";
     }

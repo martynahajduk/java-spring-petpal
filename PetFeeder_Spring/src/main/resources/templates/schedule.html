@@ -35,22 +35,14 @@
                             <label for="portion">Portion Size (grams):</label>
                             <input type="number" id="portion" name="portion" min="1" step="0.1" required/>
                         </div>
-                        <div class="mb-3">
-                        <label for="frequency">Feed Frequency:</label>
-                        <select id="frequency" name="frequency" required>
-                            <option value="">-- Choose Frequency --</option>
-                            <th:block th:each="frequency : ${frequencies}">
-                                <option th:value="${frequency}" th:text="${frequency}"></option>
-                            </th:block>
-                        </select>
-                        </div>
 
                         <div class="mb-3">
-                            <label for="days">Feed Frequency:</label>
-                            <select id="days" name="days" th:each="day : ${daysOfWeek}" required>
-                                <option value="">-- Choose Frequency --</option>
-                                <option th:value="${day}" th:text="${day}"></option>
-                            </select>
+                            <th:block th:each="day : ${daysOfWeek}">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" th:id="${day.name()}" th:name="${day.name()}" checked>
+                                    <label class="form-check-label" th:for="${day.name()}" th:text="${day.displayName}"></label>
+                                </div>
+                            </th:block>
                         </div>
 
                         <button type="submit">Create Schedule</button>
@@ -71,10 +63,19 @@
                 <div class="col-12 col-md-6 mb-4" th:each="schedule : ${schedules}">
                     <div class="card rounded-4 bg-light shadow-lg">
                         <div class="card-body">
-                            <h5 class="card-title">Feeder: <span th:text="${schedule.feeder.id}"></span></h5>
+<!--                            <h5 class="card-title">Feeder: <span th:text="${schedule.feeder.id}"></span></h5>-->
                             <p class="card-text">
                                 <strong>Time to Feed:</strong> <span th:text="${schedule.timeToFeed}"></span><br>
-                                <strong>Frequency:</strong> <span th:text="${schedule.frequency}"></span><br>
+                                <strong>Days:</strong><br>
+                                <ul>
+                                    <li th:if="${schedule.monday}">Monday</li>
+                                    <li th:if="${schedule.tuesday}">Tuesday</li>
+                                    <li th:if="${schedule.wednesday}">Wednesday</li>
+                                    <li th:if="${schedule.thursday}">Thursday</li>
+                                    <li th:if="${schedule.friday}">Friday</li>
+                                    <li th:if="${schedule.saturday}">Saturday</li>
+                                    <li th:if="${schedule.sunday}">Sunday</li>
+                                </ul>
                                 <strong>Portion:</strong> <span th:text="${schedule.portion}"></span> grams
                             </p>
                         </div>

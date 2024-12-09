@@ -46,16 +46,6 @@ public class ArduinoController {
 
     }
 
-    @GetMapping("/view-data")       //? should this be in arduino controller?
-    public String viewData(Model model) {
-        List<PetDataLog> petDataLogs = petDataLogService.findAll();
-
-        // Add data to the model
-        model.addAttribute("petData", petDataLogs);
-
-        return "TestPage"; // Name of the Thymeleaf template
-    }
-
     @PostMapping(value = "/SensorData", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     @ResponseBody
     public String receiveData(
@@ -91,7 +81,7 @@ public class ArduinoController {
     }
 
     @Scheduled(cron = "0 0 0 * * *") // Runs every day at midnight
-    public static void zero() {  //? should we use HttpClient or the one shown below?
+    public static void zero() {
         sendData("");
     }
 
