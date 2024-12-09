@@ -3,6 +3,7 @@ package be.kdg.programming3.presentation;
 import be.kdg.programming3.domain.*;
 import be.kdg.programming3.service.*;
 import jakarta.servlet.http.HttpSession;
+import org.apache.catalina.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -251,6 +252,7 @@ public class MainController {
             User user = userService.loginUser(email, password);
             session.setAttribute("user", user);
             model.addAttribute("user", user);
+
             return "menupage";
         } catch (IllegalArgumentException e) {
             model.addAttribute("error", e.getMessage());
@@ -286,15 +288,23 @@ public class MainController {
 
 
     @GetMapping("/petchoice")
-    public String showPetChoicePage(Model model) {
-        List<Pet> pets = petService.findAll();
-        List<User> users = userService.findAll();
+    public String showPetChoicePage(Model model, HttpSession session) {
+User user = (User) session.getAttribute("user");
+Long userId = user.getId();
+Long feederId = user.getFeeder().getId();
 
-        model.addAttribute("pets", pets);
-        model.addAttribute("users", users);
+        Pet pet = petService.getPetByUserId(user.getId()); // Modified `PetService` handles nulls
+        model.addAttribute("pets", pet);
+
+//        List<User> users = userService.findAll();
+
+        List<User> filteredUsers = userService.findUsersByFeederId(feederId);
+
+        model.addAttribute("users", filteredUsers);
 
         return "petchoice";
     }
+
 
     //TODO change into view object
     @PostMapping("/pets/add-form")

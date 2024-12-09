@@ -29,6 +29,8 @@ dependencies {
     implementation("org.webjars:webjars-locator-core:0.59")
     implementation("com.fasterxml.jackson.core:jackson-databind") // Jackson library for JSON
     implementation("org.apache.commons:commons-csv:1.10.0") // Apache Commons CSV
+    implementation ("org.springframework.boot:spring-boot-starter-security")
+
 }
 
 tasks.withType<Test> {

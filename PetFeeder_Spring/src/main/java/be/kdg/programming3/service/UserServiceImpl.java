@@ -64,5 +64,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User with email " + email + " not found"));
     }
+    public List<User> findUsersByFeederId(Long feederId) {
+        return userRepository.findByFeederId(feederId);
+    }
 
 }

@@ -14,4 +14,5 @@ public interface UserService {
     User loginUser(String email, String password);
     User registerUser(String name, String email, String password, Feeder feeder);
     User findUserByEmail(String email);
+    public List<User> findUsersByFeederId(Long feederId);
 }

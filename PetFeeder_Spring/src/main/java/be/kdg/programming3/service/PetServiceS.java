@@ -75,5 +75,12 @@ public class PetServiceS implements PetService {
         }
         return feederById;
     }
+    public Pet getPetByUserId(Long userId) {
+        User user = userRepository.findById(userId).orElse(null); // Use optional to handle null
+        if (user == null || user.getPet() == null) {
+            return null; // Return null if no user or pet exists
+        }
+        return user.getPet();
+    }
 
 }

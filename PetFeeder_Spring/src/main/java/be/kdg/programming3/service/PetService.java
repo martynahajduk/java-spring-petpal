@@ -18,5 +18,7 @@ public interface PetService {
    User findRandUserByFeederId(Long id);
    Feeder getFeederByUserId(Long userId);
    Integer getPetAgeWeeks(Pet pet);
+   public Pet getPetByUserId(Long userId);
+
 
 }
