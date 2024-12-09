@@ -163,6 +163,7 @@ public class ArduinoController {
             logger.error("POST request failed with status code: {}", responseEntity.getStatusCodeValue());
         }
         logger.info("oi2");
+
     }
 }
 

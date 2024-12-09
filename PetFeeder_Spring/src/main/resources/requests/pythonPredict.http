@@ -1,0 +1,10 @@
+### GET request to example server
+POST http://localhost:80/api/predict
+Content-Type: application/json
+
+
+
+  {"age_weeks": 10, "weight_grams": 59, "food_intake": 7.5, "breed": "Syrian", "sex": "male"}
+
+
+

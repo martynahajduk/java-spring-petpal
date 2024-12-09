@@ -18,6 +18,10 @@ public class ResearchDataServiceImpl implements ResearchDataService {
     public ResearchDataServiceImpl(ResearchDataRepository researchDataRepository) {
         this.researchDataRepository = researchDataRepository;
     }
+    /**
+     * Fetch research data from the repository and serialize it to JSON.
+     * @return Serialized JSON string of research data.
+     */
 
     @Override
     public String getResearchDataAsJson() {

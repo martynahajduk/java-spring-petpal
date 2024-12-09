@@ -14,22 +14,44 @@
 
     <div class="text-center">
         <h2>Visualization of Predictions</h2>
-        <div id="graph-container" class="mt-4"></div> <!-- Placeholder for the graph -->
+        <div id="graph-container" class="mt-4">
+            <!-- Add an <img> element for the graph -->
+            <img id="graph" class="img-fluid mt-3" alt="Graph will appear here">
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", async () => {
+                try {
+                    const response = await fetch("http://127.0.0.1:5000/api/visualize", {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify([
+                            {"Age (weeks)": 10, "Predicted Weight (grams)": 120.5, "Predicted Food Intake (grams)": 15.2},
+                            {"Age (weeks)": 20, "Predicted Weight (grams)": 140.3, "Predicted Food Intake (grams)": 17.8},
+                            {"Age (weeks)": 30, "Predicted Weight (grams)": 160.0, "Predicted Food Intake (grams)": 20.1}
+                        ])
+                    });
+
+                    if (!response.ok) throw new Error("Failed to fetch graph");
+
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+
+                    // Display the image
+                    const graphImage = document.getElementById("graph");
+                    graphImage.src = url;
+                    graphImage.alt = "Prediction Graph";
+                } catch (error) {
+                    console.error("Error fetching graph:", error);
+                    document.getElementById("graph-container").textContent = "Failed to load graph.";
+                }
+            });
+        </script>
     </div>
 </main>
 
 <footer th:insert="~{footer.html}" class="mt-5"></footer>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const graphContainer = document.createElement("img");
-        graphContainer.src = "http://127.0.0.1:5000/visualize"; // Flask endpoint
-        graphContainer.alt = "Visualization of Predictions";
-        graphContainer.classList.add("img-fluid", "mt-4");
 
-        // Add the graph to the designated container
-        document.getElementById("graph-container").appendChild(graphContainer);
-    });
-</script>
 </body>
 </html>

@@ -6,9 +6,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 
-@Repository
-public interface ResearchDataRepository {
 
-    @Query(value="SELECT * FROM prediction_data.hamster_data",nativeQuery = true)
+public interface ResearchDataRepository {
     List<Map<String,Object>> findAllResearchData();
+
+//    @Query(value="SELECT * FROM prediction_data.hamster_data",nativeQuery = true)
+//    List<Map<String,Object>> findAllResearchData();
 }
