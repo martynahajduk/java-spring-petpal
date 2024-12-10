@@ -299,7 +299,9 @@ Long feederId = user.getFeeder().getId();
                          @RequestParam double petWeight,
                          @RequestParam String sex,
                          @RequestParam List<Long> userIds,
-                         Model model) {
+                         Model model,
+                         HttpSession session) {
+
 
         Pet newPet = new Pet(name, birthDate, animalType, petWeight, sex,  new HashSet<>());
         newPet.setAgeWeeks(newPet.calculateAgeWeeks());
@@ -311,7 +313,9 @@ Long feederId = user.getFeeder().getId();
                 userService.save(user);
             }
         }
-        model.addAttribute("pets", petService.findAll());
+        User userHttp = (User) session.getAttribute("user");
+        Pet pet = petService.getPetByUserId(userHttp.getId());
+        model.addAttribute("pets", pet);
         return "petchoice";
     }
 
