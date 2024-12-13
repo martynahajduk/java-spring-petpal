@@ -14,8 +14,9 @@ public class ResearchDataRepositoryImpl implements ResearchDataRepository{
     private EntityManager em;
 
     @Override
-    public List<Map<String,Object>> findAllResearchData() {
-        return em.createNativeQuery("SELECT * FROM prediction_data.hamster_data")
+    public List<Map<String, Object>> findAllResearchData() {
+        return em.createNativeQuery("SELECT age_weeks, weight_grams AS pet_weight, food_intake, breed, sex " +
+                        "FROM prediction_data.hamster_data WHERE age_weeks IS NOT NULL", Map.class)
                 .getResultList();
     }
 }

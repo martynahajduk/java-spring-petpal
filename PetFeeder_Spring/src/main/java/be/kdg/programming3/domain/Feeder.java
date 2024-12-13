@@ -1,5 +1,6 @@
 package be.kdg.programming3.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class Feeder {
 
     // One Feeder can have multiple PetDataLogs
     @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
+
     private Set<PetDataLog> petDataLogs;
 
 

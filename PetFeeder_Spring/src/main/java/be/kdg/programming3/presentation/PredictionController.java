@@ -9,7 +9,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
@@ -27,44 +31,63 @@ public class PredictionController {
         this.researchDataService = researchDataService;
     }
 
+
     @PostMapping("/train")
-    public ResponseEntity<String> trainModel()  {
+    public ResponseEntity<List<Map<String, Object>>> trainModel() {
         try {
-        String researchDataJson = researchDataService.getResearchDataAsJson();
-
-        // Send research data to Python server for training
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> request = new HttpEntity<>(researchDataJson, headers);
-        ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL + "api/train", request, String.class);
-
-        return ResponseEntity.ok(response.getBody());
-    } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error training model: " + e.getMessage());
+            String researchDataJson = researchDataService.getResearchDataAsJson();
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Map<String, Object>> researchData = objectMapper.readValue(researchDataJson, List.class);
+            return ResponseEntity.ok(researchData);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null); // Return null if there's an error
         }
-        }
+    }
 
-    @PostMapping("/predict")
-    public ResponseEntity<String> makePredictions() {
+    @PostMapping("/visualize")
+    public ResponseEntity<String> visualizeData() {
         try {
-            // Step 1: Fetch real data
+            // Fetch real pet data from the database
             List<PetDataLog> petData = petDataLogService.findAll();
 
-            // Step 2: Serialize real data to JSON
-        String realDataJson = new ObjectMapper().writeValueAsString(petData);
+            // Transform PetDataLog to the expected structure
+            List<Map<String, Object>> transformedRealData = petData.stream()
+                    .map(pet -> {
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("age_weeks", pet.getAgeWeeks());
+                        map.put("breed", pet.getBreed().name()); // Convert enum to String
+                        map.put("sex", pet.getSex());
+                        map.put("pet_weight", pet.getPetWeight());
+                        map.put("food_intake", pet.getBowlWeight());
+                        return map;
+                    })
+                    .collect(Collectors.toList());
 
-            // Step 3: Prepare HTTP request
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> request = new HttpEntity<>(realDataJson, headers);
+            // Fetch research data dynamically
+            String researchDataJson = researchDataService.getResearchDataAsJson();
 
-        ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL + "api/predict", request, String.class);
+            // Deserialize research data JSON into a List
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<Map<String, Object>> researchData = objectMapper.readValue(researchDataJson, List.class);
 
-        return ResponseEntity.ok(response.getBody());
+            // Create payload to send to Python (include both real and research data)
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("real_data", transformedRealData);
+            payload.put("research_data", researchData);
+
+            // Send payload to Python server
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    pythonServerURL + "/api/visualize", request, String.class);
+
+            return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
-            // Handle errors and return appropriate HTTP status
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error making predictions: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error generating visualization: " + e.getMessage());
         }
     }
 
@@ -90,4 +113,5 @@ public class PredictionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error making descriptive graphs: " + e.getMessage());
         }
     }
+
 }

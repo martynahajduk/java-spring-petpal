@@ -1,6 +1,9 @@
 package be.kdg.programming3.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +17,9 @@ public class PetDataLog {
 
     // Many PetDataLogs can be associated with one Feeder
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "feeder_id") // Foreign key to Feeder
+    @JoinColumn(name = "feeder_id")
+    @JsonIgnore
+    // Foreign key to Feeder
     private Feeder feeder;
 
     // Many PetDataLogs can be associated with one Pet
@@ -37,6 +42,7 @@ public class PetDataLog {
     private Double petWeight;
     private Double bowlWeight;
     private Double reservoirHeight;
+   @JsonIgnore
     private LocalDateTime timestamp; // Timestamp of the feeding
 
 

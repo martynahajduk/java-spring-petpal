@@ -1,10 +1,100 @@
 ### GET request to example server
-POST http://localhost:80/api/predict
+POST http://localhost:80/api/visualize
 Content-Type: application/json
 
 
-
-  {"age_weeks": 10, "weight_grams": 59, "food_intake": 7.5, "breed": "Syrian", "sex": "male"}
-
-
-
+{ "real_data":
+[
+  {
+    "age_weeks": 4,
+    "food_intake": 1.8,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 16.54,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 5,
+    "food_intake": 2.1,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 18.8,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 6,
+    "food_intake": 2.23,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 21.1,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 7,
+    "food_intake": 2.1,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 20.6,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 8,
+    "food_intake": 2.4,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 21.8,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 9,
+    "food_intake": 2.7,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 23.5,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 10,
+    "food_intake": 2.84,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 22.9,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 11,
+    "food_intake": 2.67,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 24.34,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 12,
+    "food_intake": 2.91,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 25.1,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 13,
+    "food_intake": 2.6,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 24.9,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 14,
+    "food_intake": 3.12,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 25.5,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 15,
+    "food_intake": 3.5,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 26.6,
+    "sex": "Male"
+  },
+  {
+    "age_weeks": 16,
+    "food_intake": 3.67,
+    "breed": "DWARF_CAMPBELL_RUSSIAN",
+    "pet_weight": 27,
+    "sex": "Male"
+  }
+]
+}
