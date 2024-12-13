@@ -1,0 +1,24 @@
+### GET request to example server
+POST http://localhost:80/api/descriptive
+Content-Type: application/json
+
+{
+  "pet_data_log_descriptive": [
+    {
+      "timestamp": "2024-12-10T08:00:00",
+      "petWeight": 300,
+      "bowlWeight": 100,
+      "ageWeeks": 12,
+      "breed": "Dwarf_Campbell_Russian",
+      "sex": "Male"
+    },
+    {
+      "timestamp": "2024-12-10T14:00:00",
+      "petWeight": 305,
+      "bowlWeight": 105,
+      "ageWeeks": 12,
+      "breed": "Dwarf_Campbell_Russian",
+      "sex": "Male"
+    }
+  ]
+}
