@@ -67,4 +67,27 @@ public class PredictionController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error making predictions: " + e.getMessage());
         }
     }
+
+    @PostMapping("/descriptive")
+    public ResponseEntity<String> makeDescriptiveGraphs() {
+        try {
+            // Step 1: Fetch real data
+            List<PetDataLog> petData = petDataLogService.findAll();
+
+            // Step 2: Serialize real data to JSON
+            String realDataJson = new ObjectMapper().writeValueAsString(petData);
+
+            // Step 3: Prepare HTTP request
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<String> request = new HttpEntity<>(realDataJson, headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL + "api/descriptive", request, String.class);
+
+            return ResponseEntity.ok(response.getBody());
+        } catch (Exception e) {
+            // Handle errors and return appropriate HTTP status
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error making descriptive graphs: " + e.getMessage());
+        }
+    }
 }
