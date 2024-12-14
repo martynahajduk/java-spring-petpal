@@ -42,8 +42,9 @@ public class PetDataLog {
     private Double petWeight;
     private Double bowlWeight;
     private Double reservoirHeight;
-   @JsonIgnore
-    private LocalDateTime timestamp; // Timestamp of the feeding
+   //@JsonIgnore
+   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+   private LocalDateTime timestamp; // Timestamp of the feeding
 
 
     public PetDataLog() {

@@ -25,18 +25,19 @@ public class PredictionController {
     private final RestTemplate restTemplate = new RestTemplate();
     private final PetDataLogService petDataLogService;
     private final ResearchDataService researchDataService;
+    private final ObjectMapper objectMapper;
 
-    public PredictionController(PetDataLogService petDataLogService, ResearchDataServiceImpl researchDataService) {
+    public PredictionController(PetDataLogService petDataLogService, ResearchDataService researchDataService, ObjectMapper objectMapper) {
         this.petDataLogService = petDataLogService;
         this.researchDataService = researchDataService;
+        this.objectMapper = objectMapper;
     }
-
 
     @PostMapping("/train")
     public ResponseEntity<List<Map<String, Object>>> trainModel() {
         try {
             String researchDataJson = researchDataService.getResearchDataAsJson();
-            ObjectMapper objectMapper = new ObjectMapper();
+//            ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, Object>> researchData = objectMapper.readValue(researchDataJson, List.class);
             return ResponseEntity.ok(researchData);
         } catch (Exception e) {
@@ -68,7 +69,7 @@ public class PredictionController {
             String researchDataJson = researchDataService.getResearchDataAsJson();
 
             // Deserialize research data JSON into a List
-            ObjectMapper objectMapper = new ObjectMapper();
+//            ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, Object>> researchData = objectMapper.readValue(researchDataJson, List.class);
 
             // Create payload to send to Python (include both real and research data)
@@ -94,23 +95,25 @@ public class PredictionController {
     @PostMapping("/descriptive")
     public ResponseEntity<String> makeDescriptiveGraphs() {
         try {
-            // Step 1: Fetch real data
+            // Fetch real data
             List<PetDataLog> petData = petDataLogService.findAll();
 
-            // Step 2: Serialize real data to JSON
-            String realDataJson = new ObjectMapper().writeValueAsString(petData);
+            // Serialize real data to JSON using the injected ObjectMapper
+            String descriptive = objectMapper.writeValueAsString(petData);
 
-            // Step 3: Prepare HTTP request
+            // HTTP request
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            HttpEntity<String> request = new HttpEntity<>(realDataJson, headers);
+            HttpEntity<String> request = new HttpEntity<>(descriptive, headers);
 
-            ResponseEntity<String> response = restTemplate.postForEntity(pythonServerURL + "api/descriptive", request, String.class);
+            ResponseEntity<String> response = restTemplate.postForEntity(
+                    pythonServerURL + "/api/descriptive", request, String.class);
 
             return ResponseEntity.ok(response.getBody());
         } catch (Exception e) {
             // Handle errors and return appropriate HTTP status
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error making descriptive graphs: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error making descriptive graphs: " + e.getMessage());
         }
     }
 
