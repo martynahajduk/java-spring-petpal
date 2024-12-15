@@ -15,80 +15,90 @@
     <div class="text-center">
         <h2>Visualization of Predictions</h2>
         <div id="graph-container" class="mt-4">
-            <!-- Graphs -->
             <h3>Growth Trend</h3>
-            <img id="growth-trend" class="img-fluid mt-3" alt="Growth Trend Graph">
+            <img id="growth-trend" class="img-fluid mt-3" alt="Growth Trend Graph" src="/plots/growth_trend.png">
+
             <h3>Food Intake Trend</h3>
-            <img id="food-intake-trend" class="img-fluid mt-3" alt="Food Intake Trend Graph">
+            <img id="food-intake-trend" class="img-fluid mt-3" alt="Food Intake Trend Graph" src="/plots/food_intake_trend.png">
         </div>
 
-        <div id="health-assessment" class="mt-4 text-start">
-            <h3>Health Assessment</h3>
-            <table class="table table-bordered">
+        <div id="health-assessment" class="mt-5">
+            <h2>Health Assessment</h2>
+
+            <!-- Verdict Table -->
+            <h3>Verdict</h3>
+            <table class="table table-bordered table-striped mt-3">
                 <thead>
                 <tr>
                     <th>Age (Weeks)</th>
-                    <th>Food Intake</th>
-                    <th>Pet Weight</th>
                     <th>Health Status</th>
                 </tr>
                 </thead>
-                <tbody id="health-status-table">
-                <!-- Health data rows will be dynamically added here -->
+                <tbody id="verdict-table-body">
+                <!-- Verdict rows will be added dynamically -->
                 </tbody>
             </table>
         </div>
-
-        <script>
-            async function loadVisualizations() {
-                try {
-                    // Fetch visualization data from the Flask backend
-                    const response = await fetch('/api/visualize', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({})
-                    });
-
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch visualizations');
-                    }
-
-                    const data = await response.json();
-
-                    // Dynamically load graphs
-                    const growthTrend = document.getElementById('growth-trend');
-                    const foodIntakeTrend = document.getElementById('food-intake-trend');
-
-                    growthTrend.src = `/plots/${data.plots[0]}`;
-                    foodIntakeTrend.src = `/plots/${data.plots[1]}`;
-
-                    // Populate the Health Status Table
-                    const tableBody = document.getElementById('health-status-table');
-                    tableBody.innerHTML = '';
-                    data.health_data.forEach(item => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                <td>${item.age_weeks}</td>
-                <td>${item.food_intake.toFixed(2)}</td>
-                <td>${item.pet_weight.toFixed(2)}</td>
-                <td style="color: ${item.health_status === "Healthy" ? "green" : "red"}">
-                    ${item.health_status}
-                </td>
-            `;
-                        tableBody.appendChild(row);
-                    });
-                } catch (error) {
-                    console.error('Error loading visualizations:', error);
-                }
-            }
-
-            window.onload = loadVisualizations;
-        </script>
-
     </div>
 </main>
 
 <footer th:insert="~{footer.html}" class="mt-5"></footer>
+
+<script>
+    // Fetch real data dynamically from the Spring Boot endpoint
+    fetch('/api/visualize', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Failed to fetch data from the Spring Boot API.");
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Response from Flask API:', data);
+
+            // Display Growth Trend Plot
+            if (data.plots && data.plots.length > 0) {
+                document.getElementById('growth-trend').src = '/plots/' + data.plots[0];
+                document.getElementById('food-intake-trend').src = '/plots/' + data.plots[1];
+            } else {
+                console.error("Plot data is missing in the response.");
+            }
+
+            // Populate Verdict Table
+            const verdictTableBody = document.getElementById('verdict-table')
+            if (data.verdict_data && data.verdict_data.length > 0) {
+                // Clear the table body first
+                verdictTableBody.innerHTML = '';
+
+                // Add rows dynamically
+                data.verdict_data.forEach(row => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${row.age_weeks}</td>
+                        <td>${row.health_status}</td>`;
+                    verdictTableBody.appendChild(tr);
+                });
+            } else {
+                verdictTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="2" class="text-center text-danger">No verdict data available.</td>
+                    </tr>`;
+                console.error("Verdict data is missing in the response.");
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+            const graphContainer = document.getElementById('graph-container');
+            graphContainer.innerHTML = `
+                <div class="alert alert-danger mt-3">
+                    Failed to load data from the server. Please try again later.
+                </div>`;
+        });
+</script>
+
 
 </body>
 </html>

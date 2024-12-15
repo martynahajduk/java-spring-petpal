@@ -7,6 +7,7 @@ import be.kdg.programming3.service.ResearchDataServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -37,7 +38,7 @@ public class PredictionController {
     public ResponseEntity<List<Map<String, Object>>> trainModel() {
         try {
             String researchDataJson = researchDataService.getResearchDataAsJson();
-//            ObjectMapper objectMapper = new ObjectMapper();
+           ObjectMapper objectMapper = new ObjectMapper();
             List<Map<String, Object>> researchData = objectMapper.readValue(researchDataJson, List.class);
             return ResponseEntity.ok(researchData);
         } catch (Exception e) {
@@ -91,6 +92,8 @@ public class PredictionController {
                     .body("Error generating visualization: " + e.getMessage());
         }
     }
+    
+
 
     @PostMapping("/descriptive")
     public ResponseEntity<String> makeDescriptiveGraphs() {
