@@ -9,4 +9,5 @@ public interface FeederService {
     Feeder save(Feeder feeder);
     void deleteById(Long id);
     Feeder findById(Long id);
+    Feeder findOrCreateById(Long id);
 }

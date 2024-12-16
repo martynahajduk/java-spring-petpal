@@ -21,6 +21,12 @@ public class FeederServiceImpl implements FeederService {
     public Feeder findById(Long id) {
         return feederRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public Feeder findOrCreateById(Long id) {
+        return feederRepository.findById(id).orElse(save(new Feeder(id)));
+    }
+
     public List<Feeder> findAll() {
         return feederRepository.findAll();
     }

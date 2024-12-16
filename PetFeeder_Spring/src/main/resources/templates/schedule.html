@@ -67,30 +67,32 @@
         <div class="col-12 col-md-6 mb-4 pb-5">
             <h3 class="mb-3" style="color: #F27244;">Scheduled Feedings</h3>
             <div class="row">
-                <div class="col-12 col-md-6 mb-4" th:each="schedule : ${schedules}">
-                    <div class="card rounded-4 bg-light shadow-lg">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                Feeder: <span th:text="${schedule.feeder.id}"></span>
-                                <a th:href="@{'/deleteSchedule/'+${schedule.id}}"><button class="btn btn-sm btn-danger position-absolute end-0 m-2">Remove</button></a>
-                            </h5>
-                            <p class="card-text">
-                                <strong>Time to Feed:</strong> <span th:text="${schedule.timeToFeed}"></span><br>
-                                <strong>Days:</strong><br>
-                                <ul>
-                                    <li th:if="${schedule.monday}">Monday</li>
-                                    <li th:if="${schedule.tuesday}">Tuesday</li>
-                                    <li th:if="${schedule.wednesday}">Wednesday</li>
-                                    <li th:if="${schedule.thursday}">Thursday</li>
-                                    <li th:if="${schedule.friday}">Friday</li>
-                                    <li th:if="${schedule.saturday}">Saturday</li>
-                                    <li th:if="${schedule.sunday}">Sunday</li>
-                                </ul>
-                                <strong>Portion:</strong> <span th:text="${schedule.portion}"></span> grams
-                            </p>
+                <th:block th:each="entry : ${schedules}">
+                    <div class="col-12 col-md-6 mb-4" th:each="schedule : ${entry.value}">
+                        <div class="card rounded-4 bg-light shadow-lg">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    Feeder: <span th:text="${entry.key}"></span>
+                                    <a th:href="@{'/deleteSchedule/'+${schedule.getId()}}"><button class="btn btn-sm btn-danger position-absolute end-0 m-2">Remove</button></a>
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Time to Feed:</strong> <span th:text="${schedule.timeToFeed}"></span><br>
+                                    <strong>Days:</strong><br>
+                                    <ul>
+                                        <li th:if="${schedule.monday}">Monday</li>
+                                        <li th:if="${schedule.tuesday}">Tuesday</li>
+                                        <li th:if="${schedule.wednesday}">Wednesday</li>
+                                        <li th:if="${schedule.thursday}">Thursday</li>
+                                        <li th:if="${schedule.friday}">Friday</li>
+                                        <li th:if="${schedule.saturday}">Saturday</li>
+                                        <li th:if="${schedule.sunday}">Sunday</li>
+                                    </ul>
+                                    <strong>Portion:</strong> <span th:text="${schedule.portion}"></span> grams
+                                </p>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </th:block>
             </div>
         </div>
     </div>

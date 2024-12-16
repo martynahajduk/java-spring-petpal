@@ -17,23 +17,30 @@ public class Pet {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
     @Column(name = "name", nullable = false)
     private String name;
+
     @Column(name = "birthDate", nullable = true)
     private LocalDate birthDate;
+
 
     @Column(name = "animal_type", nullable = false)
     @Enumerated(EnumType.STRING)
     private Breed animalType;
+
     @Column(name = "weight")
     private double petWeight;
+
     @Column(name = "age_weeks", nullable = false)
     private int ageWeeks;
+
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "app_user",
-            joinColumns = @JoinColumn(name = "pet_id"),
-            inverseJoinColumns = @JoinColumn(name = "id"))
     private Set<User> users = new HashSet<>();
+
+    @OneToOne(fetch = FetchType.EAGER)
+    private Feeder feeder;
+
     @Column(name="sex")
     private String sex;
 
@@ -53,9 +60,10 @@ public class Pet {
         System.out.println(1);
     }
 
-    public Pet(String name, LocalDate birthDate, Breed animalType,  double petWeight, String sex,Set<User> users) {
-        this.birthDate = birthDate;
+    public Pet(String name, Feeder feeder, LocalDate birthDate, Breed animalType,  double petWeight, String sex, Set<User> users) {
         this.name = name;
+        this.feeder = feeder;
+        this.birthDate = birthDate;
         this.animalType = animalType;
         this.petWeight = petWeight;
         this.sex=sex;
@@ -141,6 +149,14 @@ public class Pet {
 
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public Feeder getFeeder() {
+        return feeder;
+    }
+
+    public void setFeeder(Feeder feeder) {
+        this.feeder = feeder;
     }
 
     public String getSex() {

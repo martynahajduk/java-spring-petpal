@@ -3,7 +3,7 @@ package be.kdg.programming3.domain;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
-import java.util.List;
+import java.util.Set;
 
 
 @Entity
@@ -22,32 +22,33 @@ public class User {
     private String password;
 
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "feeder_id")
-    private Feeder feeder;
-
-
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
-    @JoinColumn(name = "pet_id",nullable = true)
-    private Pet pet;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Pet> pets;
 
 
 
-    public User(String name, String email, String password,  Feeder feeder,Pet pet) {
+    public User(String name, String email, String password, Set<Pet> pets) {
         this.name = name;
         this.email = email;
         this.password = password;
-        this.feeder = feeder;
-        this.pet = pet;
+        this.pets = pets;
 
 
         // Setting this user in the pet's users set
-        if (pet != null) {
-            if (pet.getUsers() == null) {
-                pet.setUsers(new HashSet<>());
+        if (pets != null) {
+            for (Pet pet : pets) {
+                if (pet.getUsers() == null) {
+                    pet.setUsers(new HashSet<>());
+                }
+                pet.getUsers().add(this);
             }
-            pet.getUsers().add(this);
         }
+    }
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 
     public User() {}
@@ -85,20 +86,20 @@ public class User {
     }
 
 
-    public Pet getPet() {
-        return pet;
+    public Set<Pet> getPets() {
+        return pets;
     }
 
-    public void setPet(Pet pet) {
-        this.pet = pet;
+    public void setPets(Set<Pet> pets) {
+        this.pets = pets;
     }
 
-    public Feeder getFeeder() {
-        return feeder;
+    public void addPet(Pet pet) {
+        pets.add(pet);
     }
 
-    public void setFeeder(Feeder feeder) {
-        this.feeder = feeder;
+    public void removePet(Pet pet) {
+        pets.remove(pet);
     }
 }
 

@@ -1,11 +1,7 @@
 package be.kdg.programming3.presentation;
 
 
-import be.kdg.programming3.collector.ArduinoSensorData;
 import be.kdg.programming3.domain.Feeder;
-import be.kdg.programming3.domain.PetDataLog;
-import be.kdg.programming3.processor.DataProcessor;
-import be.kdg.programming3.processor.DataProcessorFactory;
 import be.kdg.programming3.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,35 +11,29 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Calendar;
-import java.util.List;
 
 @Controller
 public class ArduinoController {
     private static final Logger logger = LoggerFactory.getLogger(ArduinoController.class);
     private final PetDataLogService petDataLogService;
-    private static String ip = "192.168.0.159";
     private final ArduinoService arduinoService;
+    private final FeederService feederService;
     ;
 
     // Constructor-based dependency injection
-    public ArduinoController(PetDataLogService petDataLogService, ArduinoService arduinoService) {
+    public ArduinoController(PetDataLogService petDataLogService, ArduinoService arduinoService, FeederService feederService) {
         this.petDataLogService = petDataLogService;
         this.arduinoService = arduinoService;
-
+        this.feederService = feederService;
     }
 
     @PostMapping(value = "/SensorData", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
@@ -69,7 +59,7 @@ public class ArduinoController {
         }
     }
 
-    public  void sendSchedule(LocalTime localTime, int amount) {
+    public  void sendSchedule(LocalTime localTime, int amount, Feeder feeder) {
 //        List<Long> times = List.of((long)5000, (long)20000);
 //        List<Integer> amount = List.of(20, 20);
         int times = localTime.toSecondOfDay();
@@ -77,21 +67,24 @@ public class ArduinoController {
         // Define the request payload, if any
         String requestPayload = String.format("times=%s&amount=%s", times, amount).replace(" ","").replace("[","").replace("]","");
 
-        sendData(requestPayload);
+        sendData(requestPayload, feeder.getIp());
     }
 
     @Scheduled(cron = "0 0 0 * * *") // Runs every day at midnight
-    public static void zero() {
-        sendData("");
+    public void zero() {
+        feederService.findAll().forEach(feeder -> sendData("", feeder.getIp()));
     }
 
 
     @PostMapping("/IP")
     @ResponseBody
-    public String receiveIP(String address) {
+    public String receiveIP(String address, Long feederId) {
         // Log the received data
         logger.info("IP: {}", address);
-        ip = address;
+
+        Feeder feeder = feederService.findOrCreateById(feederId);
+        feeder.setIp(address);
+
 
         LocalTime date = LocalTime.now();
         System.out.println("Date = " + date);
@@ -117,13 +110,13 @@ public class ArduinoController {
         return String.valueOf(seconds);
     }
 
-    public static void feedNow( @RequestParam int amount) {
+    public static void feedNow( @RequestParam int amount, Feeder feeder) {
 
         String requestPayload = String.format("amount=%s", amount);
-        sendData(requestPayload);
+        sendData(requestPayload, feeder.getIp());
     }
 
-    private static void sendData(String payload) {
+    private static void sendData(String payload, String ip) {
         // Set headers
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

@@ -14,7 +14,7 @@ public class PetDataLog {
 
     // Many PetDataLogs can be associated with one Feeder
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "feeder_id") // Foreign key to Feeder
+//    @JoinColumn(name = "feeder_id") // Foreign key to Feeder
     private Feeder feeder;
 
     // Many PetDataLogs can be associated with one Pet

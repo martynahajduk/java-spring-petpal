@@ -3,7 +3,6 @@ package be.kdg.programming3.presentation;
 import be.kdg.programming3.domain.*;
 import be.kdg.programming3.service.*;
 import jakarta.servlet.http.HttpSession;
-import org.apache.catalina.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -11,9 +10,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
-import java.util.*;
 import java.time.LocalTime;
+import java.util.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -21,6 +19,8 @@ import java.util.Set;
 @Controller
 @RequestMapping
 public class MainController {
+
+    //TODO add meaningful logger messages everywhere
 
     private static final Logger logger = LoggerFactory.getLogger(MainController.class);
 
@@ -119,7 +119,6 @@ public class MainController {
 //        return petDataLogService.save(petDataLog);
 //    }
 
-    //! this should not be a post and a delete is not possible with HTML, only get and post
     @PostMapping("/data-logs/{id}")
     public PetDataLog getPetDataLohById(@PathVariable Long id) {return petDataLogService.getPetDataLogById(id);}
 
@@ -143,10 +142,15 @@ public class MainController {
     @GetMapping("/schedulecreation")
     public String showScheduleCreationPage(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        Feeder feeder = feederService.findById(user.getFeeder().getId());
-        model.addAttribute("feeders", feeder);
-        model.addAttribute("frequencies", FeedFrequency.values());
-        model.addAttribute("schedules", scheduleService.findSchedulesByFeederId(feeder.getId()));
+
+        Set<Feeder> feeders = new HashSet<>();
+        user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
+        model.addAttribute("feeders", feeders);
+        logger.debug("{}",feeders);
+
+        Map<Long, List<Schedule>> schedules = new HashMap<>();
+        feeders.forEach(feeder -> schedules.put(feeder.getId(), scheduleService.findSchedulesByFeederId(feeder.getId())));
+        model.addAttribute("schedules", schedules);
 
         model.addAttribute("daysOfWeek", DayOfWeek.values());
         model.addAttribute("scheduleObject", new Schedule());
@@ -154,7 +158,6 @@ public class MainController {
         return "schedule";
     }
 
-    //TODO change into view object and converter
     @PostMapping("/schedule/add")
     public String handleScheduleCreation(
             Schedule schedule,
@@ -204,25 +207,6 @@ public class MainController {
         return userService.findUserById(id);
     }
 
-    @PostMapping("/users/add")
-    public String addUser(@RequestBody User user) {
-        Feeder feeder = feederService.findById(user.getFeeder().getId());
-        logger.info("aaaaaa");
-
-        if (feeder == null) {
-            return "Feeder with ID " + user.getFeeder().getId() + " does not exist.";
-        }
-        user.setFeeder(feeder);
-
-        Pet pet = petService.findById(user.getPet().getId());
-        if (pet == null) {
-            return "Pet with ID " + user.getPet().getId() + " does not exist.";
-        }
-        user.setPet(pet);
-        userService.save(user);
-        return "User added successfully with Feeder ID: " + feeder.getId() + " and Pet ID: " + pet.getId();
-    }
-
     @GetMapping("/")
     public String showLoginRegisterPage(Model model) {
         List<User> users = userService.findAll();
@@ -250,21 +234,12 @@ public class MainController {
     public String registerUser(@RequestParam String name,
                                @RequestParam String email,
                                @RequestParam String password,
-                               @RequestParam(required = false) Long feederId,
                                Model model) {
-        Feeder feeder = null;
-
-        if (feederId != null) {
-            feeder = feederService.findById(feederId);
-        } else {
-            feeder = feederService.save(new Feeder());
-        }
 
         User newUser = new User();
         newUser.setName(name);
         newUser.setEmail(email);
         newUser.setPassword(password);
-        newUser.setFeeder(feeder);
 
         userService.save(newUser);
         model.addAttribute("success", "User registered successfully!");
@@ -274,16 +249,22 @@ public class MainController {
 
     @GetMapping("/petchoice")
     public String showPetChoicePage(Model model, HttpSession session) {
-User user = (User) session.getAttribute("user");
-Long userId = user.getId();
-Long feederId = user.getFeeder().getId();
+        User user = (User) session.getAttribute("user");
 
-        Pet pet = petService.getPetByUserId(user.getId()); // Modified `PetService` handles nulls
-        model.addAttribute("pets", pet);
+
+        Set<Pet> pets = petService.findPetsByUserId(user.getId()); // Modified `PetService` handles nulls
+        model.addAttribute("pets", pets);
 
 //        List<User> users = userService.findAll();
 
-        List<User> filteredUsers = userService.findUsersByFeederId(feederId);
+        //TODO move this to a service
+        List<User> filteredUsers = new ArrayList<>();
+        filteredUsers.add(user);
+        petService.findPetsByUserId(user.getId()).forEach(p -> {
+            Set<User> users = userService.findUsersByPet(p);
+            users.forEach(u -> {if (filteredUsers.stream().noneMatch(o -> Objects.equals(u.getId(), o.getId()))) filteredUsers.add(u);});
+        });
+
 
         model.addAttribute("users", filteredUsers);
 
@@ -294,6 +275,7 @@ Long feederId = user.getFeeder().getId();
     //TODO change into view object
     @PostMapping("/pets/add-form")
     public String addPet(@RequestParam String name,
+                         @RequestParam Long feederId,
                          @RequestParam LocalDate birthDate,
                          @RequestParam Breed animalType,
                          @RequestParam double petWeight,
@@ -302,21 +284,26 @@ Long feederId = user.getFeeder().getId();
                          Model model,
                          HttpSession session) {
 
-
-        Pet newPet = new Pet(name, birthDate, animalType, petWeight, sex,  new HashSet<>());
+        logger.debug("{}",feederId);
+        Feeder feeder = feederService.findOrCreateById(feederId);
+        logger.debug("{}", feeder);
+        Pet newPet = new Pet(name, feeder, birthDate, animalType, petWeight, sex, new HashSet<>());
+        feeder.setPet(newPet);
         newPet.setAgeWeeks(newPet.calculateAgeWeeks());
         petService.save(newPet);
         for (Long userId : userIds) {
             User user = userService.findUserById(userId);
             if (user != null) {
-                user.setPet(newPet);
+                user.addPet(newPet);
                 userService.save(user);
             }
         }
-        User userHttp = (User) session.getAttribute("user");
-        Pet pet = petService.getPetByUserId(userHttp.getId());
-        model.addAttribute("pets", pet);
-        return "petchoice";
+
+        User user = (User) session.getAttribute("user");
+        user.addPet(newPet);
+        session.setAttribute("user", user);
+
+        return "redirect:/petchoice";
     }
 
 
@@ -330,27 +317,48 @@ Long feederId = user.getFeeder().getId();
     public String showFeederPage(Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
 
-        Feeder feeder = feederService.findById(user.getFeeder().getId());
-        List<Schedule> schedules = scheduleService.findSchedulesByFeederId(feeder.getId());
+        Set<Feeder> feeders = new HashSet<>();
+        user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
+
+        Map<Long, List<Schedule>> schedules = new HashMap<>();
+        feeders.forEach(feeder -> schedules.put(feeder.getId(), scheduleService.findSchedulesByFeederId(feeder.getId())));
+
+        //get the reservoir level
+        Map<Long, Double> reservoirLevels = new HashMap<>();
+        feeders.forEach(feeder -> reservoirLevels.put(feeder.getId(), petDataLogService.getFoodLevelPercentage(feeder.getId())));
 
 
-        //get teh reservoir level
-        Double reservoirLevel = petDataLogService.getFoodLevelPercentage(feeder.getId());
+        Map<Long, Boolean> isFoodLevelLowMap = new HashMap<>();
+        feeders.forEach(feeder -> isFoodLevelLowMap.put(feeder.getId(), reservoirLevels.get(feeder.getId()) <= 20));
 
-        boolean isFoodLevelLow = reservoirLevel <= 20;
+        logger.debug("{}", schedules);
+        Map<Long, LocalTime> nextFeedingTimes = new HashMap<>();
+        schedules.forEach((key, value) -> nextFeedingTimes.put(key, value.stream().filter(s ->
+                switch (LocalDate.now().getDayOfWeek()) {
+                    case MONDAY -> s.isMonday();
+                    case TUESDAY -> s.isTuesday();
+                    case WEDNESDAY -> s.isWednesday();
+                    case THURSDAY -> s.isThursday();
+                    case FRIDAY -> s.isFriday();
+                    case SATURDAY -> s.isSaturday();
+                    case SUNDAY -> s.isSunday();
+                }
+        ).sorted(Comparator.comparing(Schedule::getTimeToFeed)).toList().getFirst().getTimeToFeed()));
+        model.addAttribute("nextFeedingTimes", nextFeedingTimes);
 
         model.addAttribute("pets", petService.findAll());
-        model.addAttribute("feeders", feeder);
+        model.addAttribute("feeders", feeders);
         model.addAttribute("schedules", schedules);
-        model.addAttribute("reservoirLevel", reservoirLevel);
-        model.addAttribute("isFoodLevelLow", isFoodLevelLow);
+        model.addAttribute("reservoirLevels", reservoirLevels);
+        model.addAttribute("isFoodLevelLows", isFoodLevelLowMap);
 
         return "feederpage";
     }
 
+    //TODO get the feeder
     @PostMapping("/feedNow")
-    public String feedNow( @RequestParam int amount) {
-        ArduinoController.feedNow(amount);
+    public String feedNow( @RequestParam int amount, Long feederId) {
+        ArduinoController.feedNow(amount, feederService.findById(feederId));
         return "redirect:/feederpage";
     }
 

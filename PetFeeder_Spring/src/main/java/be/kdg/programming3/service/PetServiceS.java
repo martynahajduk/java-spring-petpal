@@ -1,7 +1,6 @@
 package be.kdg.programming3.service;
 
 
-import be.kdg.programming3.domain.Breed;
 import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.User;
@@ -12,10 +11,10 @@ import be.kdg.programming3.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Service
 public class PetServiceS implements PetService {
@@ -32,7 +31,7 @@ public class PetServiceS implements PetService {
         this.userRepository = userRepository;
     }
 
-    public Integer getPetAgeWeeks(Pet pet) {
+    public Integer findPetAgeWeeks(Pet pet) {
         return pet.calculateAgeWeeks();
     }
 
@@ -55,32 +54,19 @@ public class PetServiceS implements PetService {
     }
 
     @Override
-    public User findRandUserByFeederId(Long id) {
+    public User findRandUserByPetId(Long id) {
         return userRepository.findAll().stream().
-                filter(u -> u.getFeeder().getId().equals(id))
+                filter(u -> !u.getPets().stream().filter(p -> p.getId().equals(id)).toList().isEmpty())
                 .findFirst().get();
     }
 
     @Override
-    public Feeder getFeederByUserId(Long userId) {
-        Feeder feederById;
-        if (userRepository.existsById(userId)) {
-            if(feederRepository.existsById((userRepository.findById(userId).get().getFeeder().getId()))) {
-               feederById  = feederRepository.findById((userRepository.findById(userId).get().getFeeder().getId())).get();
-            }else {
-                throw new NoSuchElementException();
-            }
-        }else {
-            throw new NoSuchElementException();
-        }
-        return feederById;
-    }
-    public Pet getPetByUserId(Long userId) {
+    public Set<Pet> findPetsByUserId(Long userId) {
         User user = userRepository.findById(userId).orElse(null); // Use optional to handle null
-        if (user == null || user.getPet() == null) {
+        if (user == null || user.getPets() == null) {
             return null; // Return null if no user or pet exists
         }
-        return user.getPet();
+        return user.getPets();
     }
 
 }

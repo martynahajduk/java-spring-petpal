@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 //concrete processor for processing the ArduinoSensorData
 //saves the data of sensors in database through FeederService
@@ -25,12 +26,11 @@ public class FeederDataProcessor extends DataProcessor {
 
     @Override
     public void saveToDatabase(PetPalData data, PetService petService) {
-        if (data instanceof ArduinoSensorData) {
-            ArduinoSensorData sensorData = (ArduinoSensorData) data;
-
+        if (data instanceof ArduinoSensorData sensorData) {
+            
             // Log the sensor data
 //            logger.info("BirthDate: {}", sensorData.)
-            Pet petto = petService.findRandUserByFeederId(sensorData.getId()).getPet();
+//            Set<Pet> petto = petService.findRandUserByFeederId(sensorData.getId()).getPets();
 //            petto.setPetWeight();
             logger.info("Processing Sensor Data for Feeder ID: {}", sensorData.getId());
             logger.info("Reservoir Height: {}", sensorData.getReservoirHeight());
@@ -49,9 +49,9 @@ public class FeederDataProcessor extends DataProcessor {
                 petDataLog.setBowlWeight(sensorData.getBowlWeight());
                 petDataLog.setPetWeight(sensorData.getPetWeight());
                 petDataLog.setFeeder(sensorData.getFeeder());
-                petDataLog.setBreed(petto.getAnimalType());
-                petDataLog.setAgeWeeks(petto.calculateAgeWeeks());
-                petDataLog.setSex(petto.getSex());
+//                petDataLog.setBreed(petto.getAnimalType());
+//                petDataLog.setAgeWeeks(petto.calculateAgeWeeks());
+//                petDataLog.setSex(petto.getSex());
 
 
                 petDataLog.setTimestamp(LocalDateTime.now());

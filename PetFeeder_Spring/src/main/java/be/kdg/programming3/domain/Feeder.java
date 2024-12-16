@@ -1,6 +1,7 @@
 package be.kdg.programming3.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.Check;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -21,16 +22,28 @@ public class Feeder {
     @OneToMany(mappedBy = "feeder", fetch = FetchType.EAGER)
     private Set<PetDataLog> petDataLogs;
 
+    @OneToOne
+    private Pet pet;
+
+    private String ip;
+
 
 
     public Feeder() {}
 
-    public Feeder(double reservoirLevel , double bowlWeight,double petWeight,Long id) {
-
+    public Feeder(Long id) {
         this.id= id;
-
     }
 
+    public Feeder(Pet pet, Long id) {
+        this.pet = pet;
+        this.id = id;
+    }
+
+    public Feeder(String ip, Long id) {
+        this.ip = ip;
+        this.id = id;
+    }
 
 
     public Long getId() {
@@ -49,7 +62,21 @@ public class Feeder {
         this.petDataLogs = petDataLogs;
     }
 
+    public Pet getPet() {
+        return pet;
+    }
 
+    public void setPet(Pet pet) {
+        this.pet = pet;
+    }
+
+    public String getIp() {
+        return ip;
+    }
+
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
 
     @Override
     public String toString() {

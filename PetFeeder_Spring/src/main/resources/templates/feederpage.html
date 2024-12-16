@@ -18,42 +18,57 @@
             <i class="bi bi-info-square fs-4" style="color: #F27244;"></i>
         </button>
     </h1>
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <h3 class="card-title" style="color: #F27244;">Reservoir Level</h3>
-            <h5 class="card-title" th:text="'Feeder id: ' + ${feeders}"></h5>
-            <div class="progress mb-3">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
-                     th:style="'width: ' + ${reservoirLevel} + '%'" aria-valuenow="${reservoirLevel}" aria-valuemin="0" aria-valuemax="10">
-                    <span th:text="${reservoirLevel} + '%'"></span>
+    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
+        <div class="carousel-inner p-3">
+            <div class="carousel-item active" th:each="feeder : ${feeders}">
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #F27244;">Reservoir Level</h3>
+                        <h5 class="card-title" th:text="'Feeder id: ' + ${feeder}"></h5>
+                        <div class="progress mb-3">
+                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
+                                 th:style="'width: ' + ${reservoirLevels.get(feeder.getId())} + '%'" aria-valuenow="${reservoirLevel}" aria-valuemin="0" aria-valuemax="10">
+                                <span th:text="${reservoirLevels.get(feeder.getId())} + '%'"></span>
+                            </div>
+                        </div>
+                        <div th:if="${isFoodLevelLows.get(feeder.getId())}" class="alert alert-danger" role="alert">
+                            <strong>Warning!</strong> Food level is low. Please refill the reservoir.
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body">
+                        <h3 class="card-title" style="color: #F27244;">Current Schedule</h3>
+                        <p><strong>Next Feeding:</strong> <span th:text="${nextFeedingTimes.get(feeder.getId())}"></span></p>
+                        <div class="text-start">
+                            <a href="/schedulecreation" class="btn" style="background-color: #F27244; color: white;">Change Feeding Schedule</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card border-0 shadow-sm mb-4">
+                    <div class="card-body text-start">
+                        <h3 class="card-title" style="color: #F27244;">Distribute Food Now</h3>
+                        <form th:action="@{/feedNow}" method="post">
+                            <div class="mb-3">
+                                <label for="feedNow" class="form-label">Choose Amount to Feed</label>
+                                <input type="number" id="feedNow" name="amount" required class="form-control" min="1">
+                            </div>
+                            <button type="submit" class="btn" style="background-color: #F27244; color: white;">Feed Now</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-            <div th:if="${isFoodLevelLow}" class="alert alert-danger" role="alert">
-                <strong>Warning!</strong> Food level is low. Please refill the reservoir.
-            </div>
         </div>
     </div>
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <h3 class="card-title" style="color: #F27244;">Current Schedule</h3>
-            <p><strong>Next Feeding:</strong> <span th:text="${schedules.get(0).timeToFeed}"></span></p>
-            <div class="text-start">
-                <a href="/schedulecreation" class="btn" style="background-color: #F27244; color: white;">Change Feeding Schedule</a>
-            </div>
-        </div>
-    </div>
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body text-start">
-            <h3 class="card-title" style="color: #F27244;">Distribute Food Now</h3>
-            <form th:action="@{/feedNow}" method="post">
-                <div class="mb-3">
-                    <label for="feedNow" class="form-label">Choose Amount to Feed</label>
-                    <input type="number" id="feedNow" name="amount" required class="form-control" min="1">
-                </div>
-                <button type="submit" class="btn" style="background-color: #F27244; color: white;">Feed Now</button>
-            </form>
-        </div>
-    </div>
+    <button class="carousel-control-prev position-absolute start-0" style="filter: invert(100%);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next position-absolute end-0" style="filter: invert(100%);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="false"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+
 </div>
 
 <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">

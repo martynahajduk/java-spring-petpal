@@ -17,7 +17,7 @@
         <div class="col-md-4">
             <h3 class="mb-4">Available Pet Breeds</h3>
             <ul class="list-group">
-                <li th:each="breed : ${breeds}" class="list-group-item">
+                <li th:each="breed : ${breeds}" class="list-group-item" th:style="${selectedBreed==breed ? 'background-color:PeachPuff' : 'background-color:none'}">
                     <a href="#" th:href="@{/breed/{breed}(breed=${breed})}" th:text="${breed.properName}" style="text-decoration: none; color: black"></a>
                 </li>
             </ul>
