@@ -18,7 +18,7 @@
         <button class="btn btn-success m-2" onclick="fetchFoodIntakeTrend()">Food Intake Trend</button>
         <button class="btn btn-info m-2" onclick="fetchScatterPlot()">Scatter Plot</button>
         <button class="btn btn-warning m-2" onclick="fetchBarChart()">Bar Chart</button>
-        <button class="btn btn-danger m-2" onclick="fetchHeatmap()">Heatmap</button>
+        <button class="btn btn-danger m-2" onclick="fetchHistogram()">Histogram</button>
     </div>
 
     <!-- Graph Container -->
@@ -72,9 +72,9 @@
         fetchGraph('/api/visualize', 'Bar Chart', 'bar_chart_base64', 'bar_chart_conclusion');
     }
 
-    // Fetch Heatmap
-    function fetchHeatmap() {
-        fetchGraph('/api/visualize', 'Heatmap', 'heatmap_base64', 'heatmap_conclusion');
+    // Fetch Histogram
+    function fetchHistogram() {
+        fetchGraph('/api/visualize', 'Histogram', 'food_intake_histogram_base64', 'food_intake_histogram_conclusion');
     }
 
     // Generic Function to Fetch and Display Graphs with Conclusions
