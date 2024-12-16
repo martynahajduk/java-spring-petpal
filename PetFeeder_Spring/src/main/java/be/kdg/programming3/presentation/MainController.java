@@ -365,10 +365,10 @@ public class MainController {
     }
 
     @GetMapping("/healthtracker")
-    public String showHealthPage(Model model) {
-//        if (!isSessionValid(session)) {
-//            throw new SessionExpiredException("User session has expired.");
-//        }
+    public String showHealthPage(Model model, HttpSession session) {
+        if (!isSessionValid(session)) {
+            throw new SessionExpiredException("User session has expired.");
+        }
         List<Pet> pets = petService.findAll();
         List<PetDataLog> petdatalogs = petDataLogService.findAll();
         model.addAttribute("pets", petService.findAll());
