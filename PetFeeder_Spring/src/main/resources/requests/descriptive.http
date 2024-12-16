@@ -1,6 +1,6 @@
-### GET request to example server
-POST http://localhost:80/api/descriptive
-Content-Type: application/json
+#### GET request to example server
+#POST http://localhost:80/api/descriptive
+#Content-Type: application/json
 
 
 [
