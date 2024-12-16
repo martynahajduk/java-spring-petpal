@@ -36,6 +36,9 @@ public class FeederServiceImpl implements FeederService {
     public void deleteById(Long id) {
         feederRepository.deleteById(id);
     }
+    public Feeder findByPetId(Long petId) {
+        return feederRepository.findByPetId(petId);
+    }
 
 }
 

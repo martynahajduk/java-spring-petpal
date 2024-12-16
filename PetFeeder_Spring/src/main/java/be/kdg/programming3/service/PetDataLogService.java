@@ -1,7 +1,6 @@
 package be.kdg.programming3.service;
 
 import be.kdg.programming3.domain.PetDataLog;
-import be.kdg.programming3.domain.PetDataLog;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,7 +14,8 @@ public interface PetDataLogService {
     List<PetDataLog> getAllLogs();
 
     //Calculate food left in the reservoir in Percentage
-    Double getFoodLevelPercentage(Long petDataLogId);
+    Double getFoodLevelPercentageById(Long feederId);
+    List<PetDataLog> findAllByFeederId(Long feederId);
 
     String getRealDataAsJson();
 }

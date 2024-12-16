@@ -1,5 +1,6 @@
 package be.kdg.programming3.presentation;
 
+import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.PetDataLog;
 import be.kdg.programming3.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,12 +27,14 @@ public class PredictionController {
     private final ResearchDataService researchDataService;
     private final ObjectMapper objectMapper;
     private final ImageProcessorServiceIntf imageProcessorServiceIntf;
+    private final FeederService feederService;
 
-    public PredictionController(PetDataLogService petDataLogService, ResearchDataService researchDataService, ObjectMapper objectMapper, ImageProcessorServiceIntf imageProcessorServiceIntf) {
+    public PredictionController(PetDataLogService petDataLogService, ResearchDataService researchDataService, ObjectMapper objectMapper, ImageProcessorServiceIntf imageProcessorServiceIntf, FeederService feederService) {
         this.petDataLogService = petDataLogService;
         this.researchDataService = researchDataService;
         this.objectMapper = objectMapper;
         this.imageProcessorServiceIntf = imageProcessorServiceIntf;
+        this.feederService = feederService;
     }
 
     @PostMapping("/train")
@@ -47,9 +50,26 @@ public class PredictionController {
         }
     }
 
-    @PostMapping("/visualize")
-    public ResponseEntity<Map<String, Object>> visualizeData() {
+    @PostMapping("/visualize/{id}")
+    public ResponseEntity<Map<String, Object>> visualizeData(@PathVariable int id) {
         try {
+
+            Map<Long, List<PetDataLog>> petDataMap = new HashMap<>();
+            for (Feeder feeder : feederService.findAll()) {
+                petDataMap.put(feeder.getId(), petDataLogService.findAllByFeederId(feeder.getId()));
+            }
+
+            Map<Long, List<Map<String, Object>>> transformedRealDataMap = new HashMap<>();
+            for (Map.Entry<Long, List<PetDataLog>> entry : petDataMap.entrySet()) {
+                transformedRealDataMap.put(entry.getKey(), entry.getValue().stream().map(pet -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("age_weeks", pet.getAgeWeeks());
+                    map.put("pet_weight", pet.getPetWeight());
+                    map.put("food_intake", pet.getBowlWeight()); // Rename bowl_weight -> food_intake
+                    return map;
+                }).toList());
+            }
+
             // Fetch real pet data from the database
             List<PetDataLog> petData = petDataLogService.findAll();
 
@@ -66,7 +86,7 @@ public class PredictionController {
 
             // Create payload to send to Flask
             Map<String, Object> payload = new HashMap<>();
-            payload.put("real_data", transformedRealData);
+            payload.put("real_data", transformedRealDataMap);
 
             // Send payload to Flask server
             HttpHeaders headers = new HttpHeaders();
@@ -74,7 +94,7 @@ public class PredictionController {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
             ResponseEntity<Map> response = restTemplate.postForEntity(
-                    pythonServerURL + "/api/visualize", request, Map.class);
+                    pythonServerURL + "/api/visualize/"+id, request, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 Map<String, Object> responseBody = response.getBody();
@@ -97,6 +117,32 @@ public class PredictionController {
     @PostMapping("/descriptive")
     public ResponseEntity<String> makeDescriptiveGraphs() {
         try {
+
+            Map<Long, List<PetDataLog>> petDataMap = new HashMap<>();
+            for (Feeder feeder : feederService.findAll()) {
+                petDataMap.put(feeder.getId(), petDataLogService.findAllByFeederId(feeder.getId()));
+            }
+
+            Map<Long, List<Map<String, Object>>> transformedRealDataMap = new HashMap<>();
+            for (Map.Entry<Long, List<PetDataLog>> entry : petDataMap.entrySet()) {
+                transformedRealDataMap.put(entry.getKey(), entry.getValue().stream().map(pet -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("age_weeks", pet.getAgeWeeks());
+                    map.put("pet_weight", pet.getPetWeight());
+                    map.put("food_intake", pet.getBowlWeight()); // Rename bowl_weight -> food_intake
+                    return map;
+                }).toList());
+            }
+
+            petDataMap.forEach((key,value) ->
+                value.stream().map(pet -> {
+                    Map<String, Object> map = new HashMap<>();
+                    map.put("age_weeks", pet.getAgeWeeks());
+                    map.put("pet_weight", pet.getPetWeight());
+                    map.put("food_intake", pet.getBowlWeight()); // Rename bowl_weight -> food_intake
+                    return map;
+                }));
+
             // Fetch real data
             List<PetDataLog> petData = petDataLogService.findAll();
 
@@ -112,7 +158,7 @@ public class PredictionController {
                     .collect(Collectors.toList());
 
             // Convert to JSON string
-            String descriptive = objectMapper.writeValueAsString(transformedRealData);
+            String descriptive = objectMapper.writeValueAsString(transformedRealDataMap);
 
             // Send HTTP request to Python API
             HttpHeaders headers = new HttpHeaders();

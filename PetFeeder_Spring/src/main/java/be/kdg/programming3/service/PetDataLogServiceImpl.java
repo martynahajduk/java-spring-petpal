@@ -42,10 +42,14 @@ public class PetDataLogServiceImpl implements PetDataLogService {
     }
 
     @Override
-    public Double getFoodLevelPercentage(Long petDataLogId) {
-        PetDataLog latestLog = petDataLogRepository.findLatestLog();
-        Double percentage =  (latestLog.getReservoirHeight()) * 100;
+    public Double getFoodLevelPercentageById(Long feederId) {
+        PetDataLog latestLog = petDataLogRepository.findLatestByFeederId(feederId);
+        double percentage =  (latestLog.getReservoirHeight()) * 100;
         return (double) Math.round(percentage);
+    }
+
+    public List<PetDataLog> findAllByFeederId(Long feederId) {
+        return petDataLogRepository.findAllByFeederId(feederId);
     }
 
     @Override

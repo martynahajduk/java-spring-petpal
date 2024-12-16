@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoField;
 import java.util.*;
 import java.time.LocalTime;
 import java.util.HashSet;
@@ -355,7 +354,7 @@ public class MainController {
 
         //get the reservoir level
         Map<Long, Double> reservoirLevels = new HashMap<>();
-        feeders.forEach(feeder -> reservoirLevels.put(feeder.getId(), petDataLogService.getFoodLevelPercentage(feeder.getId())));
+        feeders.forEach(feeder -> reservoirLevels.put(feeder.getId(), petDataLogService.getFoodLevelPercentageById(feeder.getId())));
 
 
         Map<Long, Boolean> isFoodLevelLowMap = new HashMap<>();
@@ -392,14 +391,17 @@ public class MainController {
     }
 
     @GetMapping("/healthtracker")
-    public String showHealthPage(Model model) {
+    public String showHealthPage(Model model, HttpSession session) {
 //        if (!isSessionValid(session)) {
 //            throw new SessionExpiredException("User session has expired.");
 //        }
-        List<Pet> pets = petService.findAll();
-        List<PetDataLog> petdatalogs = petDataLogService.findAll();
-        model.addAttribute("pets", petService.findAll());
-        model.addAttribute("petdatalogs", petDataLogService.findAll());
+
+        User user = (User) session.getAttribute("user");
+
+        List<Feeder> feeders = new ArrayList<>();
+        petService.findPetsByUserId(user.getId()).forEach(pet -> feeders.add(feederService.findByPetId(pet.getId())));
+
+        model.addAttribute("feeders", feeders);
         return "healthtracker";
     }
 

@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface FeederRepository extends JpaRepository<Feeder, Long> {
-
+    Feeder findByPetId(Long petId);
 }
