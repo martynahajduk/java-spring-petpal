@@ -1,6 +1,7 @@
 package be.kdg.programming3.presentation;
 
 import be.kdg.programming3.domain.*;
+import be.kdg.programming3.exceptions.SessionExpiredException;
 import be.kdg.programming3.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.apache.catalina.Session;
@@ -142,6 +143,9 @@ public class MainController {
 
     @GetMapping("/schedulecreation")
     public String showScheduleCreationPage(Model model, HttpSession session) {
+        if (!isSessionValid(session)) {
+            throw new SessionExpiredException("User session has expired.");
+        }
         User user = (User) session.getAttribute("user");
         Feeder feeder = feederService.findById(user.getFeeder().getId());
         model.addAttribute("feeders", feeder);
@@ -274,9 +278,12 @@ public class MainController {
 
     @GetMapping("/petchoice")
     public String showPetChoicePage(Model model, HttpSession session) {
-User user = (User) session.getAttribute("user");
-Long userId = user.getId();
-Long feederId = user.getFeeder().getId();
+        if (!isSessionValid(session)) {
+            throw new SessionExpiredException("User session has expired.");
+        }
+        User user = (User) session.getAttribute("user");
+        Long userId = user.getId();
+        Long feederId = user.getFeeder().getId();
 
         Pet pet = petService.getPetByUserId(user.getId()); // Modified `PetService` handles nulls
         model.addAttribute("pets", pet);
@@ -328,6 +335,9 @@ Long feederId = user.getFeeder().getId();
 
     @GetMapping("/feederpage")
     public String showFeederPage(Model model, HttpSession session) {
+        if (!isSessionValid(session)) {
+            throw new SessionExpiredException("User session has expired.");
+        }
         User user = (User) session.getAttribute("user");
 
         Feeder feeder = feederService.findById(user.getFeeder().getId());
@@ -356,6 +366,9 @@ Long feederId = user.getFeeder().getId();
 
     @GetMapping("/healthtracker")
     public String showHealthPage(Model model) {
+//        if (!isSessionValid(session)) {
+//            throw new SessionExpiredException("User session has expired.");
+//        }
         List<Pet> pets = petService.findAll();
         List<PetDataLog> petdatalogs = petDataLogService.findAll();
         model.addAttribute("pets", petService.findAll());
@@ -389,6 +402,10 @@ Long feederId = user.getFeeder().getId();
     @GetMapping("/team")
     public String showTeam(Model model) {
         return "team";
+    }
+
+    private boolean isSessionValid(HttpSession session) {
+        return session.getAttribute("user") != null;
     }
 
 }
