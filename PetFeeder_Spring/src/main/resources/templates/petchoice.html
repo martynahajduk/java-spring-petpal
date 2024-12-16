@@ -5,10 +5,22 @@
     <title>Pet Choice</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body>
 <header th:insert="~{navbar.html}"></header>
 <div class="container mt-5 pb-5">
+    <div class="row justify-content-center mb-3">
+        <div class="col-12 text-center">
+            <h1 class="d-flex align-items-center justify-content-center">
+                <span>Your Pet</span>
+                <button type="button" class="btn btn-sm btn-transparent ms-2" data-bs-toggle="modal" data-bs-target="#infoModal">
+                    <i class="bi bi-info-square fs-4" style="color: #F27244;"></i>
+                </button>
+            </h1>
+        </div>
+    </div>
+
     <div class="row justify-content-between">
         <div class="col-12 col-md-5 mb-4 pb-5">
             <div class="card rounded-4 bg-light shadow-lg">
@@ -33,7 +45,6 @@
                                 <option>Male</option>
                                 <option>Female</option>
                             </select>
-
                         </div>
                         <div class="mb-3">
                             <label for="animalType" class="form-label">Animal Type</label>
@@ -61,7 +72,6 @@
             </div>
         </div>
         <div class="col-12 col-md-6 mb-4">
-            <h3 class="mb-3">Your Pets</h3>
             <div class="row">
                 <div th:if="${pets == null}">
                     <p>No pets found. Add a new pet to get started!</p>
@@ -69,7 +79,6 @@
                 <div class="col-12 col-md-6 mb-4" th:each="pet : ${pets}">
                     <div class="card rounded-4 bg-light shadow-lg">
                         <div class="card-body d-flex">
-                            <div class="rounded-circle" style="width: 5rem; height: 5rem; background-color: #ddd;"></div>
                             <div class="d-flex flex-column ms-3">
                                 <h4 class="mb-1"><strong>Name:</strong> <span th:text="${pet.name}"></span></h4>
                                 <p class="mb-1"><strong>Birthday:</strong> <span th:text="${pet.birthDate}"></span></p>
@@ -84,6 +93,30 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Add New Pet</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>This page allows you to add a new pet to the system. Enter the pet's name, birthday, sex, type, weight, and assign users to the pet. Once you have filled in the details, click on "Add Pet" to save.</p>
+                <p><strong>Pet Name:</strong> The name of your pet.</p>
+                <p><strong>Pet's Birthday:</strong> The birth date of your pet (more or less, no worries).</p>
+                <p><strong>Sex:</strong> Choose the sex of your pet.</p>
+                <p><strong>Animal Type:</strong> Choose the breed of your hamster</p>
+                <p><strong>Weight:</strong> Enter the pet's weight in grams.</p>
+                <p><strong>Assign Users:</strong> Assign users who are responsible for the pet.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <footer th:insert="~{footer.html}"></footer>
 </body>
 </html>

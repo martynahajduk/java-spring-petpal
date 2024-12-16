@@ -1,6 +1,7 @@
 package be.kdg.programming3.presentation;
 
 import be.kdg.programming3.domain.*;
+import be.kdg.programming3.exceptions.SessionExpiredException;
 import be.kdg.programming3.service.*;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -10,8 +11,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.temporal.ChronoField;
 import java.util.*;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -141,6 +143,9 @@ public class MainController {
 
     @GetMapping("/schedulecreation")
     public String showScheduleCreationPage(Model model, HttpSession session) {
+        if (!isSessionValid(session)) {
+            throw new SessionExpiredException("User session has expired.");
+        }
         User user = (User) session.getAttribute("user");
 
         Set<Feeder> feeders = new HashSet<>();
@@ -207,6 +212,25 @@ public class MainController {
         return userService.findUserById(id);
     }
 
+//    @PostMapping("/users/add")
+//    public String addUser(@RequestBody User user) {
+//        Feeder feeder = feederService.findById(user.getFeeder().getId());
+//        logger.info("aaaaaa");
+//
+//        if (feeder == null) {
+//            return "Feeder with ID " + user.getFeeder().getId() + " does not exist.";
+//        }
+//        user.setFeeder(feeder);
+//
+//        Pet pet = petService.findById(user.getPet().getId());
+//        if (pet == null) {
+//            return "Pet with ID " + user.getPet().getId() + " does not exist.";
+//        }
+//        user.setPet(pet);
+//        userService.save(user);
+//        return "User added successfully with Feeder ID: " + feeder.getId() + " and Pet ID: " + pet.getId();
+//    }
+
     @GetMapping("/")
     public String showLoginRegisterPage(Model model) {
         List<User> users = userService.findAll();
@@ -249,6 +273,9 @@ public class MainController {
 
     @GetMapping("/petchoice")
     public String showPetChoicePage(Model model, HttpSession session) {
+        if (!isSessionValid(session)) {
+            throw new SessionExpiredException("User session has expired.");
+        }
         User user = (User) session.getAttribute("user");
 
 
@@ -315,6 +342,9 @@ public class MainController {
 
     @GetMapping("/feederpage")
     public String showFeederPage(Model model, HttpSession session) {
+        if (!isSessionValid(session)) {
+            throw new SessionExpiredException("User session has expired.");
+        }
         User user = (User) session.getAttribute("user");
 
         Set<Feeder> feeders = new HashSet<>();
@@ -355,7 +385,6 @@ public class MainController {
         return "feederpage";
     }
 
-    //TODO get the feeder
     @PostMapping("/feedNow")
     public String feedNow( @RequestParam int amount, Long feederId) {
         ArduinoController.feedNow(amount, feederService.findById(feederId));
@@ -364,6 +393,9 @@ public class MainController {
 
     @GetMapping("/healthtracker")
     public String showHealthPage(Model model) {
+//        if (!isSessionValid(session)) {
+//            throw new SessionExpiredException("User session has expired.");
+//        }
         List<Pet> pets = petService.findAll();
         List<PetDataLog> petdatalogs = petDataLogService.findAll();
         model.addAttribute("pets", petService.findAll());
@@ -397,6 +429,10 @@ public class MainController {
     @GetMapping("/team")
     public String showTeam(Model model) {
         return "team";
+    }
+
+    private boolean isSessionValid(HttpSession session) {
+        return session.getAttribute("user") != null;
     }
 
 }

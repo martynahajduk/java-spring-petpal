@@ -1,0 +1,21 @@
+### GET request to example server
+POST http://localhost:80/api/descriptive
+Content-Type: application/json
+
+
+[
+  {"age_weeks": 4, "pet_weight": 10.9, "bowl_weight": 1.2},
+  {"age_weeks": 5, "pet_weight": 12.3, "bowl_weight": 1.6},
+  {"age_weeks": 6, "pet_weight": 15.2, "bowl_weight": 2.23},
+  {"age_weeks": 7, "pet_weight": 14.9, "bowl_weight": 2.1},
+  {"age_weeks": 8, "pet_weight": 18.1, "bowl_weight": 2.7},
+  {"age_weeks": 9, "pet_weight": 21.2, "bowl_weight": 3.0},
+  {"age_weeks": 10, "pet_weight": 23, "bowl_weight": 2.84},
+  {"age_weeks": 11, "pet_weight": 22.5, "bowl_weight": 2.9},
+  {"age_weeks": 12, "pet_weight": 23.2, "bowl_weight": 3.0},
+  {"age_weeks": 13, "pet_weight": 24.1, "bowl_weight": 2.8},
+  {"age_weeks": 14, "pet_weight": 24.6, "bowl_weight": 2.9},
+  {"age_weeks": 15, "pet_weight": 25.5, "bowl_weight": 3.2},
+  {"age_weeks": 16, "pet_weight": 27, "bowl_weight": 3.4}
+]
+
