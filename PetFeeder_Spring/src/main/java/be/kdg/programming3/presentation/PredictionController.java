@@ -51,27 +51,10 @@ public class PredictionController {
     }
 
     @PostMapping("/visualize/{id}")
-    public ResponseEntity<Map<String, Object>> visualizeData(@PathVariable int id) {
+    public ResponseEntity<Map<String, Object>> visualizeData(@PathVariable long id) {
         try {
-
-            Map<Long, List<PetDataLog>> petDataMap = new HashMap<>();
-            for (Feeder feeder : feederService.findAll()) {
-                petDataMap.put(feeder.getId(), petDataLogService.findAllByFeederId(feeder.getId()));
-            }
-
-            Map<Long, List<Map<String, Object>>> transformedRealDataMap = new HashMap<>();
-            for (Map.Entry<Long, List<PetDataLog>> entry : petDataMap.entrySet()) {
-                transformedRealDataMap.put(entry.getKey(), entry.getValue().stream().map(pet -> {
-                    Map<String, Object> map = new HashMap<>();
-                    map.put("age_weeks", pet.getAgeWeeks());
-                    map.put("pet_weight", pet.getPetWeight());
-                    map.put("food_intake", pet.getBowlWeight()); // Rename bowl_weight -> food_intake
-                    return map;
-                }).toList());
-            }
-
             // Fetch real pet data from the database
-            List<PetDataLog> petData = petDataLogService.findAll();
+            List<PetDataLog> petData = petDataLogService.findAllByFeederId(id);
 
             // Transform PetDataLog to include only numeric fields
             List<Map<String, Object>> transformedRealData = petData.stream()
@@ -86,7 +69,7 @@ public class PredictionController {
 
             // Create payload to send to Flask
             Map<String, Object> payload = new HashMap<>();
-            payload.put("real_data", transformedRealDataMap);
+            payload.put("real_data", transformedRealData);
 
             // Send payload to Flask server
             HttpHeaders headers = new HttpHeaders();
@@ -94,7 +77,7 @@ public class PredictionController {
             HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
 
             ResponseEntity<Map> response = restTemplate.postForEntity(
-                    pythonServerURL + "/api/visualize/"+id, request, Map.class);
+                    pythonServerURL + "/api/visualize", request, Map.class);
 
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 Map<String, Object> responseBody = response.getBody();
