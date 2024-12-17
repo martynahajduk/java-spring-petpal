@@ -67,24 +67,21 @@ public class PredictionController {
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 Map<String, Object> graphsData = response.getBody();
 
-                // Debug вывод для проверки ответа от Python-сервера
+                // Debug
                 System.out.println("Response from Python Server: " + graphsData);
 
-                // Сохранение графиков
                 saveGraph(graphsData, "growth_trend_base64", "./static/plots/growth_trend.png", model, "growthTrendPath");
                 saveGraph(graphsData, "food_intake_trend_base64", "./static/plots/food_intake_trend.png", model, "foodIntakeTrendPath");
                 saveGraph(graphsData, "scatter_plot_base64", "./static/plots/scatter_plot.png", model, "scatterPlotPath");
                 saveGraph(graphsData, "bar_chart_base64", "./static/plots/bar_chart.png", model, "barChartPath");
                 saveGraph(graphsData, "histogram_base64", "./static/plots/histogram.png", model, "histogramPath");
 
-                // Добавление заключений
                 model.addAttribute("growthTrendConclusion", graphsData.getOrDefault("growth_trend_conclusion", "No conclusion available"));
                 model.addAttribute("foodIntakeTrendConclusion", graphsData.getOrDefault("food_intake_trend_conclusion", "No conclusion available"));
                 model.addAttribute("scatterPlotConclusion", graphsData.getOrDefault("scatter_plot_conclusion", "No conclusion available"));
                 model.addAttribute("barChartConclusion", graphsData.getOrDefault("bar_chart_conclusion", "No conclusion available"));
                 model.addAttribute("histogramConclusion", graphsData.getOrDefault("histogram_conclusion", "No conclusion available"));
 
-                // Обработка аномалий
                 processAnomalies(graphsData, "growth_anomalies", model, "growthAnomalies");
                 processAnomalies(graphsData, "food_anomalies", model, "foodAnomalies");
             }
