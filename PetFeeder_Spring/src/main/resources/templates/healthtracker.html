@@ -1,127 +1,101 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Health Tracker Predictions</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css"/>
 </head>
 <body>
-<header th:insert="~{navbar.html}"></header>
+<div class="container mt-5">
+    <!-- Page Title -->
+    <h1 class="text-center mb-4">Health Tracker Predictions</h1>
 
-<main class="container mt-5">
-    <h1 class="text-center mb-4">Health Tracker</h1>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
-        <div class="carousel-inner p-3">
-            <div class="carousel-item active" th:each="feeder : ${feeders}">
-                <!-- Buttons to Fetch Different Graphs -->
-                <div class="text-center mb-4">
-                    <button class="btn btn-primary m-2" th:onclick="'fetchGrowthTrend('  + ${feeder.getId()} +  ');'">Growth Trend</button>
-                    <button class="btn btn-success m-2" th:onclick="'fetchFoodIntakeTrend('  + ${feeder.getId()} +  ');'">Food Intake Trend</button>
-                    <button class="btn btn-info m-2" th:onclick="'fetchScatterPlot('  + ${feeder.getId()} +  ');'">Scatter Plot</button>
-                    <button class="btn btn-warning m-2" th:onclick="'fetchBarChart('  + ${feeder.getId()} +  ');'">Bar Chart</button>
-                    <button class="btn btn-danger m-2" th:onclick="'fetchHeatmap('  + ${feeder.getId()} +  ');'">Heatmap</button>
-                </div>
-
-                <!-- Graph Container -->
-                <div id="graph-container" class="text-center mt-4">
-                    <h3 class="graph-title">Click a Button to Display a Graph</h3>
-                    <img class="img-fluid mt-3 graph-image" alt="Graph will display here" style="max-width: 80%;"/>
-                </div>
-
-                <!-- Health Assessment Section -->
-                <div id="health-assessment" class="mt-5">
-                    <h2>Health Assessment</h2>
-                    <h3>Verdict</h3>
-                    <table class="table table-bordered table-striped mt-3">
-                        <thead>
-                        <tr>
-                            <th>Age (Weeks)</th>
-                            <th>Health Status</th>
-                        </tr>
-                        </thead>
-                        <tbody id="verdict-table-body">
-                        <tr>
-                            <td colspan="2" class="text-center text-danger">No verdict data available.</td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+    <!-- Buttons to Switch Between Graphs -->
+    <div class="text-center mb-4">
+        <button class="btn btn-primary" onclick="showGraph('growth')">Growth Trend</button>
+        <button class="btn btn-success" onclick="showGraph('foodIntake')">Food Intake Trend</button>
+        <button class="btn btn-info" onclick="showGraph('scatter')">Scatter Plot</button>
+        <button class="btn btn-warning" onclick="showGraph('barChart')">Bar Chart</button>
+        <button class="btn btn-danger" onclick="showGraph('histogram')">Histogram</button>
     </div>
-    <button class="carousel-control-prev position-absolute start-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="false"></span>
-        <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next position-absolute end-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="false"></span>
-        <span class="visually-hidden">Next</span>
-    </button>
 
-</main>
+    <!-- Verdict Section -->
+    <div class="alert alert-info text-center"
+         th:if="${growthTrendConclusion != null and not #strings.isEmpty(growthTrendConclusion)} or
+                ${foodIntakeTrendConclusion != null and not #strings.isEmpty(foodIntakeTrendConclusion)}">
+        <h3>Overall Verdict</h3>
+        <p th:if="${growthTrendConclusion != null and not #strings.isEmpty(growthTrendConclusion)}"
+           th:text="${growthTrendConclusion}">Default Growth Conclusion</p>
+        <p th:if="${foodIntakeTrendConclusion != null and not #strings.isEmpty(foodIntakeTrendConclusion)}"
+           th:text="${foodIntakeTrendConclusion}">Default Food Intake Conclusion</p>
+    </div>
 
-<footer th:insert="~{footer.html}" class="mt-5"></footer>
+    <!-- Growth Anomalies -->
+    <div class="alert alert-warning" th:if="${not #lists.isEmpty(growthAnomalies)}">
+        <h3>Growth Trend Anomalies</h3>
+        <ul>
+            <li th:each="anomaly : ${growthAnomalies}">
+                Week: <span th:text="${anomaly.week}"></span> |
+                Expected Weight: <span th:text="${anomaly.expected_weight}"></span> |
+                Actual Weight: <span th:text="${anomaly.actual_weight}"></span> |
+                Deviation: <span th:text="${anomaly.deviation}"></span>%
+            </li>
+        </ul>
+    </div>
 
-<!-- JavaScript -->
-<script>
-    // Fetch Growth Trend Graph
-    function fetchGrowthTrend(id) {
-        fetchGraph(`/api/visualize/${id}`, 'Growth Trend', 'growth_trend_base64');
-    }
+    <!-- Food Intake Anomalies -->
+    <div class="alert alert-warning" th:if="${not #lists.isEmpty(foodAnomalies)}">
+        <h3>Food Intake Trend Anomalies</h3>
+        <ul>
+            <li th:each="anomaly : ${foodAnomalies}">
+                Week: <span th:text="${anomaly.week}"></span> |
+                Expected Intake: <span th:text="${anomaly.expected_weight}"></span> |
+                Actual Intake: <span th:text="${anomaly.actual_weight}"></span> |
+                Deviation: <span th:text="${anomaly.deviation}"></span>%
+            </li>
+        </ul>
+    </div>
 
-    // Fetch Food Intake Trend Graph
-    function fetchFoodIntakeTrend(id) {
-        fetchGraph(`/api/visualize/${id}`, 'Food Intake Trend', 'food_intake_trend_base64');
-    }
+    <!-- Graph Sections with Conclusions -->
+    <div id="growth" class="graph-section text-center">
+        <h3>Growth Trend</h3>
+        <img th:src="@{/plots/growth_trend.png}" class="img-fluid" alt="Growth Trend"/>
+        <p><strong>Conclusion:</strong> <span th:text="${growthTrendConclusion}">Growth Trend Analysis</span></p>
+    </div>
 
-    // Fetch Scatter Plot
-    function fetchScatterPlot(id) {
-        fetchGraph(`/api/descriptive/${id}`, 'Scatter Plot', 'scatter_plot_base64');
-    }
+    <div id="foodIntake" class="graph-section text-center" style="display:none;">
+        <h3>Food Intake Trend</h3>
+        <img th:src="@{/plots/food_intake_trend.png}" class="img-fluid" alt="Food Intake Trend"/>
+        <p><strong>Conclusion:</strong> <span th:text="${foodIntakeTrendConclusion}">Food Intake Trend Analysis</span></p>
+    </div>
 
-    // Fetch Bar Chart
-    function fetchBarChart(id) {
-        fetchGraph(`/api/descriptive/${id}`, 'Bar Chart', 'bar_chart_base64');
-    }
+    <div id="scatter" class="graph-section text-center" style="display:none;">
+        <h3>Scatter Plot</h3>
+        <img th:src="@{/plots/scatter_plot.png}" class="img-fluid" alt="Scatter Plot"/>
+        <p><strong>Conclusion:</strong> <span th:text="${scatterPlotConclusion}">Scatter Plot Analysis</span></p>
+    </div>
 
-    // Fetch Heatmap
-    function fetchHeatmap(id) {
-        fetchGraph(`/api/descriptive/${id}`, 'Heatmap', 'heatmap_base64');
-    }
+    <div id="barChart" class="graph-section text-center" style="display:none;">
+        <h3>Bar Chart</h3>
+        <img th:src="@{/plots/bar_chart.png}" class="img-fluid" alt="Bar Chart"/>
+        <p><strong>Conclusion:</strong> <span th:text="${barChartConclusion}">Bar Chart Analysis</span></p>
+    </div>
 
-    // Generic Function to Fetch and Display Graphs
-    function fetchGraph(endpoint, graphTitle, graphKey) {
-        const active = document.querySelector('.active');
-        const title = active.querySelector('.graph-title');
-        const graphImage = active.querySelector('.graph-image');
-        console.log(active, graphImage);
-        title.innerText = `Loading ${graphTitle}...`;
-        fetch(endpoint, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({})
-        })
-            .then(response => {
-                if (!response.ok) throw new Error("Failed to fetch data.");
-                return response.json();
-            })
-            .then(data => {
-                if (data[graphKey]) {
-                    graphImage.src = `data:image/png;base64,${data[graphKey]}`;
-                    title.innerText = graphTitle;
-                } else {
-                    graphImage.src = '';
-                    graphImage.alt = `${graphTitle} not available.`;
-                    title.innerText = `${graphTitle} not available`;
-                }
-            })
-            .catch(error => {
-                console.error(`Error fetching ${graphTitle}:`, error);
-                title.innerText = `Error loading ${graphTitle}.`;
-                graphImage.src = '';
-            });
-    }
-</script>
+    <div id="histogram" class="graph-section text-center" style="display:none;">
+        <h3>Histogram</h3>
+        <img th:src="@{/plots/histogram.png}" class="img-fluid" alt="Histogram"/>
+        <p><strong>Conclusion:</strong> <span th:text="${histogramConclusion}">Histogram Analysis</span></p>
+    </div>
+
+    <!-- JavaScript for Switching Between Graphs -->
+    <script>
+        function showGraph(id) {
+            document.querySelectorAll('.graph-section').forEach(section => section.style.display = 'none');
+            const targetGraph = document.getElementById(id);
+            if (targetGraph) targetGraph.style.display = 'block';
+        }
+
+        window.onload = () => showGraph('growth');
+    </script>
+</div>
 </body>
 </html>

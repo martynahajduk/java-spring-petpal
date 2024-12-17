@@ -1,101 +1,24 @@
 ### GET request to example server
-POST http://localhost:80/api/visualize
+POST http://127.0.0.1:5000/api/visualize
 Content-Type: application/json
 
 
 {
   "real_data": [
-    {
-      "age_weeks": 4,
-      "food_intake": 1.5,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 11.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 5,
-      "food_intake": 1.7,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 13.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 6,
-      "food_intake": 2.0,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 15.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 7,
-      "food_intake": 2.2,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 17.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 8,
-      "food_intake": 2.4,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 19.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 9,
-      "food_intake": 2.7,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 21.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 10,
-      "food_intake": 2.9,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 23.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 11,
-      "food_intake": 3.1,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 25.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 12,
-      "food_intake": 3.3,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 26.5,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 13,
-      "food_intake": 3.5,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 27.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 14,
-      "food_intake": 3.6,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 27.5,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 15,
-      "food_intake": 3.7,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 28.0,
-      "sex": "Male"
-    },
-    {
-      "age_weeks": 16,
-      "food_intake": 3.8,
-      "breed": "DWARF_CAMPBELL_RUSSIAN",
-      "pet_weight": 28.5,
-      "sex": "Male"
-    }
+    {"age_weeks": 4, "pet_weight": 10.9, "food_intake": 1.2},
+    {"age_weeks": 5, "pet_weight": 12.3, "food_intake": 1.6},
+    {"age_weeks": 6, "pet_weight": 15.2, "food_intake": 2.23},
+    {"age_weeks": 7, "pet_weight": 14.9, "food_intake": 2.1},
+    {"age_weeks": 8, "pet_weight": 18.1, "food_intake": 2.7},
+    {"age_weeks": 9, "pet_weight": 21.2, "food_intake": 3.0},
+    {"age_weeks": 10, "pet_weight": 23, "food_intake": 2.84},
+    {"age_weeks": 11, "pet_weight": 22.5, "food_intake": 2.9},
+    {"age_weeks": 12, "pet_weight": 23.2, "food_intake": 3.0},
+    {"age_weeks": 13, "pet_weight": 24.1, "food_intake": 2.8},
+    {"age_weeks": 14, "pet_weight": 24.6, "food_intake": 2.9},
+    {"age_weeks": 15, "pet_weight": 25.5, "food_intake": 3.2},
+    {"age_weeks": 16, "pet_weight": 27, "food_intake": 3.4}
   ]
 }
+
 
