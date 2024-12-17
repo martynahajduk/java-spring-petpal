@@ -9,26 +9,24 @@ import java.nio.file.Paths;
 import java.util.Base64;
 
 @Service
-public class ImageProcessingService implements ImageProcessorServiceIntf
-{
+public class ImageProcessingService implements ImageProcessorServiceIntf {
 
     @Override
     public void saveImageFromBase64(String base64Image, String fileName) {
         try {
-            // Decode Base64 string into bytes
             byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
 
-            // Define the directory and file path
-            Path outputPath = Paths.get("src/main/resources/plots", fileName);
+            Path outputPath = Paths.get("plots", fileName).toAbsolutePath();
+            System.out.println("Saving image to: " + outputPath);
+            System.out.println("Saving image to: " + outputPath);
 
-            // Ensure the directory exists
             Files.createDirectories(outputPath.getParent());
 
-            // Write the file
             Files.write(outputPath, decodedBytes);
+            System.out.println("Image successfully saved at: " + outputPath);
 
-            System.out.println("Image saved as: " + outputPath.toAbsolutePath());
         } catch (IOException e) {
+            e.printStackTrace();
             System.err.println("Error saving image " + fileName + ": " + e.getMessage());
         }
     }
