@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Health Tracker Predictions</title>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css"/>
 </head>
 <body>
 <div class="container mt-5">
     <!-- Page Title -->
     <h1 class="text-center mb-4">Health Tracker Predictions</h1>
+
+
 
     <!-- Buttons to Switch Between Graphs -->
     <div class="text-center mb-4">
@@ -18,71 +22,66 @@
         <button class="btn btn-danger" onclick="showGraph('histogram')">Histogram</button>
     </div>
 
-    <!-- Verdict Section -->
-    <div class="alert alert-info text-center"
-         th:if="${growthTrendConclusion != null and not #strings.isEmpty(growthTrendConclusion)} or
-                ${foodIntakeTrendConclusion != null and not #strings.isEmpty(foodIntakeTrendConclusion)}">
-        <h3>Overall Verdict</h3>
-        <p th:if="${growthTrendConclusion != null and not #strings.isEmpty(growthTrendConclusion)}"
-           th:text="${growthTrendConclusion}">Default Growth Conclusion</p>
-        <p th:if="${foodIntakeTrendConclusion != null and not #strings.isEmpty(foodIntakeTrendConclusion)}"
-           th:text="${foodIntakeTrendConclusion}">Default Food Intake Conclusion</p>
-    </div>
-
-    <!-- Growth Anomalies -->
-    <div class="alert alert-warning" th:if="${not #lists.isEmpty(growthAnomalies)}">
+    <!-- Display Anomalies -->
+    <div class="alert alert-warning" th:if="${growthAnomalies != null and !#lists.isEmpty(growthAnomalies)}">
         <h3>Growth Trend Anomalies</h3>
         <ul>
             <li th:each="anomaly : ${growthAnomalies}">
-                Week: <span th:text="${anomaly.week}"></span> |
-                Expected Weight: <span th:text="${anomaly.expected_weight}"></span> |
-                Actual Weight: <span th:text="${anomaly.actual_weight}"></span> |
-                Deviation: <span th:text="${anomaly.deviation}"></span>%
+                Week: <span th:text="${anomaly['week']}"></span> |
+                Expected Weight: <span th:text="${anomaly['expected_weight']}"></span> |
+                Actual Weight: <span th:text="${anomaly['actual_weight']}"></span> |
+                Deviation: <span th:text="${anomaly['deviation']}"></span>%
             </li>
         </ul>
     </div>
 
-    <!-- Food Intake Anomalies -->
-    <div class="alert alert-warning" th:if="${not #lists.isEmpty(foodAnomalies)}">
-        <h3>Food Intake Trend Anomalies</h3>
+    <!-- Display Food Intake Anomalies -->
+    <div class="alert alert-warning" th:if="${foodAnomalies != null and !#lists.isEmpty(foodAnomalies)}">
+        <h3>Food Intake Anomalies</h3>
         <ul>
             <li th:each="anomaly : ${foodAnomalies}">
-                Week: <span th:text="${anomaly.week}"></span> |
-                Expected Intake: <span th:text="${anomaly.expected_weight}"></span> |
-                Actual Intake: <span th:text="${anomaly.actual_weight}"></span> |
-                Deviation: <span th:text="${anomaly.deviation}"></span>%
+                Week: <span th:text="${anomaly['week']}"></span> |
+                Expected Intake: <span th:text="${anomaly['expected_weight']}"></span> |
+                Actual Intake: <span th:text="${anomaly['actual_weight']}"></span> |
+                Deviation: <span th:text="${anomaly['deviation']}"></span>%
             </li>
         </ul>
     </div>
 
+    <!-- Display Conclusions -->
+    <div class="alert alert-info text-center">
+        <h3>Overall Verdict</h3>
+        <p th:if="${growthTrendConclusion != null}" th:text="${growthTrendConclusion}"></p>
+        <p th:if="${foodIntakeTrendConclusion != null}" th:text="${foodIntakeTrendConclusion}"></p>
+    </div>
     <!-- Graph Sections with Conclusions -->
     <div id="growth" class="graph-section text-center">
         <h3>Growth Trend</h3>
-        <img th:src="@{/plots/growth_trend.png}" class="img-fluid" alt="Growth Trend"/>
+        <img th:src="@{/graphs/growth_trend.png}" class="img-fluid" alt="Growth Trend"/>
         <p><strong>Conclusion:</strong> <span th:text="${growthTrendConclusion}">Growth Trend Analysis</span></p>
     </div>
 
     <div id="foodIntake" class="graph-section text-center" style="display:none;">
         <h3>Food Intake Trend</h3>
-        <img th:src="@{/plots/food_intake_trend.png}" class="img-fluid" alt="Food Intake Trend"/>
+        <img th:src="@{/graphs/food_intake_trend.png}" class="img-fluid" alt="Food Intake Trend"/>
         <p><strong>Conclusion:</strong> <span th:text="${foodIntakeTrendConclusion}">Food Intake Trend Analysis</span></p>
     </div>
 
     <div id="scatter" class="graph-section text-center" style="display:none;">
         <h3>Scatter Plot</h3>
-        <img th:src="@{/plots/scatter_plot.png}" class="img-fluid" alt="Scatter Plot"/>
+        <img th:src="@{/graphs/scatter_plot.png}" class="img-fluid" alt="Scatter Plot"/>
         <p><strong>Conclusion:</strong> <span th:text="${scatterPlotConclusion}">Scatter Plot Analysis</span></p>
     </div>
 
     <div id="barChart" class="graph-section text-center" style="display:none;">
         <h3>Bar Chart</h3>
-        <img th:src="@{/plots/bar_chart.png}" class="img-fluid" alt="Bar Chart"/>
+        <img th:src="@{/graphs/bar_chart.png}" class="img-fluid" alt="Bar Chart"/>
         <p><strong>Conclusion:</strong> <span th:text="${barChartConclusion}">Bar Chart Analysis</span></p>
     </div>
 
     <div id="histogram" class="graph-section text-center" style="display:none;">
         <h3>Histogram</h3>
-        <img th:src="@{/plots/histogram.png}" class="img-fluid" alt="Histogram"/>
+        <img th:src="@{/graphs/histogram.png}" class="img-fluid" alt="Histogram"/>
         <p><strong>Conclusion:</strong> <span th:text="${histogramConclusion}">Histogram Analysis</span></p>
     </div>
 

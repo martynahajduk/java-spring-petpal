@@ -1,6 +1,5 @@
 package be.kdg.programming3.presentation;
 
-import be.kdg.programming3.domain.PetDataLog;
 import be.kdg.programming3.service.*;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -14,14 +13,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api")
-public class PredictionController {
+public class ExploratoryAnalysisController {
 
     @Value("${python.server.url}")
     private String pythonServerURL;
@@ -31,7 +29,7 @@ public class PredictionController {
     private final ImageProcessorServiceIntf imageProcessorServiceIntf;
     private final ResearchDataService researchDataService;
 
-    public PredictionController(PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf) {
+    public ExploratoryAnalysisController(PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf) {
         this.petDataLogService = petDataLogService;
         this.imageProcessorServiceIntf = imageProcessorServiceIntf;
         this.researchDataService = researchDataService;
@@ -54,9 +52,11 @@ public class PredictionController {
     @GetMapping("/all")
     public String getAllGraphs(Model model) {
         try {
+            // Fetch real data and send it to Python API
             List<Map<String, Object>> realData = fetchRealData();
             Map<String, Object> payload = Collections.singletonMap("real_data", realData);
 
+            // Call Python API
             ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     pythonServerURL + "/api/visualize",
                     HttpMethod.POST,
@@ -64,26 +64,10 @@ public class PredictionController {
                     new ParameterizedTypeReference<>() {}
             );
 
+            // Process response
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 Map<String, Object> graphsData = response.getBody();
-
-                // Debug
-                System.out.println("Response from Python Server: " + graphsData);
-
-                saveGraph(graphsData, "growth_trend_base64", "./static/plots/growth_trend.png", model, "growthTrendPath");
-                saveGraph(graphsData, "food_intake_trend_base64", "./static/plots/food_intake_trend.png", model, "foodIntakeTrendPath");
-                saveGraph(graphsData, "scatter_plot_base64", "./static/plots/scatter_plot.png", model, "scatterPlotPath");
-                saveGraph(graphsData, "bar_chart_base64", "./static/plots/bar_chart.png", model, "barChartPath");
-                saveGraph(graphsData, "histogram_base64", "./static/plots/histogram.png", model, "histogramPath");
-
-                model.addAttribute("growthTrendConclusion", graphsData.getOrDefault("growth_trend_conclusion", "No conclusion available"));
-                model.addAttribute("foodIntakeTrendConclusion", graphsData.getOrDefault("food_intake_trend_conclusion", "No conclusion available"));
-                model.addAttribute("scatterPlotConclusion", graphsData.getOrDefault("scatter_plot_conclusion", "No conclusion available"));
-                model.addAttribute("barChartConclusion", graphsData.getOrDefault("bar_chart_conclusion", "No conclusion available"));
-                model.addAttribute("histogramConclusion", graphsData.getOrDefault("histogram_conclusion", "No conclusion available"));
-
-                processAnomalies(graphsData, "growth_anomalies", model, "growthAnomalies");
-                processAnomalies(graphsData, "food_anomalies", model, "foodAnomalies");
+                assignAttributes(graphsData, model);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -93,26 +77,31 @@ public class PredictionController {
         return "healthtracker";
     }
 
-    private void processAnomalies(Map<String, Object> graphsData, String key, Model model, String attributeName) {
-        List<Map<String, Object>> anomalies = (List<Map<String, Object>>) graphsData.get(key);
-        if (anomalies != null) {
-            model.addAttribute(attributeName, anomalies);
-        } else {
-            model.addAttribute(attributeName, Collections.emptyList());
-        }
-    }
+    private void assignAttributes(Map<String, Object> graphsData, Model model) {
+        // Save Graphs
+        saveGraph(graphsData, "growth_trend_base64", "growth_trend.png", model, "growthTrendPath");
+        saveGraph(graphsData, "food_intake_trend_base64", "food_intake_trend.png", model, "foodIntakeTrendPath");
+        saveGraph(graphsData, "scatter_plot_base64", "scatter_plot.png", model, "scatterPlotPath");
+        saveGraph(graphsData, "bar_chart_base64", "bar_chart.png", model, "barChartPath");
+        saveGraph(graphsData, "histogram_base64", "histogram.png", model, "histogramPath");
 
+        // Add Conclusions
+        model.addAttribute("growthTrendConclusion", graphsData.getOrDefault("growth_trend_conclusion", "No conclusion available"));
+        model.addAttribute("foodIntakeTrendConclusion", graphsData.getOrDefault("food_intake_trend_conclusion", "No conclusion available"));
+        model.addAttribute("scatterPlotConclusion", graphsData.getOrDefault("scatter_plot_conclusion", "No conclusion available"));
+        model.addAttribute("barChartConclusion", graphsData.getOrDefault("bar_chart_conclusion", "No conclusion available"));
+        model.addAttribute("histogramConclusion", graphsData.getOrDefault("histogram_conclusion", "No conclusion available"));
+    }
 
     private void saveGraph(Map<String, Object> graphsData, String base64Key, String fileName, Model model, String modelKey) {
         if (graphsData.containsKey(base64Key)) {
             String base64Image = graphsData.get(base64Key).toString();
             imageProcessorServiceIntf.saveImageFromBase64(base64Image, fileName);
-            model.addAttribute(modelKey, "/static/plots/" + fileName); // Correct static path
+            model.addAttribute(modelKey, "/graphs/" + fileName);
         }
     }
 
     private List<Map<String, Object>> fetchRealData() {
-        // Fetch all pet data logs
         return petDataLogService.findAll().stream()
                 .map(pet -> Map.<String, Object>of(
                         "age_weeks", pet.getAgeWeeks(),
@@ -122,4 +111,3 @@ public class PredictionController {
                 .collect(Collectors.toList());
     }
 }
-
