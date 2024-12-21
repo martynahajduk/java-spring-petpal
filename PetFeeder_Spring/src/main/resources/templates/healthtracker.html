@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Health Tracker Predictions</title>
 <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css"/>-->
@@ -20,7 +20,7 @@
                 <div class="carousel-item" th:if="${data.hasData}">
 
                     <h2 class="text-center" th:text="'Pet: '+${data.petName}"></h2>
-    
+
                     <!-- Buttons to Switch Between Graphs -->
                     <div class="text-center mb-4">
                         <button class="btn btn-primary" onclick="showGraph('growth')">Growth Trend</button>
@@ -29,7 +29,7 @@
                         <button class="btn btn-warning" onclick="showGraph('barChart')">Bar Chart</button>
                         <button class="btn btn-danger" onclick="showGraph('histogram')">Histogram</button>
                     </div>
-    
+
                     <!-- Verdict Section -->
                     <div class="alert alert-info text-center"
                          th:if="${data.growthTrendConclusion != null and not #strings.isEmpty(data.growthTrendConclusion)} or
@@ -40,7 +40,7 @@
                         <p th:if="${data.foodIntakeTrendConclusion != null and not #strings.isEmpty(data.foodIntakeTrendConclusion)}"
                            th:text="${data.foodIntakeTrendConclusion}">Default Food Intake Conclusion</p>
                     </div>
-    
+
                     <!-- Display Growth Anomalies -->
                     <div class="growth anomaly alert alert-warning" th:if="${not #lists.isEmpty(data.growthAnomalies)}">
                         <h3>Growth Trend Anomalies</h3>
@@ -53,7 +53,7 @@
                             </li>
                         </ul>
                     </div>
-    
+
                     <!-- Display Food Intake Anomalies -->
                     <div class="foodIntake anomaly alert alert-warning" th:if="${not #lists.isEmpty(data.foodAnomalies)}">
                         <h3>Food Intake Anomalies</h3>
@@ -66,36 +66,43 @@
                             </li>
                         </ul>
                     </div>
-    
+
                     <!-- Graph Sections with Conclusions -->
                     <div class="graph-section growth text-center">
                         <h3>Growth Trend</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.growthTrendPath}}" class="img-fluid" alt="Growth Trend"/>
                         <p><strong>Conclusion:</strong> <span th:text="${data.growthTrendConclusion}">Growth Trend Analysis</span></p>
                     </div>
-    
+
                     <div class="graph-section foodIntake text-center" style="display:none;">
                         <h3>Food Intake Trend</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.foodIntakeTrendPath}}" class="img-fluid" alt="Food Intake Trend"/>
                         <p><strong>Conclusion:</strong> <span th:text="${data.foodIntakeTrendConclusion}">Food Intake Trend Analysis</span></p>
                     </div>
-    
+
                     <div class="graph-section scatter text-center" style="display:none;">
                         <h3>Scatter Plot</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.scatterPlotPath}}" class="img-fluid" alt="Scatter Plot"/>
                         <p><strong>Conclusion:</strong> <span th:text="${data.scatterPlotConclusion}">Scatter Plot Analysis</span></p>
                     </div>
-    
+
                     <div class="graph-section barChart text-center" style="display:none;">
                         <h3>Bar Chart</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.barChartPath}}" class="img-fluid" alt="Bar Chart"/>
                         <p><strong>Conclusion:</strong> <span th:text="${data.barChartConclusion}">Bar Chart Analysis</span></p>
                     </div>
-    
+
                     <div class="graph-section histogram text-center" style="display:none;">
                         <h3>Histogram</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.histogramPath}}" class="img-fluid" alt="Histogram"/>
                         <p><strong>Conclusion:</strong> <span th:text="${data.histogramConclusion}">Histogram Analysis</span></p>
+                    </div>
+
+                    <!-- Display Conclusions -->
+                    <div class="alert alert-info text-center">
+                        <h3>Overall Verdict</h3>
+                        <p th:if="${growthTrendConclusion != null}" th:text="${growthTrendConclusion}"></p>
+                        <p th:if="${foodIntakeTrendConclusion != null}" th:text="${foodIntakeTrendConclusion}"></p>
                     </div>
                 </div>
                 <div class="carousel-item" style="text-align: center" th:if="${!data.hasData}">

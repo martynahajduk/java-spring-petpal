@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/api")
-public class PredictionController {
+public class ExploratoryAnalysisController {
     private static final Logger logger = LoggerFactory.getLogger(PredictionController.class);
     private final PetService petService;
 
@@ -34,7 +34,7 @@ public class PredictionController {
     private final ImageProcessorServiceIntf imageProcessorServiceIntf;
     private final ResearchDataService researchDataService;
 
-    public PredictionController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf, PetService petService) {
+    public ExploratoryAnalysisController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf, PetService petService) {
         this.feederService = feederService;
         this.petDataLogService = petDataLogService;
         this.imageProcessorServiceIntf = imageProcessorServiceIntf;
@@ -84,6 +84,8 @@ public class PredictionController {
 
             logger.debug("oi");
             ResponseEntity<Map<String, Map<String, Object>>> response = restTemplate.exchange(
+            // Call Python API
+            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     pythonServerURL + "/api/visualize",
                     HttpMethod.POST,
                     new HttpEntity<>(payload),
@@ -91,6 +93,8 @@ public class PredictionController {
             );
             logger.debug("oii");
             logger.debug("response from Python Server: {}", response);
+
+            // Process response
             if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
                 Map<String, Map<String, Object>> graphsDataMap = response.getBody();
 
