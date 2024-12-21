@@ -9,6 +9,6 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/graphs/**")
-                .addResourceLocations("file:F:/petpal/graphs/");;
+                .addResourceLocations("PetFeeder_Spring:resources/static/graphs/");;
     }
 }
