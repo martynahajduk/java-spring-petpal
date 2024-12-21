@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class PredictionController {
     private static final Logger logger = LoggerFactory.getLogger(PredictionController.class);
+    private final PetService petService;
 
     @Value("${python.server.url}")
     private String pythonServerURL;
@@ -33,11 +34,12 @@ public class PredictionController {
     private final ImageProcessorServiceIntf imageProcessorServiceIntf;
     private final ResearchDataService researchDataService;
 
-    public PredictionController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf) {
+    public PredictionController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf, PetService petService) {
         this.feederService = feederService;
         this.petDataLogService = petDataLogService;
         this.imageProcessorServiceIntf = imageProcessorServiceIntf;
         this.researchDataService = researchDataService;
+        this.petService = petService;
     }
 
 
@@ -54,11 +56,10 @@ public class PredictionController {
         }
     }
 
-    @GetMapping("/all")
-    public String getAllGraphs(Model model) {
+    public String getSelectGraphs(Model model, List<Feeder> feeders) {
         try {
             Map<Long, List<PetDataLog>> petDataMap = new HashMap<>();
-            for (Feeder feeder : feederService.findAll()) {
+            for (Feeder feeder : feeders) {
                 petDataMap.put(feeder.getId(), petDataLogService.findAllByFeederId(feeder.getId()));
             }
 
@@ -102,22 +103,10 @@ public class PredictionController {
                     Map<String, Object> graphData = entry.getValue();
                     logger.debug(graphData.toString());
 
-//                    saveGraph(graphData, "growth_trend_base64", "/plots/growth_trend"+entry.getKey()+".png", model, "growthTrendPath"+entry.getKey());
-//                    saveGraph(graphData, "food_intake_trend_base64", "/plots/food_intake_trend"+entry.getKey()+".png", model, "foodIntakeTrendPath"+entry.getKey());
-//                    saveGraph(graphData, "scatter_plot_base64", "/plots/scatter_plot"+entry.getKey()+".png", model, "scatterPlotPath"+entry.getKey());
-//                    saveGraph(graphData, "bar_chart_base64", "/plots/bar_chart"+entry.getKey()+".png", model, "barChartPath"+entry.getKey());
-//                    saveGraph(graphData, "histogram_base64", "/plots/histogram"+entry.getKey()+".png", model, "histogramPath"+entry.getKey());
-//
-//                    model.addAttribute("growthTrendConclusion"+entry.getKey(), graphData.getOrDefault("growth_trend_conclusion", "No conclusion available"));
-//                    model.addAttribute("foodIntakeTrendConclusion"+entry.getKey(), graphData.getOrDefault("food_intake_trend_conclusion", "No conclusion available"));
-//                    model.addAttribute("scatterPlotConclusion"+entry.getKey(), graphData.getOrDefault("scatter_plot_conclusion", "No conclusion available"));
-//                    model.addAttribute("barChartConclusion"+entry.getKey(), graphData.getOrDefault("bar_chart_conclusion", "No conclusion available"));
-//                    model.addAttribute("histogramConclusion"+entry.getKey(), graphData.getOrDefault("histogram_conclusion", "No conclusion available"));
-//
-//                    processAnomalies(graphData, "growth_anomalies", model, "growthAnomalies"+entry.getKey());
-//                    processAnomalies(graphData, "food_anomalies", model, "foodAnomalies"+entry.getKey());
-
                     Map<String, Object> dataMap = new HashMap<>();
+
+                    dataMap.put("petName", petService.findByFeederId(Long.parseLong(entry.getKey())).getName());
+                    dataMap.put("hasData", graphData.get("hasData"));
 
                     dataMap.put("growthTrendPath", graphData.getOrDefault("growth_trend_base64", ""));
                     dataMap.put("foodIntakeTrendPath", graphData.getOrDefault("food_intake_trend_base64", ""));
@@ -146,24 +135,9 @@ public class PredictionController {
         return "healthtracker";
     }
 
-    private void processAnomalies(Map<String, Object> graphsData, String key, Model model, String attributeName) {
-        List<Map<String, Object>> anomalies = (List<Map<String, Object>>) graphsData.get(key);
-        if (anomalies != null) {
-            model.addAttribute(attributeName, anomalies);
-        } else {
-            model.addAttribute(attributeName, Collections.emptyList());
-        }
-    }
-
-
-    private void saveGraph(Map<String, Object> graphsData, String base64Key, String fileName, Model model, String modelKey) {
-        if (graphsData.containsKey(base64Key)) {
-            Object base64Image = graphsData.get(base64Key);
-            if (base64Image != null) {
-                imageProcessorServiceIntf.saveImageFromBase64(base64Image.toString(), "/static"+fileName);
-                model.addAttribute(modelKey, fileName); // Correct static path
-            }
-        }
+    @GetMapping("/all")
+    public String getAllGraphs(Model model) {
+        return getSelectGraphs(model, feederService.findAll());
     }
 
     private List<Map<String, Object>> fetchRealData() {

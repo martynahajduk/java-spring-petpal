@@ -15,7 +15,7 @@ public interface PetService {
    void deleteById(Long id);
    //List<Feeder> findAllFeedersById(Long id);
 //   User findRandUserByFeederId(Long id);
-
+    Pet findByFeederId(Long id);
     User findRandUserByPetId(Long id);
 
    Integer findPetAgeWeeks(Pet pet);

@@ -58,8 +58,11 @@ public class FeederController {
         }
         User user = (User) session.getAttribute("user");
 
-        Set<Feeder> feeders = new HashSet<>();
+        List<Feeder> feeders = new ArrayList<>();
         user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
+
+        Map<Long, String> petNames = new HashMap<>();
+        feeders.forEach(feeder -> {petNames.put(feeder.getId(), feeder.getPet().getName());});
 
         Map<Long, List<Schedule>> schedules = new HashMap<>();
         feeders.forEach(feeder -> schedules.put(feeder.getId(), scheduleService.findSchedulesByFeederId(feeder.getId())));
@@ -87,8 +90,8 @@ public class FeederController {
         ).sorted(Comparator.comparing(Schedule::getTimeToFeed)).toList().getFirst().getTimeToFeed()));
         model.addAttribute("nextFeedingTimes", nextFeedingTimes);
 
-        model.addAttribute("pets", petService.findAll());
         model.addAttribute("feeders", feeders);
+        model.addAttribute("petNames", petNames);
         model.addAttribute("schedules", schedules);
         model.addAttribute("reservoirLevels", reservoirLevels);
         model.addAttribute("isFoodLevelLows", isFoodLevelLowMap);

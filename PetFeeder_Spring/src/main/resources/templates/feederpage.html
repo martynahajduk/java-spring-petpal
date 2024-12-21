@@ -24,7 +24,7 @@
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body">
                         <h3 class="card-title" style="color: #F27244;">Reservoir Level</h3>
-                        <h5 class="card-title" th:text="'Feeder id: ' + ${feeder}"></h5>
+                        <h5 class="card-title" th:text="'Pet: ' + ${petNames.get(feeder.getId())}"></h5>
                         <div class="progress mb-3">
                             <div class="progress-bar progress-bar-striped progress-bar-animated bg-warning" role="progressbar"
                                  th:style="'width: ' + ${reservoirLevels.get(feeder.getId())} + '%'" aria-valuenow="${reservoirLevel}" aria-valuemin="0" aria-valuemax="10">

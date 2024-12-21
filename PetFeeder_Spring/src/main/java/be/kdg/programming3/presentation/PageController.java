@@ -24,14 +24,16 @@ public class PageController {
     private final ScheduleService scheduleService;
     private final UserService userService;
     private final FeederService feederService;
+    private final PredictionController predictionController;
 
 
-    public PageController(PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService, FeederService feederService) {
+    public PageController(PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService, FeederService feederService, PredictionController predictionController) {
         this.petService = petService;
         this.petDataLogService = petDataLogService;
         this.scheduleService = scheduleService;
         this.userService = userService;
         this.feederService = feederService;
+        this.predictionController = predictionController;
     }
 
 
@@ -49,11 +51,12 @@ public class PageController {
         if (!isSessionValid(session)) {
             throw new SessionExpiredException("User session has expired.");
         }
-        List<Pet> pets = petService.findAll();
-        List<PetDataLog> petdatalogs = petDataLogService.findAll();
-        model.addAttribute("pets", petService.findAll());
-        model.addAttribute("petdatalogs", petDataLogService.findAll());
-        return "healthtracker";
+
+        User user = (User) session.getAttribute("user");
+
+        List<Feeder> feeders = new ArrayList<>();
+        user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
+        return predictionController.getSelectGraphs(model, feeders);
     }
 
     @GetMapping("/petbreed")

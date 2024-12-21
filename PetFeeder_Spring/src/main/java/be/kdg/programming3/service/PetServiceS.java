@@ -54,6 +54,11 @@ public class PetServiceS implements PetService {
     }
 
     @Override
+    public Pet findByFeederId(Long id) {
+        return petRepository.findByFeederId(id);
+    }
+
+    @Override
     public User findRandUserByPetId(Long id) {
         return userRepository.findAll().stream().
                 filter(u -> !u.getPets().stream().filter(p -> p.getId().equals(id)).toList().isEmpty())
