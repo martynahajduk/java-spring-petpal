@@ -97,13 +97,6 @@
                         <img th:src="@{'data:image/jpeg;base64,'+${data.histogramPath}}" class="img-fluid" alt="Histogram"/>
                         <p><strong>Conclusion:</strong> <span th:text="${data.histogramConclusion}">Histogram Analysis</span></p>
                     </div>
-
-                    <!-- Display Conclusions -->
-                    <div class="alert alert-info text-center">
-                        <h3>Overall Verdict</h3>
-                        <p th:if="${growthTrendConclusion != null}" th:text="${growthTrendConclusion}"></p>
-                        <p th:if="${foodIntakeTrendConclusion != null}" th:text="${foodIntakeTrendConclusion}"></p>
-                    </div>
                 </div>
                 <div class="carousel-item" style="text-align: center" th:if="${!data.hasData}">
                     <h2 class="text-center" th:text="'Pet: '+${data.petName}"></h2>

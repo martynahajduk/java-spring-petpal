@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/api")
 public class ExploratoryAnalysisController {
-    private static final Logger logger = LoggerFactory.getLogger(PredictionController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ExploratoryAnalysisController.class);
     private final PetService petService;
 
     @Value("${python.server.url}")
@@ -84,8 +84,6 @@ public class ExploratoryAnalysisController {
 
             logger.debug("oi");
             ResponseEntity<Map<String, Map<String, Object>>> response = restTemplate.exchange(
-            // Call Python API
-            ResponseEntity<Map<String, Object>> response = restTemplate.exchange(
                     pythonServerURL + "/api/visualize",
                     HttpMethod.POST,
                     new HttpEntity<>(payload),

@@ -24,16 +24,16 @@ public class PageController {
     private final ScheduleService scheduleService;
     private final UserService userService;
     private final FeederService feederService;
-    private final PredictionController predictionController;
+    private final ExploratoryAnalysisController exploratoryAnalysisController;
 
 
-    public PageController(PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService, FeederService feederService, PredictionController predictionController) {
+    public PageController(PetService petService, PetDataLogService petDataLogService, ScheduleService scheduleService, UserService userService, FeederService feederService, ExploratoryAnalysisController exploratoryAnalysisController) {
         this.petService = petService;
         this.petDataLogService = petDataLogService;
         this.scheduleService = scheduleService;
         this.userService = userService;
         this.feederService = feederService;
-        this.predictionController = predictionController;
+        this.exploratoryAnalysisController = exploratoryAnalysisController;
     }
 
 
@@ -56,7 +56,7 @@ public class PageController {
 
         List<Feeder> feeders = new ArrayList<>();
         user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
-        return predictionController.getSelectGraphs(model, feeders);
+        return exploratoryAnalysisController.getSelectGraphs(model, feeders);
     }
 
     @GetMapping("/petbreed")
