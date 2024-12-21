@@ -42,7 +42,7 @@
                     </div>
     
                     <!-- Display Growth Anomalies -->
-                    <div class="alert alert-warning" th:if="${not #lists.isEmpty(data.growthAnomalies)}">
+                    <div class="growth anomaly alert alert-warning" th:if="${not #lists.isEmpty(data.growthAnomalies)}">
                         <h3>Growth Trend Anomalies</h3>
                         <ul>
                             <li th:each="anomaly : ${data.growthAnomalies}">
@@ -55,7 +55,7 @@
                     </div>
     
                     <!-- Display Food Intake Anomalies -->
-                    <div class="alert alert-warning" th:if="${not #lists.isEmpty(data.foodAnomalies)}">
+                    <div class="foodIntake anomaly alert alert-warning" th:if="${not #lists.isEmpty(data.foodAnomalies)}">
                         <h3>Food Intake Anomalies</h3>
                         <ul>
                             <li th:each="anomaly : ${data.foodAnomalies}">
@@ -121,6 +121,7 @@
 <!-- JavaScript for Switching Between Graphs -->
 <script>
     function showGraph(className) {
+        document.querySelectorAll('.anomaly').forEach(section => section.style.display = 'none');
         document.querySelectorAll('.graph-section').forEach(section => section.style.display = 'none');
         document.querySelectorAll('.'+className).forEach(section => section.style.display = 'block');
     }
