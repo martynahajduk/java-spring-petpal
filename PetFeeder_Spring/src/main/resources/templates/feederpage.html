@@ -6,7 +6,7 @@
     <title>Feeder Dashboard</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">-->
 </head>
 <body>
 
@@ -18,9 +18,9 @@
             <i class="bi bi-info-square fs-4" style="color: #F27244;"></i>
         </button>
     </h1>
-    <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
+    <div id="carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
         <div class="carousel-inner p-3">
-            <div class="carousel-item active" th:each="feeder : ${feeders}">
+            <div class="carousel-item" th:each="feeder : ${feeders}">
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body">
                         <h3 class="card-title" style="color: #F27244;">Reservoir Level</h3>
@@ -60,11 +60,11 @@
             </div>
         </div>
     </div>
-    <button class="carousel-control-prev position-absolute start-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
+    <button class="carousel-control-prev position-absolute start-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="false"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next position-absolute end-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
+    <button class="carousel-control-next position-absolute end-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="false"></span>
         <span class="visually-hidden">Next</span>
     </button>
@@ -91,5 +91,13 @@
 </div>
 
 <footer th:insert="~{footer.html}"></footer>
+
+<!-- JavaScript for Setting the first carrousel item active -->
+<script>
+    window.onload = () => {
+        document.querySelectorAll('.carousel-item').item(0).classList.add("active");
+    };
+</script>
+
 </body>
 </html>

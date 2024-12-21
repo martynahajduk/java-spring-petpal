@@ -15,16 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping
 public class ScheduleController {
+    private static final Logger logger = LoggerFactory.getLogger(ScheduleController.class);
 
     private final ScheduleService scheduleService;
     private final FeederService feederService;
-    private static final Logger logger = LoggerFactory.getLogger(PageController.class);
 
     public ScheduleController(ScheduleService scheduleService, FeederService feederService) {
         this.scheduleService = scheduleService;
@@ -48,10 +47,15 @@ public class ScheduleController {
             throw new SessionExpiredException("User session has expired.");
         }
         User user = (User) session.getAttribute("user");
-        Feeder feeder = feederService.findById(user.getFeeder().getId());
-        model.addAttribute("feeders", feeder);
-        model.addAttribute("frequencies", FeedFrequency.values());
-        model.addAttribute("schedules", scheduleService.findSchedulesByFeederId(feeder.getId()));
+
+        Set<Feeder> feeders = new HashSet<>();
+        user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
+        model.addAttribute("feeders", feeders);
+        logger.debug("{}",feeders);
+
+        Map<Long, List<Schedule>> schedules = new HashMap<>();
+        feeders.forEach(feeder -> schedules.put(feeder.getId(), scheduleService.findSchedulesByFeederId(feeder.getId())));
+        model.addAttribute("schedules", schedules);
 
         model.addAttribute("daysOfWeek", DayOfWeek.values());
         model.addAttribute("scheduleObject", new Schedule());

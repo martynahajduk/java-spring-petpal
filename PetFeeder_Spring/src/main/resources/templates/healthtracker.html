@@ -2,99 +2,124 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Health Tracker Predictions</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css"/>
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap/dist/css/bootstrap.min.css"/>-->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+<!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">-->
 </head>
 <body>
+<header th:insert="~{navbar.html}"></header>
 <div class="container mt-5">
     <!-- Page Title -->
     <h1 class="text-center mb-4">Health Tracker Predictions</h1>
+    <div id="carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
+        <div class="carousel-inner p-3">
+            <div class="carousel-item" th:each="data : ${dataList}">
 
-    <!-- Buttons to Switch Between Graphs -->
-    <div class="text-center mb-4">
-        <button class="btn btn-primary" onclick="showGraph('growth')">Growth Trend</button>
-        <button class="btn btn-success" onclick="showGraph('foodIntake')">Food Intake Trend</button>
-        <button class="btn btn-info" onclick="showGraph('scatter')">Scatter Plot</button>
-        <button class="btn btn-warning" onclick="showGraph('barChart')">Bar Chart</button>
-        <button class="btn btn-danger" onclick="showGraph('histogram')">Histogram</button>
-    </div>
+                <!-- Buttons to Switch Between Graphs -->
+                <div class="text-center mb-4">
+                    <button class="btn btn-primary" onclick="showGraph('growth')">Growth Trend</button>
+                    <button class="btn btn-success" onclick="showGraph('foodIntake')">Food Intake Trend</button>
+                    <button class="btn btn-info" onclick="showGraph('scatter')">Scatter Plot</button>
+                    <button class="btn btn-warning" onclick="showGraph('barChart')">Bar Chart</button>
+                    <button class="btn btn-danger" onclick="showGraph('histogram')">Histogram</button>
+                </div>
 
-    <!-- Verdict Section -->
-    <div class="alert alert-info text-center"
-         th:if="${growthTrendConclusion != null and not #strings.isEmpty(growthTrendConclusion)} or
-                ${foodIntakeTrendConclusion != null and not #strings.isEmpty(foodIntakeTrendConclusion)}">
-        <h3>Overall Verdict</h3>
-        <p th:if="${growthTrendConclusion != null and not #strings.isEmpty(growthTrendConclusion)}"
-           th:text="${growthTrendConclusion}">Default Growth Conclusion</p>
-        <p th:if="${foodIntakeTrendConclusion != null and not #strings.isEmpty(foodIntakeTrendConclusion)}"
-           th:text="${foodIntakeTrendConclusion}">Default Food Intake Conclusion</p>
-    </div>
+                <!-- Verdict Section -->
+                <div class="alert alert-info text-center"
+                     th:if="${data.growthTrendConclusion != null and not #strings.isEmpty(data.growthTrendConclusion)} or
+                            ${data.foodIntakeTrendConclusion != null and not #strings.isEmpty(data.foodIntakeTrendConclusion)}">
+                    <h3>Overall Verdict</h3>
+                    <p th:if="${data.growthTrendConclusion != null and not #strings.isEmpty(data.growthTrendConclusion)}"
+                       th:text="${data.growthTrendConclusion}">Default Growth Conclusion</p>
+                    <p th:if="${data.foodIntakeTrendConclusion != null and not #strings.isEmpty(data.foodIntakeTrendConclusion)}"
+                       th:text="${data.foodIntakeTrendConclusion}">Default Food Intake Conclusion</p>
+                </div>
 
-    <!-- Growth Anomalies -->
-    <div class="alert alert-warning" th:if="${not #lists.isEmpty(growthAnomalies)}">
-        <h3>Growth Trend Anomalies</h3>
-        <ul>
-            <li th:each="anomaly : ${growthAnomalies}">
-                Week: <span th:text="${anomaly.week}"></span> |
-                Expected Weight: <span th:text="${anomaly.expected_weight}"></span> |
-                Actual Weight: <span th:text="${anomaly.actual_weight}"></span> |
-                Deviation: <span th:text="${anomaly.deviation}"></span>%
-            </li>
-        </ul>
-    </div>
+                <!-- Display Growth Anomalies -->
+                <div class="alert alert-warning" th:if="${not #lists.isEmpty(data.growthAnomalies)}">
+                    <h3>Growth Trend Anomalies</h3>
+                    <ul>
+                        <li th:each="anomaly : ${data.growthAnomalies}">
+                            Week: <span th:text="${anomaly.week}">N/A</span> |
+                            Expected Weight: <span th:text="${anomaly.expected_weight}">N/A</span> |
+                            Actual Weight: <span th:text="${anomaly.actual_weight}">N/A</span> |
+                            Deviation: <span th:text="${anomaly.deviation}">N/A</span>%
+                        </li>
+                    </ul>
+                </div>
 
-    <!-- Food Intake Anomalies -->
-    <div class="alert alert-warning" th:if="${not #lists.isEmpty(foodAnomalies)}">
-        <h3>Food Intake Trend Anomalies</h3>
-        <ul>
-            <li th:each="anomaly : ${foodAnomalies}">
-                Week: <span th:text="${anomaly.week}"></span> |
-                Expected Intake: <span th:text="${anomaly.expected_weight}"></span> |
-                Actual Intake: <span th:text="${anomaly.actual_weight}"></span> |
-                Deviation: <span th:text="${anomaly.deviation}"></span>%
-            </li>
-        </ul>
-    </div>
+                <!-- Display Food Intake Anomalies -->
+                <div class="alert alert-warning" th:if="${not #lists.isEmpty(data.foodAnomalies)}">
+                    <h3>Food Intake Anomalies</h3>
+                    <ul>
+                        <li th:each="anomaly : ${data.foodAnomalies}">
+                            Week: <span th:text="${anomaly.week}">N/A</span> |
+                            Expected Intake: <span th:text="${anomaly.expected_weight}">N/A</span> |
+                            Actual Intake: <span th:text="${anomaly.actual_weight}">N/A</span> |
+                            Deviation: <span th:text="${anomaly.deviation}">N/A</span>%
+                        </li>
+                    </ul>
+                </div>
 
-    <!-- Graph Sections with Conclusions -->
-    <div id="growth" class="graph-section text-center">
-        <h3>Growth Trend</h3>
-        <img th:src="@{/plots/growth_trend.png}" class="img-fluid" alt="Growth Trend"/>
-        <p><strong>Conclusion:</strong> <span th:text="${growthTrendConclusion}">Growth Trend Analysis</span></p>
-    </div>
+                <!-- Graph Sections with Conclusions -->
+                <div class="graph-section growth text-center">
+                    <h3>Growth Trend</h3>
+                    <img th:src="@{'data:image/jpeg;base64,'+${data.growthTrendPath}}" class="img-fluid" alt="Growth Trend"/>
+                    <p><strong>Conclusion:</strong> <span th:text="${data.growthTrendConclusion}">Growth Trend Analysis</span></p>
+                </div>
 
-    <div id="foodIntake" class="graph-section text-center" style="display:none;">
-        <h3>Food Intake Trend</h3>
-        <img th:src="@{/plots/food_intake_trend.png}" class="img-fluid" alt="Food Intake Trend"/>
-        <p><strong>Conclusion:</strong> <span th:text="${foodIntakeTrendConclusion}">Food Intake Trend Analysis</span></p>
-    </div>
+                <div class="graph-section foodIntake text-center" style="display:none;">
+                    <h3>Food Intake Trend</h3>
+                    <img th:src="@{'data:image/jpeg;base64,'+${data.foodIntakeTrendPath}}" class="img-fluid" alt="Food Intake Trend"/>
+                    <p><strong>Conclusion:</strong> <span th:text="${data.foodIntakeTrendConclusion}">Food Intake Trend Analysis</span></p>
+                </div>
 
-    <div id="scatter" class="graph-section text-center" style="display:none;">
-        <h3>Scatter Plot</h3>
-        <img th:src="@{/plots/scatter_plot.png}" class="img-fluid" alt="Scatter Plot"/>
-        <p><strong>Conclusion:</strong> <span th:text="${scatterPlotConclusion}">Scatter Plot Analysis</span></p>
-    </div>
+                <div class="graph-section scatter text-center" style="display:none;">
+                    <h3>Scatter Plot</h3>
+                    <img th:src="@{'data:image/jpeg;base64,'+${data.scatterPlotPath}}" class="img-fluid" alt="Scatter Plot"/>
+                    <p><strong>Conclusion:</strong> <span th:text="${data.scatterPlotConclusion}">Scatter Plot Analysis</span></p>
+                </div>
 
-    <div id="barChart" class="graph-section text-center" style="display:none;">
-        <h3>Bar Chart</h3>
-        <img th:src="@{/plots/bar_chart.png}" class="img-fluid" alt="Bar Chart"/>
-        <p><strong>Conclusion:</strong> <span th:text="${barChartConclusion}">Bar Chart Analysis</span></p>
-    </div>
+                <div class="graph-section barChart text-center" style="display:none;">
+                    <h3>Bar Chart</h3>
+                    <img th:src="@{'data:image/jpeg;base64,'+${data.barChartPath}}" class="img-fluid" alt="Bar Chart"/>
+                    <p><strong>Conclusion:</strong> <span th:text="${data.barChartConclusion}">Bar Chart Analysis</span></p>
+                </div>
 
-    <div id="histogram" class="graph-section text-center" style="display:none;">
-        <h3>Histogram</h3>
-        <img th:src="@{/plots/histogram.png}" class="img-fluid" alt="Histogram"/>
-        <p><strong>Conclusion:</strong> <span th:text="${histogramConclusion}">Histogram Analysis</span></p>
+                <div class="graph-section histogram text-center" style="display:none;">
+                    <h3>Histogram</h3>
+                    <img th:src="@{'data:image/jpeg;base64,'+${data.histogramPath}}" class="img-fluid" alt="Histogram"/>
+                    <p><strong>Conclusion:</strong> <span th:text="${data.histogramConclusion}">Histogram Analysis</span></p>
+                </div>
+            </div>
+        </div>
     </div>
+    <button class="carousel-control-prev position-absolute start-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="false"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next position-absolute end-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carousel" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="false"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+
+    <footer th:insert="~{footer.html}"></footer>
 
     <!-- JavaScript for Switching Between Graphs -->
     <script>
-        function showGraph(id) {
+        function showGraph(className) {
             document.querySelectorAll('.graph-section').forEach(section => section.style.display = 'none');
-            const targetGraph = document.getElementById(id);
-            if (targetGraph) targetGraph.style.display = 'block';
+            document.querySelectorAll('.'+className).forEach(section => section.style.display = 'block');
         }
 
-        window.onload = () => showGraph('growth');
+        window.onload = () => {
+            document.querySelectorAll('.carousel-item').item(0).classList.add("active");
+            showGraph('growth');
+        };
+
     </script>
 </div>
 </body>

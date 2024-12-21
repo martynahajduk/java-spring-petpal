@@ -16,8 +16,7 @@ public class ImageProcessingService implements ImageProcessorServiceIntf {
         try {
             byte[] decodedBytes = Base64.getDecoder().decode(base64Image);
 
-            Path outputPath = Paths.get("plots", fileName).toAbsolutePath();
-            System.out.println("Saving image to: " + outputPath);
+            Path outputPath = Paths.get("PetFeeder_Spring/src/main/resources"+fileName).toAbsolutePath();
             System.out.println("Saving image to: " + outputPath);
 
             Files.createDirectories(outputPath.getParent());

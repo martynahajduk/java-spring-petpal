@@ -9,15 +9,21 @@ import be.kdg.programming3.service.PetDataLogService;
 import be.kdg.programming3.service.PetService;
 import be.kdg.programming3.service.ScheduleService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.*;
 
 @Controller
 @RequestMapping
 public class FeederController {
+    private static final Logger logger = LoggerFactory.getLogger(FeederController.class);
+
     private final FeederService feederService;
     private final PetService petService;
     private final PetDataLogService petDataLogService;
@@ -52,28 +58,49 @@ public class FeederController {
         }
         User user = (User) session.getAttribute("user");
 
-        Feeder feeder = feederService.findById(user.getFeeder().getId());
-        List<Schedule> schedules = scheduleService.findSchedulesByFeederId(feeder.getId());
+        Set<Feeder> feeders = new HashSet<>();
+        user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
+
+        Map<Long, List<Schedule>> schedules = new HashMap<>();
+        feeders.forEach(feeder -> schedules.put(feeder.getId(), scheduleService.findSchedulesByFeederId(feeder.getId())));
+
+        //get the reservoir level
+        Map<Long, Double> reservoirLevels = new HashMap<>();
+        feeders.forEach(feeder -> reservoirLevels.put(feeder.getId(), petDataLogService.getFoodLevelPercentageById(feeder.getId())));
 
 
-        //get teh reservoir level
-        Double reservoirLevel = petDataLogService.getFoodLevelPercentage(feeder.getId());
+        Map<Long, Boolean> isFoodLevelLowMap = new HashMap<>();
+        feeders.forEach(feeder -> isFoodLevelLowMap.put(feeder.getId(), reservoirLevels.get(feeder.getId()) <= 20));
 
-        boolean isFoodLevelLow = reservoirLevel <= 20;
+        logger.debug("{}", schedules);
+        Map<Long, LocalTime> nextFeedingTimes = new HashMap<>();
+        schedules.forEach((key, value) -> nextFeedingTimes.put(key, value.stream().filter(s ->
+                switch (LocalDate.now().getDayOfWeek()) {
+                    case MONDAY -> s.isMonday();
+                    case TUESDAY -> s.isTuesday();
+                    case WEDNESDAY -> s.isWednesday();
+                    case THURSDAY -> s.isThursday();
+                    case FRIDAY -> s.isFriday();
+                    case SATURDAY -> s.isSaturday();
+                    case SUNDAY -> s.isSunday();
+                }
+        ).sorted(Comparator.comparing(Schedule::getTimeToFeed)).toList().getFirst().getTimeToFeed()));
+        model.addAttribute("nextFeedingTimes", nextFeedingTimes);
 
         model.addAttribute("pets", petService.findAll());
-        model.addAttribute("feeders", feeder);
+        model.addAttribute("feeders", feeders);
         model.addAttribute("schedules", schedules);
-        model.addAttribute("reservoirLevel", reservoirLevel);
-        model.addAttribute("isFoodLevelLow", isFoodLevelLow);
+        model.addAttribute("reservoirLevels", reservoirLevels);
+        model.addAttribute("isFoodLevelLows", isFoodLevelLowMap);
 
         return "feederpage";
     }
     @PostMapping("/feedNow")
-    public String feedNow( @RequestParam int amount) {
-        ArduinoController.feedNow(amount);
+    public String feedNow( @RequestParam int amount, Long feederId) {
+        ArduinoController.feedNow(amount, feederService.findById(feederId));
         return "redirect:/feederpage";
     }
+
     private boolean isSessionValid(HttpSession session) {
         return session.getAttribute("user") != null;
     }

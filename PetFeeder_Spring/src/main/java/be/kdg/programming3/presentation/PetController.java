@@ -1,28 +1,34 @@
 package be.kdg.programming3.presentation;
 
 import be.kdg.programming3.domain.Breed;
+import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.User;
 import be.kdg.programming3.exceptions.SessionExpiredException;
+import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.PetService;
 import be.kdg.programming3.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping
 public class PetController {
+    private static final Logger logger = LoggerFactory.getLogger(PetController.class);
+
+    private final FeederService feederService;
     private final PetService petService;
     private final UserService userService;
 
-    public PetController(PetService petService, UserService userService) {
+    public PetController(FeederService feederService, PetService petService, UserService userService) {
+        this.feederService = feederService;
         this.petService = petService;
         this.userService = userService;
     }
@@ -36,7 +42,6 @@ public class PetController {
     public Pet getPetById(@PathVariable Long id) {
         return petService.findById(id);
     }
-
 
     @PostMapping("/pets/add")
     public String createPet(@RequestBody Pet pet) {
@@ -53,8 +58,10 @@ public class PetController {
         return pet.toString();
     }
 
+    //TODO change into view object
     @PostMapping("/pets/add-form")
     public String addPet(@RequestParam String name,
+                         @RequestParam Long feederId,
                          @RequestParam LocalDate birthDate,
                          @RequestParam Breed animalType,
                          @RequestParam double petWeight,
@@ -63,37 +70,49 @@ public class PetController {
                          Model model,
                          HttpSession session) {
 
-
-        Pet newPet = new Pet(name, birthDate, animalType, petWeight, sex,  new HashSet<>());
+        logger.debug("{}",feederId);
+        Feeder feeder = feederService.findOrCreateById(feederId);
+        logger.debug("{}", feeder);
+        Pet newPet = new Pet(name, feeder, birthDate, animalType, petWeight, sex, new HashSet<>());
+        feeder.setPet(newPet);
         newPet.setAgeWeeks(newPet.calculateAgeWeeks());
         petService.save(newPet);
         for (Long userId : userIds) {
             User user = userService.findUserById(userId);
             if (user != null) {
-                user.setPet(newPet);
+                user.addPet(newPet);
                 userService.save(user);
             }
         }
-        User userHttp = (User) session.getAttribute("user");
-        Pet pet = petService.getPetByUserId(userHttp.getId());
-        model.addAttribute("pets", pet);
-        return "petchoice";
+
+        User user = (User) session.getAttribute("user");
+        user.addPet(newPet);
+        session.setAttribute("user", user);
+
+        return "redirect:/petchoice";
     }
+
     @GetMapping("/petchoice")
     public String showPetChoicePage(Model model, HttpSession session) {
         if (!isSessionValid(session)) {
             throw new SessionExpiredException("User session has expired.");
         }
         User user = (User) session.getAttribute("user");
-        Long userId = user.getId();
-        Long feederId = user.getFeeder().getId();
 
-        Pet pet = petService.getPetByUserId(user.getId()); // Modified `PetService` handles nulls
-        model.addAttribute("pets", pet);
+
+        Set<Pet> pets = petService.findPetsByUserId(user.getId()); // Modified `PetService` handles nulls
+        model.addAttribute("pets", pets);
 
 //        List<User> users = userService.findAll();
 
-        List<User> filteredUsers = userService.findUsersByFeederId(feederId);
+        //TODO move this to a service
+        List<User> filteredUsers = new ArrayList<>();
+        filteredUsers.add(user);
+        petService.findPetsByUserId(user.getId()).forEach(p -> {
+            Set<User> users = userService.findUsersByPet(p);
+            users.forEach(u -> {if (filteredUsers.stream().noneMatch(o -> Objects.equals(u.getId(), o.getId()))) filteredUsers.add(u);});
+        });
+
 
         model.addAttribute("users", filteredUsers);
 
