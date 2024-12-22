@@ -10,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
-import java.util.Set;
-
 //concrete processor for processing the ArduinoSensorData
 //saves the data of sensors in database through FeederService
 

@@ -25,14 +25,12 @@ import java.util.List;
 @Controller
 public class ArduinoController {
     private static final Logger logger = LoggerFactory.getLogger(ArduinoController.class);
-    private final PetDataLogService petDataLogService;
     private final ArduinoService arduinoService;
     private final FeederService feederService;
-    ;
+
 
     // Constructor-based dependency injection
-    public ArduinoController(PetDataLogService petDataLogService, ArduinoService arduinoService, FeederService feederService) {
-        this.petDataLogService = petDataLogService;
+    public ArduinoController(ArduinoService arduinoService, FeederService feederService) {
         this.arduinoService = arduinoService;
         this.feederService = feederService;
     }

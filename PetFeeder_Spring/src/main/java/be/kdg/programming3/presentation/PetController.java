@@ -9,12 +9,10 @@ import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.PetService;
 import be.kdg.programming3.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -107,10 +105,6 @@ public class PetController {
 
         Set<Pet> pets = petService.findPetsByUserId(user.getId()); // Modified `PetService` handles nulls
         model.addAttribute("pets", pets);
-
-//        List<User> users = userService.findAll();
-
-        //TODO move this to a service
         List<User> filteredUsers = new ArrayList<>();
         filteredUsers.add(user);
         petService.findPetsByUserId(user.getId()).forEach(p -> {

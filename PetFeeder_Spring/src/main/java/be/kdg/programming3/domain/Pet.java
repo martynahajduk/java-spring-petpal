@@ -44,13 +44,6 @@ public class Pet {
     @Column(name="sex")
     private String sex;
 
-//    @OneToMany(mappedBy = "pet", fetch = FetchType.EAGER)
-//    private Set<PetDataLog> petDataLogs;
-
-    //@OneToMany(mappedBy = "pet", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    //private List<PetDataLog> petDataLogs = new ArrayList<>();
-
-
     public Pet() {
     }
 

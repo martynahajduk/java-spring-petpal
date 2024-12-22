@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script src="/javaScript/healthTracker.js" defer></script>
+
+
 </head>
 <body>
 <header th:insert="~{navbar.html}"></header>
@@ -156,11 +159,11 @@
             </th:block>
         </div>
     </div>
-    <button class="carousel-control-prev" style="filter: invert(100%);" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+    <button class="carousel-control-prev position-absolute start-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);" type="button" data-bs-target="#carousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next"style="filter: invert(100%);"  type="button" data-bs-target="#carousel" data-bs-slide="next">
+    <button class="carousel-control-next position-absolute start-0 h-50 top-50 translate-middle-y" style="filter: invert(100%);"  type="button" data-bs-target="#carousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
@@ -168,36 +171,6 @@
 
 <footer th:insert="~{footer.html}"></footer>
 
-<script>
-    function showGraph(className) {
-        // Hide all graphs
-        document.querySelectorAll('.growth, .foodIntake, .scatter, .barChart, .histogram, .heatmap').forEach(section => {
-            section.style.display = 'none';
-        });
 
-        // Display the selected graph
-        document.querySelectorAll('.' + className).forEach(section => {
-            section.style.display = 'block';
-        });
-
-        // Remove active state from all buttons
-        const buttons = document.querySelectorAll('.text-center .btn-outline-warning');
-        buttons.forEach(button => {
-            button.classList.remove('active');
-        });
-
-        // Set the active state for the selected button
-        const activeButton = document.querySelector(`.btn-outline-warning[onclick="showGraph('${className}')"]`);
-        if (activeButton) {
-            activeButton.classList.add('active');
-        }
-    }
-
-    window.onload = () => {
-        // Set the initial active state
-        document.querySelectorAll('.carousel-item').item(0).classList.add("active");
-        showGraph('growth');
-    };
-</script>
 </body>
 </html>

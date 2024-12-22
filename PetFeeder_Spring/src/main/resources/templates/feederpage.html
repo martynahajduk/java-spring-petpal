@@ -6,6 +6,8 @@
     <title>Feeder Dashboard</title>
     <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <script src="/javaScript/feeder.js" defer></script>
+
 <!--    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">-->
 </head>
 <body>
@@ -93,12 +95,8 @@
 
 <footer th:insert="~{footer.html}"></footer>
 
-<!-- JavaScript for Setting the first carrousel item active -->
-<script>
-    window.onload = () => {
-        document.querySelectorAll('.carousel-item').item(0).classList.add("active");
-    };
-</script>
+
+
 
 </body>
 </html>

@@ -22,14 +22,6 @@ public class PetDataLog {
     // Foreign key to Feeder
     private Feeder feeder;
 
-    // Many PetDataLogs can be associated with one Pet
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "pet_id") // Foreign key to Pet
-//    private Pet pet;
-//    @Enumerated(EnumType.STRING)
-//    @Column(name = "animal_type", nullable = true)
-//    private Breed animalType;
-
 
 //    private int age;
     @Column(name="age_weeks")

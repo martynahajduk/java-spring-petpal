@@ -17,11 +17,10 @@ public class UserController {
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
-    private final FeederService feederService;
 
-    public UserController(UserService userService, FeederService feederService) {
+    public UserController(UserService userService) {
         this.userService = userService;
-        this.feederService = feederService;
+
     }
 
     @GetMapping("/users")

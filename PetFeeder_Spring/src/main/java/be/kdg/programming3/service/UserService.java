@@ -14,7 +14,6 @@ public interface UserService {
     User save(User user);
     void deleteById(Long id);
     User loginUser(String email, String password);
-    User registerUser(String name, String email, String password);
     User findUserByEmail(String email);
     Set<User> findUsersByPet(Pet pet);
 //    List<User> findUsersByFeederId(Long feederId);

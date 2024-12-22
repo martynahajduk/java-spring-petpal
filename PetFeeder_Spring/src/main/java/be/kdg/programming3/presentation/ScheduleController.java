@@ -68,7 +68,6 @@ public class ScheduleController {
         return "schedule";
     }
 
-    //TODO change into view object and converter
     @PostMapping("/schedule/add")
     public String handleScheduleCreation(
             Schedule schedule,
