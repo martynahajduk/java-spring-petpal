@@ -5,7 +5,6 @@ import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.User;
 import be.kdg.programming3.exceptions.SessionExpiredException;
-import be.kdg.programming3.presentation.viewmodel.AddPetViewModel;
 import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.PetService;
 import be.kdg.programming3.service.UserService;
@@ -62,23 +61,24 @@ public class PetController {
     }
 
     @PostMapping("/pets/add-form")
-    public String addPet(@Valid @ModelAttribute AddPetViewModel addPetViewModel,
+    public String addPet(
+            @RequestParam String name,
+            @RequestParam Long feederId,
+            @RequestParam LocalDate birthDate,
+            @RequestParam Breed animalType,
+            @RequestParam double petWeight,
+            @RequestParam String sex,
+            @RequestParam List<Long> userIds,
                          Model model,
                          HttpSession session) {
 
+        logger.debug("{}",feederId);
 
-        Long feederId = addPetViewModel.getFeederId();
-        String name = addPetViewModel.getName();
-        LocalDate birthDate = addPetViewModel.getBirthDate();
-        Breed animalType = addPetViewModel.getAnimalType();
-        double petWeight = addPetViewModel.getPetWeight();
-        String sex = addPetViewModel.getSex();
-        List<Long> userIds = addPetViewModel.getUserIds();
 
         logger.debug("Feeder ID: {}", feederId);
         Feeder feeder = feederService.findOrCreateById(feederId);
         logger.debug("Feeder: {}", feeder);
-
+        logger.debug("{}", feeder);
         Pet newPet = new Pet(name, feeder, birthDate, animalType, petWeight, sex, new HashSet<>());
         feeder.setPet(newPet);
         newPet.setAgeWeeks(newPet.calculateAgeWeeks());

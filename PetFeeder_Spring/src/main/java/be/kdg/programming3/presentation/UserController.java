@@ -1,17 +1,13 @@
 package be.kdg.programming3.presentation;
 
-import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.User;
-import be.kdg.programming3.presentation.viewmodel.RegisterUserViewModel;
 import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.UserService;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -52,23 +48,20 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute RegisterUserViewModel registerUserViewModel,
+    public String registerUser(@RequestParam String name,
+                               @RequestParam String email,
+                               @RequestParam String password,
                                Model model) {
+        User newUser = new User();
+        newUser.setName(name);
+        newUser.setEmail(email);
+        newUser.setPassword(password);
 
-        try {
-            User newUser = new User();
-            newUser.setName(registerUserViewModel.getName());
-            newUser.setEmail(registerUserViewModel.getEmail());
-            newUser.setPassword(registerUserViewModel.getPassword());
-            userService.save(newUser);
 
-            model.addAttribute("success", "User registered successfully! Try to log in.");
-            return "index";
-        } catch (Exception e) {
-            logger.error("Error registering user", e);
-            model.addAttribute("error", "An error occurred during registration.");
-            return "index";
-        }
+        userService.save(newUser);
+        model.addAttribute("success", "User registered successfully!");
+        return "index";
+
     }
 
 
