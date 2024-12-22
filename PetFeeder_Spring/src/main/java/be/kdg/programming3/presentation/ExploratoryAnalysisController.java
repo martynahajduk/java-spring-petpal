@@ -31,13 +31,11 @@ public class ExploratoryAnalysisController {
     private final FeederService feederService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final PetDataLogService petDataLogService;
-    private final ImageProcessorServiceIntf imageProcessorServiceIntf;
     private final ResearchDataService researchDataService;
 
-    public ExploratoryAnalysisController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf, PetService petService) {
+    public ExploratoryAnalysisController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, PetService petService) {
         this.feederService = feederService;
         this.petDataLogService = petDataLogService;
-        this.imageProcessorServiceIntf = imageProcessorServiceIntf;
         this.researchDataService = researchDataService;
         this.petService = petService;
     }
@@ -78,7 +76,6 @@ public class ExploratoryAnalysisController {
             logger.debug("{}", transformedRealDataMap);
             List<Map<String, Object>> realData = fetchRealData();
             logger.debug("{}", realData);
-//            Map<String, Object> payload = Collections.singletonMap("real_data", realData);
             Map<String, Object> payload = Collections.singletonMap("real_data", transformedRealDataMap);
             logger.debug("{}", payload);
 
@@ -89,7 +86,6 @@ public class ExploratoryAnalysisController {
                     new HttpEntity<>(payload),
                     new ParameterizedTypeReference<>() {}
             );
-            logger.debug("oii");
             logger.debug("response from Python Server: {}", response);
 
             // Process response

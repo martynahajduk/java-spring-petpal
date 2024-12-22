@@ -28,10 +28,7 @@ public class FeederDataProcessor extends DataProcessor {
     public void saveToDatabase(PetPalData data, PetService petService) {
         if (data instanceof ArduinoSensorData sensorData) {
             
-            // Log the sensor data
-//            logger.info("BirthDate: {}", sensorData.)
-//            Set<Pet> petto = petService.findRandUserByFeederId(sensorData.getId()).getPets();
-//            petto.setPetWeight();
+
             logger.info("Processing Sensor Data for Feeder ID: {}", sensorData.getId());
             logger.info("Reservoir Height: {}", sensorData.getReservoirHeight());
             logger.info("Bowl Weight: {}", sensorData.getBowlWeight());
@@ -49,14 +46,7 @@ public class FeederDataProcessor extends DataProcessor {
                 petDataLog.setBowlWeight(sensorData.getBowlWeight());
                 petDataLog.setPetWeight(sensorData.getPetWeight());
                 petDataLog.setFeeder(sensorData.getFeeder());
-//                petDataLog.setBreed(petto.getAnimalType());
-//                petDataLog.setAgeWeeks(petto.calculateAgeWeeks());
-//                petDataLog.setSex(petto.getSex());
-
-
                 petDataLog.setTimestamp(LocalDateTime.now());
-
-
 
                 // Save to database
                 petDataLogService.save(petDataLog);
