@@ -4,10 +4,8 @@
     <title>Health Tracker</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/webjars/boot
-    strap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
-    <link rel="stylesheet" href="css/healthtracker.css">
 </head>
 <body>
 <header th:insert="~{navbar.html}"></header>
@@ -158,11 +156,11 @@
             </th:block>
         </div>
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+    <button class="carousel-control-prev" style="filter: invert(100%);" type="button" data-bs-target="#carousel" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+    <button class="carousel-control-next"style="filter: invert(100%);"  type="button" data-bs-target="#carousel" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
@@ -201,6 +199,5 @@
         showGraph('growth');
     };
 </script>
-
 </body>
 </html>

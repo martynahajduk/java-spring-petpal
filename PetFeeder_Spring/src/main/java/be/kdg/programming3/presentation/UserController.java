@@ -1,6 +1,5 @@
 package be.kdg.programming3.presentation;
 
-import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.User;
 import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.UserService;
@@ -43,28 +42,27 @@ public class UserController {
 
             return "menupage";
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("error", "Invalid email or password.");
             return "index";
         }
     }
 
-    //TODO change into view model
     @PostMapping("/register")
     public String registerUser(@RequestParam String name,
                                @RequestParam String email,
                                @RequestParam String password,
                                Model model) {
-
         User newUser = new User();
         newUser.setName(name);
         newUser.setEmail(email);
         newUser.setPassword(password);
 
+
         userService.save(newUser);
         model.addAttribute("success", "User registered successfully!");
         return "index";
-    }
 
+    }
 
 
 }
