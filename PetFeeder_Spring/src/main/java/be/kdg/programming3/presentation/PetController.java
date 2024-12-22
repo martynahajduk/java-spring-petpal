@@ -72,13 +72,11 @@ public class PetController {
                          Model model,
                          HttpSession session) {
 
-        logger.debug("{}",feederId);
 
 
-        logger.debug("Feeder ID: {}", feederId);
+
         Feeder feeder = feederService.findOrCreateById(feederId);
         logger.debug("Feeder: {}", feeder);
-        logger.debug("{}", feeder);
         Pet newPet = new Pet(name, feeder, birthDate, animalType, petWeight, sex, new HashSet<>());
         feeder.setPet(newPet);
         newPet.setAgeWeeks(newPet.calculateAgeWeeks());
