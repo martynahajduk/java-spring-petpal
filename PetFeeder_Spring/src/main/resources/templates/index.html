@@ -20,6 +20,14 @@
     <div class="container text-center mt-5">
         <h1 class="fw-bold" style="color: #F27244;">Join Our Pet Family!</h1>
     </div>
+    <div class="container mt-3">
+        <div th:if="${error}" class="alert alert-danger" role="alert">
+            <span th:text="${error}"></span>
+        </div>
+        <div th:if="${success}" class="alert alert-success" role="alert">
+            <span th:text="${success}"></span>
+        </div>
+    </div>
     <div class="row justify-content-center">
         <div class="col-12 col-md-5 mb-4">
             <div class="card border-0 shadow-sm">
@@ -89,11 +97,6 @@
         </div>
     </div>
 </div>
-<footer class="py-3" style="background-color: rgba(255,255,255,0.43); color: #000000;">
-    <div class="container text-center">
-        <p class="mb-0">PetPal &copy; Integration 3, Team 5</p>
-        <p class="mb-0">Contact: <a href="mailto:support@petpal.com" style="color: #F27244;">support@petpal.com</a></p>
-    </div>
-</footer>
+<footer th:insert="~{footer.html}"></footer>
 </body>
 </html>

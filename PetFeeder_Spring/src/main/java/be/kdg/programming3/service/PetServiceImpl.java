@@ -1,7 +1,6 @@
 package be.kdg.programming3.service;
 
 
-import be.kdg.programming3.domain.Feeder;
 import be.kdg.programming3.domain.Pet;
 import be.kdg.programming3.domain.User;
 import be.kdg.programming3.repository.FeederRepository;
@@ -11,13 +10,11 @@ import be.kdg.programming3.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
-public class PetServiceS implements PetService {
+public class PetServiceImpl implements PetService {
 
 
     private final PetRepository petRepository;
@@ -25,7 +22,7 @@ public class PetServiceS implements PetService {
     private final UserRepository userRepository;
 
     @Autowired
-    public PetServiceS(PetRepository petRepository, FeederRepository feederRepository, UserRepository userRepository) {
+    public PetServiceImpl(PetRepository petRepository, FeederRepository feederRepository, UserRepository userRepository) {
         this.petRepository = petRepository;
         this.feederRepository = feederRepository;
         this.userRepository = userRepository;
