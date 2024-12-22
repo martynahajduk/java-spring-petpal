@@ -20,6 +20,7 @@ import java.net.URI;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 
 @Controller
 public class ArduinoController {
@@ -59,10 +60,7 @@ public class ArduinoController {
         }
     }
 
-    public  void sendSchedule(LocalTime localTime, int amount, Feeder feeder) {
-//        List<Long> times = List.of((long)5000, (long)20000);
-//        List<Integer> amount = List.of(20, 20);
-        int times = localTime.toSecondOfDay();
+    public  void sendSchedule(List<Long> times, List<Double> amount, Feeder feeder) {
         logger.debug("{}",times);
         // Define the request payload, if any
         String requestPayload = String.format("times=%s&amount=%s", times, amount).replace(" ","").replace("[","").replace("]","");

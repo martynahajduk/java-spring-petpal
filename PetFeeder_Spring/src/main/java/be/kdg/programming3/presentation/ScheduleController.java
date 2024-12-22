@@ -5,6 +5,7 @@ import be.kdg.programming3.domain.*;
 import be.kdg.programming3.exceptions.SessionExpiredException;
 import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.ScheduleService;
+import be.kdg.programming3.service.ScheduleServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,10 +25,14 @@ public class ScheduleController {
 
     private final ScheduleService scheduleService;
     private final FeederService feederService;
+    private final ScheduleServiceImpl scheduleServiceImpl;
+    private final ArduinoController arduinoController;
 
-    public ScheduleController(ScheduleService scheduleService, FeederService feederService) {
+    public ScheduleController(ScheduleService scheduleService, FeederService feederService, ScheduleServiceImpl scheduleServiceImpl, ArduinoController arduinoController) {
         this.scheduleService = scheduleService;
         this.feederService = feederService;
+        this.scheduleServiceImpl = scheduleServiceImpl;
+        this.arduinoController = arduinoController;
     }
 
 
@@ -76,27 +81,65 @@ public class ScheduleController {
             return "redirect:/schedulecreation";
         }
 
-        //TODO:
-        //sql Select frequency, portion, timetofeed where feederid = x
-        //put in a list
-        //modify list to chronical whole schedule
+        scheduleService.save(schedule);
 
         List<Long> feedTimeList = new ArrayList<>();
-//        long time = feedTime.getLong(ChronoField.SECOND_OF_DAY);
-//         if (frequency == FeedFrequency.DAILY) {
-//             for (int i = 0; i < 6; i++) {
-//                 feedTimeList.add(time + i*86400);   // can be 2 times to add
-//             }
-//         }else{
-//             feedTimeList.add(time);  // need a list of feeding times here to add
-//         }
+        List<Double> amountList = new ArrayList<>();
 
+        List<Schedule> schedules = scheduleService.findSchedulesByFeederId(schedule.getFeeder().getId());
+        for (DayOfWeek dayOfWeek : DayOfWeek.values()) {
+            for (Schedule scheduleIteration : schedules) {
+                switch (dayOfWeek) {
+                    case MONDAY:
+                        if (scheduleIteration.isMonday()) {
+                            feedTimeList.add((long) scheduleIteration.getTimeToFeed().toSecondOfDay());
+                            amountList.add(scheduleIteration.getPortion());
+                        }
+                        break;
+                    case TUESDAY:
+                        if (scheduleIteration.isTuesday()) {
+                            feedTimeList.add((long) scheduleIteration.getTimeToFeed().toSecondOfDay());
+                            amountList.add(scheduleIteration.getPortion());
+                        }
+                        break;
+                    case WEDNESDAY:
+                        if (scheduleIteration.isWednesday()) {
+                            feedTimeList.add((long) scheduleIteration.getTimeToFeed().toSecondOfDay());
+                            amountList.add(scheduleIteration.getPortion());
+                        }
+                        break;
+                    case THURSDAY:
+                        if (scheduleIteration.isThursday()) {
+                            feedTimeList.add((long) scheduleIteration.getTimeToFeed().toSecondOfDay());
+                            amountList.add(scheduleIteration.getPortion());
+                        }
+                        break;
+                    case FRIDAY:
+                        if (scheduleIteration.isFriday()) {
+                            feedTimeList.add((long) scheduleIteration.getTimeToFeed().toSecondOfDay());
+                            amountList.add(scheduleIteration.getPortion());
+                        }
+                        break;
+                    case SATURDAY:
+                        if (scheduleIteration.isSaturday()) {
+                            feedTimeList.add((long) scheduleIteration.getTimeToFeed().toSecondOfDay());
+                            amountList.add(scheduleIteration.getPortion());
+                        }
+                        break;
+                    case SUNDAY:
+                        if (scheduleIteration.isSunday()) {
+                            feedTimeList.add((long) scheduleIteration.getTimeToFeed().toSecondOfDay());
+                            amountList.add(scheduleIteration.getPortion());
+                        }
+                        break;
+                }
+            }
+        }
 
         model.addAttribute("successMessage", "Schedule created successfully!");
         model.addAttribute("feeders", feederService.findAll());
         model.addAttribute("frequencies", FeedFrequency.values());
-        scheduleService.save(schedule);
-//        arduinoController.sendSchedule(feedTime,(int)portion);
+        arduinoController.sendSchedule(feedTimeList, amountList, schedule.getFeeder());
 
         return "redirect:/schedulecreation";
     }

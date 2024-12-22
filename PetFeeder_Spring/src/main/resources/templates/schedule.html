@@ -54,6 +54,10 @@
 
                         <button type="submit" class="btn" style="background-color: #F27244; color: white;">Create Schedule</button>
 
+                        <div class="alert alert-warning mt-3" role="alert">
+                            If a feeder has more then 14 times to feed (2 times a day) it will discard the last feeding times!
+                        </div>
+
                         <div th:if="${successMessage}">
                             <p th:text="${successMessage}"></p>
                         </div>
