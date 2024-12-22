@@ -7,6 +7,7 @@ import be.kdg.programming3.service.PetDataLogService;
 import be.kdg.programming3.service.PetService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -14,6 +15,7 @@ import java.util.Set;
 //concrete processor for processing the ArduinoSensorData
 //saves the data of sensors in database through FeederService
 
+@Component
 public class FeederDataProcessor extends DataProcessor {
     private static final Logger logger = LoggerFactory.getLogger(FeederDataProcessor.class);
     private final PetDataLogService petDataLogService;
@@ -27,11 +29,9 @@ public class FeederDataProcessor extends DataProcessor {
     @Override
     public void saveToDatabase(PetPalData data, PetService petService) {
         if (data instanceof ArduinoSensorData sensorData) {
-            
-            // Log the sensor data
-//            logger.info("BirthDate: {}", sensorData.)
-//            Set<Pet> petto = petService.findRandUserByFeederId(sensorData.getId()).getPets();
-//            petto.setPetWeight();
+
+            Pet petto = petService.findByFeederId(sensorData.getFeeder().getId());
+            petto.setPetWeight(sensorData.getPetWeight());
             logger.info("Processing Sensor Data for Feeder ID: {}", sensorData.getId());
             logger.info("Reservoir Height: {}", sensorData.getReservoirHeight());
             logger.info("Bowl Weight: {}", sensorData.getBowlWeight());
@@ -49,9 +49,9 @@ public class FeederDataProcessor extends DataProcessor {
                 petDataLog.setBowlWeight(sensorData.getBowlWeight());
                 petDataLog.setPetWeight(sensorData.getPetWeight());
                 petDataLog.setFeeder(sensorData.getFeeder());
-//                petDataLog.setBreed(petto.getAnimalType());
-//                petDataLog.setAgeWeeks(petto.calculateAgeWeeks());
-//                petDataLog.setSex(petto.getSex());
+                petDataLog.setBreed(petto.getAnimalType());
+                petDataLog.setAgeWeeks(petto.calculateAgeWeeks());
+                petDataLog.setSex(petto.getSex());
 
 
                 petDataLog.setTimestamp(LocalDateTime.now());

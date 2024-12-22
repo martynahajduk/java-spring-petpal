@@ -18,9 +18,9 @@ public class CompositeProcessor extends DataProcessor {
     }
 
     //adding processor to the composite
-   // public void addProcessor(DataProcessor processor) {
-      //  processors.add(processor);
-   // }
+    public void addProcessor(DataProcessor processor) {
+        processors.add(processor);
+    }
 
     //sequentially process data using all processors
     @Override

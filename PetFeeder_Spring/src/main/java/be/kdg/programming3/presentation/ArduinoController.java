@@ -67,12 +67,12 @@ public class ArduinoController {
         // Define the request payload, if any
         String requestPayload = String.format("times=%s&amount=%s", times, amount).replace(" ","").replace("[","").replace("]","");
 
-        sendData(requestPayload, feeder.getIp());
+        sendData(requestPayload, feeder.getIp(), "/schedule");
     }
 
     @Scheduled(cron = "0 0 0 * * *") // Runs every day at midnight
     public void zero() {
-        feederService.findAll().forEach(feeder -> sendData("", feeder.getIp()));
+        feederService.findAll().forEach(feeder -> sendData("", feeder.getIp(), "/zero"));
     }
 
 
@@ -84,6 +84,7 @@ public class ArduinoController {
 
         Feeder feeder = feederService.findOrCreateById(feederId);
         feeder.setIp(address);
+        feederService.save(feeder);
 
 
         LocalTime date = LocalTime.now();
@@ -113,39 +114,41 @@ public class ArduinoController {
     public static void feedNow( @RequestParam int amount, Feeder feeder) {
 
         String requestPayload = String.format("amount=%s", amount);
-        sendData(requestPayload, feeder.getIp());
+        sendData(requestPayload, feeder.getIp(), "/feedNow");
     }
 
-    private static void sendData(String payload, String ip) {
-        // Set headers
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        headers.setContentLength(payload.length());
+    private static void sendData(String payload, String ip, String path) {
+        if (ip != null) {
+            // Set headers
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+            headers.setContentLength(payload.length());
 
-        // Create the request entity
-        HttpEntity<String> requestEntity = new HttpEntity<>(payload, headers);
+            // Create the request entity
+            HttpEntity<String> requestEntity = new HttpEntity<>(payload, headers);
 
-        // Set the URL of the API endpoint
-        String apiUrl = "http://" + ip + "/schedule";
+            // Set the URL of the API endpoint
+            String apiUrl = "http://" + ip + path;
 
-        URI uri = URI.create(apiUrl);
+            URI uri = URI.create(apiUrl);
 
-        // Create a RestTemplate instance
-        RestTemplate restTemplate = new RestTemplate();
+            // Create a RestTemplate instance
+            RestTemplate restTemplate = new RestTemplate();
 
-        logger.info("oi");
-        // Send the POST request
-        ResponseEntity<String> responseEntity =
-                restTemplate.postForEntity(uri, requestEntity, String.class);
+            logger.info("oi");
+            // Send the POST request
+            ResponseEntity<String> responseEntity =
+                    restTemplate.postForEntity(uri, requestEntity, String.class);
 
-        // Handle the response
-        if (responseEntity.getStatusCode().is2xxSuccessful()) {
-            String responseBody = responseEntity.getBody();
-            logger.info("Response body: {}", responseBody);
-        } else {
-            logger.error("POST request failed with status code: {}", responseEntity.getStatusCodeValue());
+            // Handle the response
+            if (responseEntity.getStatusCode().is2xxSuccessful()) {
+                String responseBody = responseEntity.getBody();
+                logger.info("Response body: {}", responseBody);
+            } else {
+                logger.error("POST request failed with status code: {}", responseEntity.getStatusCodeValue());
+            }
+            logger.info("oi2");
         }
-        logger.info("oi2");
 
     }
 }

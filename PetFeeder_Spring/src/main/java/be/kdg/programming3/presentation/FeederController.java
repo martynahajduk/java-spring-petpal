@@ -62,7 +62,7 @@ public class FeederController {
         user.getPets().forEach(pet -> feeders.add(feederService.findById(pet.getFeeder().getId())));
 
         Map<Long, String> petNames = new HashMap<>();
-        feeders.forEach(feeder -> {petNames.put(feeder.getId(), feeder.getPet().getName());});
+        feeders.forEach(feeder -> {petNames.put(feeder.getId(), petService.findByFeederId(feeder.getId()).getName());});
 
         Map<Long, List<Schedule>> schedules = new HashMap<>();
         feeders.forEach(feeder -> schedules.put(feeder.getId(), scheduleService.findSchedulesByFeederId(feeder.getId())));
@@ -100,6 +100,7 @@ public class FeederController {
     }
     @PostMapping("/feedNow")
     public String feedNow( @RequestParam int amount, Long feederId) {
+        logger.debug("{}", feederId);
         ArduinoController.feedNow(amount, feederService.findById(feederId));
         return "redirect:/feederpage";
     }
