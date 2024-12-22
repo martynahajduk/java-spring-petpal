@@ -7,7 +7,6 @@ import be.kdg.programming3.processor.DataProcessorFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.xml.crypto.Data;
 
 @Service
 public class ArduinoServiceImpl implements ArduinoService {
@@ -42,9 +41,5 @@ public class ArduinoServiceImpl implements ArduinoService {
         processor.saveToDatabase(sensorData,petService);
 
     }
-
-    //public Long getFeederId() {
-     //   return feeder != null ? feeder.getId() : null;
-   // }
 
 }

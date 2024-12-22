@@ -9,10 +9,12 @@ import be.kdg.programming3.service.FeederService;
 import be.kdg.programming3.service.PetService;
 import be.kdg.programming3.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -58,25 +60,28 @@ public class PetController {
         return pet.toString();
     }
 
-    //TODO change into view object
     @PostMapping("/pets/add-form")
-    public String addPet(@RequestParam String name,
-                         @RequestParam Long feederId,
-                         @RequestParam LocalDate birthDate,
-                         @RequestParam Breed animalType,
-                         @RequestParam double petWeight,
-                         @RequestParam String sex,
-                         @RequestParam List<Long> userIds,
+    public String addPet(
+            @RequestParam String name,
+            @RequestParam Long feederId,
+            @RequestParam LocalDate birthDate,
+            @RequestParam Breed animalType,
+            @RequestParam double petWeight,
+            @RequestParam String sex,
+            @RequestParam List<Long> userIds,
                          Model model,
                          HttpSession session) {
 
-        logger.debug("{}",feederId);
+
+
+
         Feeder feeder = feederService.findOrCreateById(feederId);
-        logger.debug("{}", feeder);
+        logger.debug("Feeder: {}", feeder);
         Pet newPet = new Pet(name, feeder, birthDate, animalType, petWeight, sex, new HashSet<>());
         feeder.setPet(newPet);
         newPet.setAgeWeeks(newPet.calculateAgeWeeks());
         petService.save(newPet);
+
         for (Long userId : userIds) {
             User user = userService.findUserById(userId);
             if (user != null) {
@@ -84,13 +89,13 @@ public class PetController {
                 userService.save(user);
             }
         }
-
         User user = (User) session.getAttribute("user");
         user.addPet(newPet);
         session.setAttribute("user", user);
 
         return "redirect:/petchoice";
     }
+
 
     @GetMapping("/petchoice")
     public String showPetChoicePage(Model model, HttpSession session) {

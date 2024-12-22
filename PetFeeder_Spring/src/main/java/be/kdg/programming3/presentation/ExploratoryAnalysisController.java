@@ -31,13 +31,11 @@ public class ExploratoryAnalysisController {
     private final FeederService feederService;
     private final RestTemplate restTemplate = new RestTemplate();
     private final PetDataLogService petDataLogService;
-    private final ImageProcessorServiceIntf imageProcessorServiceIntf;
     private final ResearchDataService researchDataService;
 
-    public ExploratoryAnalysisController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, ImageProcessorServiceIntf imageProcessorServiceIntf, PetService petService) {
+    public ExploratoryAnalysisController(FeederService feederService, PetDataLogService petDataLogService, ResearchDataService researchDataService, PetService petService) {
         this.feederService = feederService;
         this.petDataLogService = petDataLogService;
-        this.imageProcessorServiceIntf = imageProcessorServiceIntf;
         this.researchDataService = researchDataService;
         this.petService = petService;
     }
@@ -78,7 +76,6 @@ public class ExploratoryAnalysisController {
             logger.debug("{}", transformedRealDataMap);
             List<Map<String, Object>> realData = fetchRealData();
             logger.debug("{}", realData);
-//            Map<String, Object> payload = Collections.singletonMap("real_data", realData);
             Map<String, Object> payload = Collections.singletonMap("real_data", transformedRealDataMap);
             logger.debug("{}", payload);
 
@@ -89,7 +86,6 @@ public class ExploratoryAnalysisController {
                     new HttpEntity<>(payload),
                     new ParameterizedTypeReference<>() {}
             );
-            logger.debug("oii");
             logger.debug("response from Python Server: {}", response);
 
             // Process response
@@ -115,12 +111,15 @@ public class ExploratoryAnalysisController {
                     dataMap.put("scatterPlotPath", graphData.getOrDefault("scatter_plot_base64", ""));
                     dataMap.put("barChartPath", graphData.getOrDefault("bar_chart_base64", ""));
                     dataMap.put("histogramPath", graphData.getOrDefault("histogram_base64", ""));
+                    dataMap.put("heatmapPath", graphData.getOrDefault("heatmap_base64", ""));
 
                     dataMap.put("growthTrendConclusion", graphData.getOrDefault("growth_trend_conclusion", "No conclusion available"));
                     dataMap.put("foodIntakeTrendConclusion", graphData.getOrDefault("food_intake_trend_conclusion", "No conclusion available"));
                     dataMap.put("scatterPlotConclusion", graphData.getOrDefault("scatter_plot_conclusion", "No conclusion available"));
                     dataMap.put("barChartConclusion", graphData.getOrDefault("bar_chart_conclusion", "No conclusion available"));
                     dataMap.put("histogramConclusion", graphData.getOrDefault("histogram_conclusion", "No conclusion available"));
+                    dataMap.put("heatmapConclusion", graphData.getOrDefault("heatmap_conclusion", "No conclusion available"));
+
 
                     dataMap.put("growthAnomalies", graphData.getOrDefault("growth_anomalies", ""));
                     dataMap.put("foodAnomalies", graphData.getOrDefault("food_anomalies", ""));

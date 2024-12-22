@@ -75,7 +75,7 @@ public class FeederController {
         Map<Long, Boolean> isFoodLevelLowMap = new HashMap<>();
         feeders.forEach(feeder -> isFoodLevelLowMap.put(feeder.getId(), reservoirLevels.get(feeder.getId()) <= 20));
 
-        logger.debug("{}", schedules);
+//        logger.debug("{}", schedules);
         Map<Long, LocalTime> nextFeedingTimes = new HashMap<>();
         schedules.forEach((key, value) -> nextFeedingTimes.put(key, value.stream().filter(s ->
                 switch (LocalDate.now().getDayOfWeek()) {
@@ -87,6 +87,7 @@ public class FeederController {
                     case SATURDAY -> s.isSaturday();
                     case SUNDAY -> s.isSunday();
                 }
+
         ).sorted(Comparator.comparing(Schedule::getTimeToFeed)).toList().getFirst().getTimeToFeed()));
         model.addAttribute("nextFeedingTimes", nextFeedingTimes);
 
@@ -98,6 +99,7 @@ public class FeederController {
 
         return "feederpage";
     }
+
     @PostMapping("/feedNow")
     public String feedNow( @RequestParam int amount, Long feederId) {
         logger.debug("{}", feederId);

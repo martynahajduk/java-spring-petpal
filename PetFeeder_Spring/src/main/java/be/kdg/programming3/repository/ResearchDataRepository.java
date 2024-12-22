@@ -10,6 +10,5 @@ import java.util.Map;
 public interface ResearchDataRepository {
     List<Map<String,Object>> findAllResearchData();
 
-//    @Query(value="SELECT * FROM prediction_data.hamster_data",nativeQuery = true)
-//    List<Map<String,Object>> findAllResearchData();
+
 }

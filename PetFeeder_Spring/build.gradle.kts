@@ -20,6 +20,7 @@ repositories {
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-thymeleaf")
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-web-services")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
@@ -28,10 +29,8 @@ dependencies {
     implementation("org.webjars:bootstrap:5.3.2")
     implementation("org.webjars:webjars-locator-core:0.59")
     implementation("com.fasterxml.jackson.core:jackson-databind") // Jackson library for JSON
-    implementation("org.apache.commons:commons-csv:1.10.0") // Apache Commons CSV
+    implementation("org.apache.commons:commons-csv:1.10.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
-
-
 }
 
 tasks.withType<Test> {
