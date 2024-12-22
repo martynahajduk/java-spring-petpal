@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Health Tracker Predictions</title>
+    <title>Health Tracker</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" th:href="@{/webjars/boot
+    strap/css/bootstrap.min.css}"/>
     <script defer th:src="@{/webjars/bootstrap/js/bootstrap.bundle.min.js}"></script>
+    <link rel="stylesheet" href="css/healthtracker.css">
 </head>
 <body>
 <header th:insert="~{navbar.html}"></header>
 <div class="container mt-5 mb-5">
     <!-- Page Title -->
-    <h1 class="text-center mb-4">Health Tracker Predictions</h1>
+    <h1 class="text-center mb-4">Health Tracker</h1>
+    <p class="text-center text-muted mb-4" style="font-size: 1.2em;">
+        Monitor your pet's health insights, including growth trends, food intake patterns, and more using the interactive charts below.
+    </p>
     <div id="carousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
         <div class="carousel-inner p-3">
             <th:block th:each="data : ${dataList}">
@@ -21,11 +26,12 @@
 
                     <!-- Buttons to Switch Between Graphs -->
                     <div class="text-center mb-4">
-                        <button class="btn btn-primary" onclick="showGraph('growth')">Growth Trend</button>
-                        <button class="btn btn-success" onclick="showGraph('foodIntake')">Food Intake Trend</button>
-                        <button class="btn btn-info" onclick="showGraph('scatter')">Scatter Plot</button>
-                        <button class="btn btn-warning" onclick="showGraph('barChart')">Bar Chart</button>
-                        <button class="btn btn-danger" onclick="showGraph('histogram')">Histogram</button>
+                        <button class="btn btn-outline-warning" onclick="showGraph('growth')">Growth Trend</button>
+                        <button class="btn btn-outline-warning" onclick="showGraph('foodIntake')">Food Intake Trend</button>
+                        <button class="btn btn-outline-warning" onclick="showGraph('scatter')">Scatter Plot</button>
+                        <button class="btn btn-outline-warning" onclick="showGraph('barChart')">Bar Chart</button>
+                        <button class="btn btn-outline-warning" onclick="showGraph('histogram')">Histogram</button>
+                        <button class="btn btn-outline-warning" onclick="showGraph('heatmap')">Heatmap</button>
                     </div>
 
                     <!-- Growth Section -->
@@ -36,15 +42,14 @@
                         </div>
 
                         <!-- Verdict Section for Growth -->
-                        <div class="alert alert-info text-center"
-                             th:if="${data.growthTrendConclusion != null and not #strings.isEmpty(data.growthTrendConclusion)}">
+                        <div class="alert text-center mt-3" style="background-color: #ffe5b4; color: #000; border: 1px solid #ffcc80;">
                             <strong>Growth Verdict:</strong>
                             <span th:text="${data.growthTrendConclusion}">Growth Trend Conclusion</span>
                         </div>
 
                         <!-- Anomalies for Growth -->
                         <div class="row g-3 mb-4">
-                            <h4 class="text-bg-secondary text-center">🚨 Growth Trend Anomalies 🚨</h4>
+                            <h4 class="text-decoration-underline text-center"> Growth Trend Anomalies </h4>
                             <div class="col-md-4" th:each="anomaly : ${data.growthAnomalies}">
                                 <div class="card border-warning h-100 shadow-sm">
                                     <div class="card-body">
@@ -54,6 +59,7 @@
                                         <p class="card-text">
                                             <strong>Expected Weight:</strong> <span th:text="${anomaly.expected_weight}">N/A</span> grams<br>
                                             <strong>Actual Weight:</strong> <span th:text="${anomaly.actual_weight}">N/A</span> grams<br>
+                                            <strong>Deviation:</strong> <span th:text="${anomaly.deviation}">N/A</span>%<br>
                                             <strong>Severity:</strong>
                                             <span th:if="${anomaly.deviation > 50}" class="badge bg-danger">Severe</span>
                                             <span th:if="${anomaly.deviation >= 20 and anomaly.deviation <= 50}" class="badge bg-warning">Moderate</span>
@@ -73,7 +79,7 @@
                         </div>
 
                         <!-- Verdict Section for Food Intake -->
-                        <div class="alert alert-info text-center"
+                        <div class="alert text-center mt-3" style="background-color: #ffe5b4; color: #000; border: 1px solid #ffcc80;"
                              th:if="${data.foodIntakeTrendConclusion != null and not #strings.isEmpty(data.foodIntakeTrendConclusion)}">
                             <strong>Food Intake Verdict:</strong>
                             <span th:text="${data.foodIntakeTrendConclusion}">Food Intake Trend Conclusion</span>
@@ -81,16 +87,17 @@
 
                         <!-- Anomalies for Food Intake -->
                         <div class="row g-3 mb-4">
-                            <h4 class="text-bg-secondary text-center">🍴 Food Intake Anomalies 🍴</h4>
+                            <h4 class="text-decoration-underline text-center"> Food Intake Anomalies </h4>
                             <div class="col-md-4" th:each="anomaly : ${data.foodAnomalies}">
-                                <div class="card border-danger h-100 shadow-sm">
+                                <div class="card border-warning h-100 shadow-sm">
                                     <div class="card-body">
-                                        <h5 class="card-title text-danger">
+                                        <h5 class="card-title text-warning">
                                             <i class="bi bi-exclamation-triangle-fill"></i> Week: <span th:text="${anomaly.week}">N/A</span>
                                         </h5>
                                         <p class="card-text">
                                             <strong>Expected Intake:</strong> <span th:text="${anomaly.expected_weight}">N/A</span> grams<br>
                                             <strong>Actual Intake:</strong> <span th:text="${anomaly.actual_weight}">N/A</span> grams<br>
+                                            <strong>Deviation:</strong> <span th:text="${anomaly.deviation}">N/A</span>%<br>
                                             <strong>Severity:</strong>
                                             <span th:if="${anomaly.deviation > 50}" class="badge bg-danger">Severe</span>
                                             <span th:if="${anomaly.deviation >= 20 and anomaly.deviation <= 50}" class="badge bg-warning">Moderate</span>
@@ -102,22 +109,48 @@
                         </div>
                     </div>
 
-                    <!-- Other Graph Sections -->
+                    <!-- Scatter Plot Section -->
                     <div class="graph-section scatter text-center" style="display:none;">
                         <h3>Scatter Plot</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.scatterPlotPath}}" class="img-fluid" alt="Scatter Plot"/>
+                        <div class="alert mt-3" style="background-color: #ffe5b4; color: #000; border: 1px solid #ffcc80;">
+                            <strong>Scatter Plot Analysis:</strong>
+                            <span th:text="${data.scatterPlotConclusion}"></span>
+                        </div>
                     </div>
 
+                    <!-- Bar Chart Section -->
                     <div class="graph-section barChart text-center" style="display:none;">
                         <h3>Bar Chart</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.barChartPath}}" class="img-fluid" alt="Bar Chart"/>
+                        <div class="alert mt-3" style="background-color: #ffe5b4; color: #000; border: 1px solid #ffcc80;">
+                            <strong>Bar Chart Analysis:</strong>
+                            <span th:text="${data.barChartConclusion}"></span>
+                        </div>
                     </div>
 
+                    <!-- Histogram Section -->
                     <div class="graph-section histogram text-center" style="display:none;">
                         <h3>Histogram</h3>
                         <img th:src="@{'data:image/jpeg;base64,'+${data.histogramPath}}" class="img-fluid" alt="Histogram"/>
+                        <div class="alert mt-3" style="background-color: #ffe5b4; color: #000; border: 1px solid #ffcc80;">
+                            <strong>Histogram Analysis:</strong>
+                            <span th:text="${data.histogramConclusion}"></span>
+                        </div>
+                    </div>
+
+                    <!-- Heatmap Section -->
+                    <div class="graph-section heatmap text-center" style="display:none;">
+                        <h3>Heatmap</h3>
+                        <img th:src="@{'data:image/jpeg;base64,'+${data.heatmapPath}}" class="img-fluid" alt="Heatmap"/>
+                        <div class="alert mt-3" style="background-color: #ffe5b4; color: #000; border: 1px solid #ffcc80;">
+                            <strong>Heatmap Analysis:</strong>
+                            <span th:text="${data.heatmapConclusion}"></span>
+                        </div>
                     </div>
                 </div>
+
+
                 <div class="carousel-item text-center" th:if="${!data.hasData}">
                     <h2 th:text="'Pet: '+${data.petName}"></h2>
                     <img src="/images/Sad_NoData_Hamster.webp" alt="No Data">
@@ -126,11 +159,11 @@
         </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon"></span>
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
     </button>
     <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
-        <span class="carousel-control-next-icon"></span>
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
     </button>
 </div>
@@ -139,18 +172,35 @@
 
 <script>
     function showGraph(className) {
-        document.querySelectorAll('.growth, .foodIntake, .scatter, .barChart, .histogram').forEach(section => {
+        // Hide all graphs
+        document.querySelectorAll('.growth, .foodIntake, .scatter, .barChart, .histogram, .heatmap').forEach(section => {
             section.style.display = 'none';
         });
+
+        // Display the selected graph
         document.querySelectorAll('.' + className).forEach(section => {
             section.style.display = 'block';
         });
+
+        // Remove active state from all buttons
+        const buttons = document.querySelectorAll('.text-center .btn-outline-warning');
+        buttons.forEach(button => {
+            button.classList.remove('active');
+        });
+
+        // Set the active state for the selected button
+        const activeButton = document.querySelector(`.btn-outline-warning[onclick="showGraph('${className}')"]`);
+        if (activeButton) {
+            activeButton.classList.add('active');
+        }
     }
 
     window.onload = () => {
+        // Set the initial active state
         document.querySelectorAll('.carousel-item').item(0).classList.add("active");
         showGraph('growth');
     };
 </script>
+
 </body>
 </html>

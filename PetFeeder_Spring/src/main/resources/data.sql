@@ -1,4 +1,5 @@
 
+
 INSERT INTO prediction_data.hamster_data (age_weeks, weight_grams, breed, food_intake, sex) VALUES
 (2, 12.38, 'Syrian', 0.24, 'Male'),
 (2, 14.76, 'Syrian', 0.48, 'Male'),

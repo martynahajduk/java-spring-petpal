@@ -115,12 +115,15 @@ public class ExploratoryAnalysisController {
                     dataMap.put("scatterPlotPath", graphData.getOrDefault("scatter_plot_base64", ""));
                     dataMap.put("barChartPath", graphData.getOrDefault("bar_chart_base64", ""));
                     dataMap.put("histogramPath", graphData.getOrDefault("histogram_base64", ""));
+                    dataMap.put("heatmapPath", graphData.getOrDefault("heatmap_base64", ""));
 
                     dataMap.put("growthTrendConclusion", graphData.getOrDefault("growth_trend_conclusion", "No conclusion available"));
                     dataMap.put("foodIntakeTrendConclusion", graphData.getOrDefault("food_intake_trend_conclusion", "No conclusion available"));
                     dataMap.put("scatterPlotConclusion", graphData.getOrDefault("scatter_plot_conclusion", "No conclusion available"));
                     dataMap.put("barChartConclusion", graphData.getOrDefault("bar_chart_conclusion", "No conclusion available"));
                     dataMap.put("histogramConclusion", graphData.getOrDefault("histogram_conclusion", "No conclusion available"));
+                    dataMap.put("heatmapConclusion", graphData.getOrDefault("heatmap_conclusion", "No conclusion available"));
+
 
                     dataMap.put("growthAnomalies", graphData.getOrDefault("growth_anomalies", ""));
                     dataMap.put("foodAnomalies", graphData.getOrDefault("food_anomalies", ""));

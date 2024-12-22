@@ -87,6 +87,7 @@ public class FeederController {
                     case SATURDAY -> s.isSaturday();
                     case SUNDAY -> s.isSunday();
                 }
+
         ).sorted(Comparator.comparing(Schedule::getTimeToFeed)).toList().getFirst().getTimeToFeed()));
         model.addAttribute("nextFeedingTimes", nextFeedingTimes);
 
